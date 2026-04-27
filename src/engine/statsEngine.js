@@ -1,6 +1,4 @@
 // src/engine/statsEngine.js
-const fs = require('fs');
-const path = require('path');
 
 // ─── Cache & Loaders ─────────────────────────────────────────────────────────
 
@@ -8,18 +6,16 @@ const cache = {};
 
 function loadConfig(sport) {
   if (cache[`cfg_${sport}`]) return cache[`cfg_${sport}`];
-  const p = path.join(__dirname, `../config/${sport}.config.json`);
-  cache[`cfg_${sport}`] = JSON.parse(fs.readFileSync(p, 'utf8'));
+  cache[`cfg_${sport}`] = require(`../config/${sport}.config.json`);
   return cache[`cfg_${sport}`];
 }
 
 function loadData(sport) {
   if (cache[`data_${sport}`]) return cache[`data_${sport}`];
-  const base = path.join(__dirname, '../../data/json');
   cache[`data_${sport}`] = {
-    matches:      JSON.parse(fs.readFileSync(path.join(base, `${sport}_matches.json`), 'utf8')),
-    players:      JSON.parse(fs.readFileSync(path.join(base, `${sport}_players.json`), 'utf8')),
-    partnerships: JSON.parse(fs.readFileSync(path.join(base, `${sport}_partnerships.json`), 'utf8')),
+    matches:      require(`../../data/json/${sport}_matches.json`),
+    players:      require(`../../data/json/${sport}_players.json`),
+    partnerships: require(`../../data/json/${sport}_partnerships.json`),
   };
   return cache[`data_${sport}`];
 }
@@ -409,6 +405,93 @@ function getPlayerSpotlight(sport, playerName, season) {
   };
 }
 
+// ─── Scorecard function ───────────────────────────────────────────────────────
+
+function getScorecard(sport, season, matchNum) {
+  const { players, matches } = loadData(sport);
+
+  const match = matches.find(m =>
+    String(m.season)   === String(season) &&
+    String(m.matchNum) === String(matchNum)
+  );
+  if (!match) return null;
+
+  // Get all player rows for this match
+  const matchRows = players.filter(p =>
+    String(p.season)   === String(season) &&
+    String(p.matchNum) === String(matchNum)
+  );
+
+  // Split into two teams
+  const team1Rows = matchRows.filter(p => p.team === match.team1);
+  const team2Rows = matchRows.filter(p => p.team === match.team2);
+
+  function buildInnings(rows, battingTeam, bowlingTeam) {
+    // Batting — rows where this team batted
+    const batters = rows
+      .filter(r => r.batting && !r.batting.dnb)
+      .sort((a, b) => (a.batting.position || 99) - (b.batting.position || 99))
+      .map(r => ({
+        player:      r.player,
+        runs:        r.batting.runs   || 0,
+        balls:       r.batting.balls  || 0,
+        fours:       r.batting.fours  || 0,
+        sixes:       r.batting.sixes  || 0,
+        sr:          r.batting.sr     || 0,
+        notOut:      r.batting.notOut || false,
+        dismissal:   r.batting.dismissalType || '',
+        dismissedBy: r.batting.dismissedBy   || '',
+      }));
+
+    // Bowling — get bowling figures from opposition rows
+    const allRows = matchRows.filter(p => p.team === bowlingTeam);
+    const bowlers = allRows
+      .filter(r => r.bowling && r.bowling.overs > 0)
+      .sort((a, b) => (b.bowling.wickets || 0) - (a.bowling.wickets || 0))
+      .map(r => ({
+        player:  r.player,
+        overs:   r.bowling.overs   || 0,
+        runs:    r.bowling.runs    || 0,
+        wickets: r.bowling.wickets || 0,
+        economy: r.bowling.economy || 0,
+        maidens: r.bowling.maidens || 0,
+      }));
+
+    // Fielding — from opposition rows
+    const fielding = allRows
+      .filter(r =>
+        (r.fielding?.catches       || 0) > 0 ||
+        (r.fielding?.stumpings     || 0) > 0 ||
+        (r.fielding?.directRunOuts || 0) > 0 ||
+        (r.fielding?.comboRunOuts  || 0) > 0
+      )
+      .map(r => ({
+        player:      r.player,
+        catches:     r.fielding.catches       || 0,
+        stumpings:   r.fielding.stumpings     || 0,
+        directRunOut:r.fielding.directRunOuts || 0,
+        comboRunOut: r.fielding.comboRunOuts  || 0,
+      }));
+
+    return { team: battingTeam, batters, bowlers, fielding };
+  }
+
+  // Determine batting order from batFirst field
+  const team1BatFirst = match.batFirst === match.team1;
+
+  const innings1 = team1BatFirst
+    ? buildInnings(team1Rows, match.team1, match.team2)
+    : buildInnings(team2Rows, match.team2, match.team1);
+
+  const innings2 = team1BatFirst
+    ? buildInnings(team2Rows, match.team2, match.team1)
+    : buildInnings(team1Rows, match.team1, match.team2);
+
+  return {
+    match,
+    innings: [innings1, innings2],
+  };
+}
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 module.exports = {
@@ -416,6 +499,7 @@ module.exports = {
   loadConfig,
   getMatches,
   getMatchById,
+  getScorecard,
   getPointsTable,
   getPlayerList,
   getPlayerStats,
