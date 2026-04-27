@@ -1,0 +1,103 @@
+{
+  "id": "box",
+  "name": "Box Cricket",
+  "shortName": "Box",
+  "seasons": [3, 4, 5, 6],
+  "currentSeason": 6,
+  "formats": ["T12", "Test", "All"],
+  "defaultFormat": "T12",
+  "grounds": ["Wakad", "Saudagar", "Balewadi", "Moshi"],
+  "players": [
+    "Ajinath", "Amar", "Amol", "Anil", "Eshwar", "Gaurav",
+    "Macchi", "Mangesh", "Rahul", "Ranjit", "Sandy D", "Sandy N",
+    "Sarang", "Sudhir", "Sushil", "Vallabh"
+  ],
+  "teams": {
+    "3": ["Energetic Avengers", "Resolute Titans", "Golden Phoenix", "Rising Abhyuday Warriors"],
+    "4": ["Radiant Raiders", "Cricket Mavericks"],
+    "5": ["Vajra Prahar", "Mighty Legends"],
+    "6": ["AjinkyaTara", "Storm Dragons"]
+  },
+  "teamAcronyms": {
+    "Energetic Avengers": "EA",
+    "Resolute Titans": "RT",
+    "Golden Phoenix": "GP",
+    "Rising Abhyuday Warriors": "RAW"
+  },
+  "mvpRules": {
+    "batting": {
+      "runPoints": 1,
+      "boundaryBonus": {
+        "four": 1,
+        "six": 2
+      },
+      "notOutBonus": {
+        "multiplier": 0.2,
+        "minimumPoints": 8
+      },
+      "strikeRate": {
+        "threshold": 1.0,
+        "bonusMultiplier": 0.3,
+        "penaltyMultiplier": 0.3,
+        "maxPenalty": -7
+      },
+      "milestones": {
+        "15": 2,
+        "30": 4,
+        "50": 8,
+        "100": 16
+      }
+    },
+    "bowling": {
+      "wicketTypes": {
+        "bowled": 12,
+        "hitWicket": 12,
+        "caught": 10,
+        "stumped": 10,
+        "lbw": 10,
+        "runOut": 0
+      },
+      "maidenOver": 5,
+      "economy": {
+        "expectedEconomy": 6.0,
+        "multiplier": 0.8,
+        "maxPenalty": -7
+      },
+      "milestones": {
+        "2": 4,
+        "3": 6,
+        "4": 8,
+        "5": 10
+      }
+    },
+    "fielding": {
+      "catch": 5,
+      "stumping": 5,
+      "directRunOut": 8,
+      "comboRunOut": 4
+    },
+    "captaincy": {
+      "win": 5,
+      "loss": 0
+    },
+    "momOverridePoints": 20
+  },
+  "scorecardConfig": {
+    "oversPerInnings": 12,
+    "playersPerSide": 8,
+    "allowNegativeScores": false,
+    "trackPartnerships": true,
+    "trackDismissalTypes": true
+  },
+  "leaderboardConfig": {
+    "minInningsForBatting": 3,
+    "minInningsForBowling": 3,
+    "minMatchesForMVP": 2
+  },
+  "aiInsightConfig": {
+    "tone": "celebratory",
+    "maxLength": 2,
+    "avoidNegative": true,
+    "fallbackToFielding": true
+  }
+}

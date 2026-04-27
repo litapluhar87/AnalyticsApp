@@ -1,0 +1,16 @@
+{
+  "short_name": "RACL Cricket",
+  "name": "RACL Cricket Stats",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0C447C",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

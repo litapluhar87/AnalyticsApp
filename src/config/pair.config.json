@@ -1,0 +1,72 @@
+{
+  "id": "pair",
+  "name": "Pair Cricket",
+  "shortName": "Pair",
+  "seasons": [6],
+  "currentSeason": 6,
+  "formats": ["T12"],
+  "defaultFormat": "T12",
+  "grounds": ["Wakad"],
+  "players": [
+    "Ajinath", "Amar", "Amol", "Anil", "Eshwar", "Gaurav",
+    "Macchi", "Mangesh", "Rahul", "Ranjit", "Sandy D", "Sandy N",
+    "Sarang", "Sudhir", "Sushil", "Vallabh"
+  ],
+  "teams": {
+    "6": ["Energetic Avengers", "Resolute Titans"]
+  },
+  "teamAcronyms": {
+    "Energetic Avengers": "EA",
+    "Resolute Titans": "RT"
+  },
+  "mvpRules": {
+    "batting": {
+      "runPoints": 1,
+      "boundaryBonus": {
+        "four": 1,
+        "six": 2
+      },
+      "wicketPenalty": -5,
+      "pairScoring": true
+    },
+    "bowling": {
+      "wicketTypes": {
+        "bowled": 8,
+        "caught": 6,
+        "stumped": 6,
+        "runOut": 0
+      },
+      "economy": {
+        "expectedEconomy": 6.0,
+        "multiplier": 0.8,
+        "maxPenalty": -5
+      }
+    },
+    "fielding": {
+      "catch": 5,
+      "runOut": 6
+    }
+  },
+  "scorecardConfig": {
+    "oversPerInnings": 12,
+    "oversPerPair": 4,
+    "playersPerSide": 10,
+    "pairsPerSide": 5,
+    "allowNegativeScores": true,
+    "wicketCostRuns": 5,
+    "trackPartnerships": false,
+    "trackDismissalTypes": true,
+    "primaryUnit": "pair"
+  },
+  "leaderboardConfig": {
+    "minInningsForBatting": 1,
+    "minInningsForBowling": 1,
+    "minMatchesForMVP": 1
+  },
+  "aiInsightConfig": {
+    "tone": "celebratory",
+    "maxLength": 2,
+    "avoidNegative": true,
+    "fallbackToFielding": true
+  }
+}
