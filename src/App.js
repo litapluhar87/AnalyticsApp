@@ -125,26 +125,39 @@ export default function App() {
             {TABS.map(tab => (
               <button
                 key={tab.id}
-                style={S.navItem}
+                style={{
+                  ...S.navItem,
+                  borderTop: activeTab === tab.id
+                    ? `3px solid ${tab.color}`
+                    : '3px solid transparent',
+                  borderLeft: activeTab === tab.id
+                    ? '0.5px solid #e0e0e0'
+                    : '0.5px solid transparent',
+                  borderRight: activeTab === tab.id
+                    ? '0.5px solid #e0e0e0'
+                    : '0.5px solid transparent',
+                  borderBottom: activeTab === tab.id
+                    ? '2px solid #fff'
+                    : '0.5px solid transparent',
+                  background: activeTab === tab.id ? '#fff' : '#f5f5f5',
+                  marginBottom: activeTab === tab.id ? -1 : 0,
+                }}
                 onClick={() => setActiveTab(tab.id)}>
                 <span style={{
                   fontSize: 16,
                   lineHeight: 1,
-                  filter: activeTab === tab.id ? 'none' : 'opacity(0.35)',
+                  opacity: activeTab === tab.id ? 1 : 0.4,
                 }}>
                   {tab.icon}
                 </span>
                 <span style={{
                   ...S.navLabel,
+                  fontSize: 11,
                   color: activeTab === tab.id ? tab.color : '#aaa',
-                  fontWeight: activeTab === tab.id ? 500 : 400,
+                  fontWeight: activeTab === tab.id ? 600 : 400,
                 }}>
                   {tab.label}
                 </span>
-                <div style={{
-                  ...S.navBar,
-                  background: activeTab === tab.id ? tab.color : 'transparent'
-                }}/>
               </button>
             ))}
           </div>
@@ -253,25 +266,20 @@ const S = {
     borderBottom: '0.5px solid #e0e0e0',
     display: 'flex',
     zIndex: 150,
+    paddingTop: 2,
   },
   navItem: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '6px 0 4px',
-    gap: 2,
-    background: 'none',
-    border: 'none',
+    padding: '6px 2px 4px',
+    gap: 3,
     cursor: 'pointer',
-  },
-  navBar: {
-    width: '100%',
-    height: 2,
-    borderRadius: 0,
-    marginTop: 2,
+    transition: 'background 0.15s',
   },
   navLabel: {
-    fontSize: 9,
+    fontSize: 11,
+    letterSpacing: 0.2,
   },
 };
