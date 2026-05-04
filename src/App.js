@@ -119,27 +119,16 @@ export default function App() {
           </div>
         </div>
 
-        {/* Page content */}
-        <div style={S.content}>
-          {renderPage()}
-        </div>
-
-        {/* Bottom nav */}
+		{/* Top tab nav — sits below header */}
         {!showSettings && (
-          <div style={S.bottomNav}>
+          <div style={S.topNav}>
             {TABS.map(tab => (
               <button
                 key={tab.id}
                 style={S.navItem}
                 onClick={() => setActiveTab(tab.id)}>
-                <div style={{
-                  ...S.navBar,
-                  background: activeTab === tab.id
-                    ? tab.color
-                    : 'transparent'
-                }}/>
                 <span style={{
-                  fontSize: 18,
+                  fontSize: 16,
                   lineHeight: 1,
                   filter: activeTab === tab.id ? 'none' : 'opacity(0.35)',
                 }}>
@@ -147,17 +136,24 @@ export default function App() {
                 </span>
                 <span style={{
                   ...S.navLabel,
-                  color: activeTab === tab.id
-                    ? tab.color
-                    : '#aaa',
+                  color: activeTab === tab.id ? tab.color : '#aaa',
                   fontWeight: activeTab === tab.id ? 500 : 400,
                 }}>
                   {tab.label}
                 </span>
+                <div style={{
+                  ...S.navBar,
+                  background: activeTab === tab.id ? tab.color : 'transparent'
+                }}/>
               </button>
             ))}
           </div>
         )}
+		
+        {/* Page content */}
+        <div style={S.content}>
+          {renderPage()}
+        </div>
 
       </div>
     </AppContext.Provider>
@@ -247,33 +243,33 @@ const S = {
   content: {
     flex: 1,
     overflowY: 'auto',
-    paddingBottom: 16,
+    paddingBottom: 24,
     WebkitOverflowScrolling: 'touch',
   },
-  bottomNav: {
+  topNav: {
     flexShrink: 0,
     width: '100%',
     background: '#fff',
-    borderTop: '0.5px solid #e0e0e0',
+    borderBottom: '0.5px solid #e0e0e0',
     display: 'flex',
-    zIndex: 100,
+    zIndex: 150,
   },
   navItem: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '6px 0 8px',
+    padding: '6px 0 4px',
     gap: 2,
     background: 'none',
     border: 'none',
     cursor: 'pointer',
   },
   navBar: {
-    width: 20,
-    height: 3,
-    borderRadius: 2,
-    marginBottom: 1,
+    width: '100%',
+    height: 2,
+    borderRadius: 0,
+    marginTop: 2,
   },
   navLabel: {
     fontSize: 9,
