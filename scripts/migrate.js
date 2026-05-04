@@ -51,6 +51,7 @@ function readDB(wb) {
 // Parse match-level data from scorecard sheets (ScrS3, ScrS4 …).
 // Match header row: row[6] === 'Match' && row[7] is a number
 // Team scorecard header row: row[4] === 'overs'
+// ─── MATCHES + SCORECARD DETAIL ──────────────────────────────────────────────
 function parseMatches(wb, scorecardSheets) {
   const matches = [];
 
@@ -72,14 +73,17 @@ function parseMatches(wb, scorecardSheets) {
         const mom       = String(resultRow[2] || '');
         const result    = String(resultRow[4] || '');
 
-        // Collect team scorecard-header rows (col[4]==='overs') until next match header
-        const teamHeaders = [];
+        // Collect all rows until next match header
         let j = i + 2;
+        const matchRows = [];
         while (j < rows.length) {
           if (rows[j][6] === 'Match' && typeof rows[j][7] === 'number') break;
-          if (rows[j][4] === 'overs') teamHeaders.push(rows[j]);
+          matchRows.push(rows[j]);
           j++;
         }
+
+        // Find team scorecard header rows (col[4]==='overs')
+        const teamHeaders = matchRows.filter(r => r[4] === 'overs');
 
         let team1 = '', score1 = '', overs1 = '';
         let team2 = '', score2 = '', overs2 = '';
@@ -100,6 +104,168 @@ function parseMatches(wb, scorecardSheets) {
         else if (/\bno result\b/i.test(result)) winner = 'No Result';
         else if (/\btie\b/i.test(result))       winner = 'Tie';
 
+        // ── Parse batting rows for each innings ──
+        // Batting rows: col[1] is player name (string), col[6] is runs (number)
+        // Format: [_, player, dismissType, fielder, 'b', bowler, runs, balls, 4s, 6s, ...]
+        // FOW rows: col[17] is wicket# (number), col[18] is player, T12 col is runs
+        // FOW is in the resultRow area — col[18] = 'FOW' marks the FOW header
+
+        const innings = [];
+        let currentInning = null;
+        let inFOW = false;
+
+        for (const r of matchRows) {
+          // New innings starts at team scorecard header
+          if (r[4] === 'overs') {
+            if (currentInning) innings.push(currentInning);
+            currentInning = {
+              team:    String(r[1] || ''),
+              score:   String(r[2] || ''),
+              overs:   String(r[3] || ''),
+              batters: [],
+              fow:     [],
+            };
+            inFOW = false;
+            continue;
+          }
+
+          if (!currentInning) continue;
+
+          // Batting row: col[1] is player string, col[6] is runs number or col[5]==='Extras'
+		  if (
+            typeof r[1] === 'string' && r[1] !== '' &&
+            !r[1].startsWith('Did not bat') &&
+            r[1] !== 'Man of the Match' &&
+            r[5] !== 'Extras' &&
+            r[4] !== 'overs'
+          ) {
+            // Check if this looks like a batter row
+            // col[2] = dismissType (c, b, run out, not out, etc)
+            // col[3] = fielder (if caught) or blank
+            // col[4] = 'b' separator or blank
+            // col[5] = bowler or blank
+            // col[6] = runs (number)
+            const runsVal = r[6];
+            if (typeof runsVal === 'number' || runsVal === '') {
+			  // Column mapping in scorecard rows:
+              // col[2] = dismissType (c, b, lbw, run out, st, hit wkt, not out, retired)
+              // col[3] = fielder1 (catcher for c, first fielder for run out, blank for b/lbw)
+              // col[4] = separator ('b' for bowling dismissals, '/' for two-fielder run out)
+              // col[5] = bowler (for c/b/lbw/st/hitwkt) or second fielder (for run out)
+
+			  const col2raw = String(r[2] || '').trim().toLowerCase();
+              const col3    = String(r[3] || '').trim();
+              const col3low = col3.toLowerCase();
+              const col4    = String(r[4] || '').trim().toLowerCase();
+              const col5    = String(r[5] || '').trim();
+
+              // Determine dismissal type from column patterns:
+              // Retired:        col3 === 'retired'
+              // Not out:        col3 === 'not out'
+              // Caught:         col2 === 'c', col3=fielder or '&', col4='b', col5=bowler
+              // Bowled:         col2 blank, col3 blank, col4 === 'b', col5=bowler
+              // LBW:            col2 === 'lbw', col4='b', col5=bowler
+              // Run out 2 fld:  col2 === 'run out', col4 === '/', col3+col5=fielders
+              // Run out 1 fld:  col2 === 'run out', col3=fielder, col4+col5 blank
+              // Stumped:        col2 === 'st', col4='b', col5=bowler
+              // Hit wicket:     col2 === 'hit wkt' or 'hw', col4='b', col5=bowler
+
+              let dismissType = '';
+              if (col3low === 'retired') {
+                dismissType = 'retired';
+              } else if (col3low === 'not out') {
+                dismissType = 'not out';
+              } else if (col2raw === 'c') {
+                dismissType = 'c';
+              } else if (col2raw === 'run out') {
+                dismissType = 'run out';
+              } else if (col2raw === 'lbw') {
+                dismissType = 'lbw';
+              } else if (col2raw === 'st') {
+                dismissType = 'st';
+              } else if (col2raw === 'hit wkt' || col2raw === 'hw') {
+                dismissType = 'hit wkt';
+              } else if (col4 === 'b' && col5 !== '') {
+                dismissType = 'b';
+              } else {
+                dismissType = '';
+              }
+
+			  let dismissal = '';
+              let fielder   = '';
+              let bowler    = '';
+
+              if (dismissType === 'c') {
+                fielder = col3;
+                bowler  = col5;
+                if (fielder && bowler) {
+                  dismissal = `c ${fielder} b ${bowler}`;
+                } else if (bowler) {
+                  dismissal = `c & b ${bowler}`;
+                } else {
+                  dismissal = 'caught';
+                }
+              } else if (dismissType === 'b') {
+                bowler    = col5;
+                dismissal = bowler ? `b ${bowler}` : 'bowled';
+              } else if (dismissType === 'lbw') {
+                bowler    = col5;
+                dismissal = bowler ? `lbw b ${bowler}` : 'lbw';
+              } else if (dismissType === 'st') {
+                bowler    = col5;
+                dismissal = bowler ? `st b ${bowler}` : 'stumped';
+              } else if (dismissType === 'hit wkt') {
+                bowler    = col5;
+                dismissal = bowler ? `hit wkt b ${bowler}` : 'hit wicket';
+              } else if (dismissType === 'run out') {
+                if (col3 && col4 === '/' && col5) {
+                  fielder   = `${col3} / ${col5}`;
+                  dismissal = `run out (${col3} / ${col5})`;
+                } else if (col3) {
+                  fielder   = col3;
+                  dismissal = `run out (${col3})`;
+                } else {
+                  dismissal = 'run out';
+                }
+              } else if (dismissType === 'retired') {
+                dismissal = 'retired';
+              } else if (dismissType === 'not out') {
+                dismissal = 'not out';
+              } else {
+                dismissal = 'not out';
+              }
+
+			  currentInning.batters.push({
+                player:       r[1],
+                dismissal,
+                dismissType,
+                fielder,
+                bowler,
+                runs:         typeof runsVal === 'number' ? runsVal : null,
+                balls:        num(r[7]),
+                fours:        num(r[8]),
+                sixes:        num(r[9]),
+              });
+
+              // FOW on same row — col 17=wicket, 18=player, 19=runs
+			  if (
+                typeof r[17] === 'number' &&
+                r[17] >= 1 && r[17] <= 11 &&
+                typeof r[18] === 'string' && r[18] !== ''
+              ) {
+                currentInning.fow.push({
+                  wicket: num(r[17]),
+                  player: String(r[18]),
+                  runs:   num(r[19]),
+                  overs:  r[20] !== '' ? String(r[20]) : null,
+                });
+              }
+            }
+          }
+        }
+
+        if (currentInning) innings.push(currentInning);
+
         matches.push({
           season,
           format,
@@ -115,7 +281,8 @@ function parseMatches(wb, scorecardSheets) {
           result,
           winner,
           mom,
-          batFirst: team1
+          batFirst: team1,
+          innings,
         });
 
         i = j;
@@ -151,16 +318,17 @@ function parsePlayers(wb) {
         won:         wonVal === 1  || wonVal === true,
         tied:        wonVal === 0.5,
         batFirst:    r['BatInning'] === 1,
-        batting: {
+		batting: {
           innings:       num(r['Inning3']),
           position:      num(r['Position']),
           runs:          isDNB ? null : (r['Runs'] === '' ? null : num(r['Runs'])),
           balls:         num(r['Balls']),
           fours:         num(r['4s']),
           sixes:         num(r['6s']),
-          sr:            Math.round(num(r['SR']) * 10000) / 100,  // stored as ratio, convert to %
+          sr:            Math.round(num(r['SR']) * 10000) / 100,
           dismissalType: String(r['HowOut?']   || ''),
           dismissedBy:   String(r['WicketTo']  || ''),
+          fielder:       String(r['CaughtBy']  || ''),
           notOut:        num(r['Not Out?'])  === 1,
           retired:       num(r['Retired?'])  === 1,
           dnb:           isDNB

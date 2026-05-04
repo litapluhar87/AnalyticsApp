@@ -4,24 +4,20 @@ import { useApp } from '../App';
 const engine = require('../engine/statsEngine');
 
 const ACCENT  = '#993C1D';
-const SEASONS = ['All', 'S3', 'S4', 'S5', 'S6'];
-const FORMATS = ['All', 'T12', 'Test'];
 
 export default function Matches() {
-  const { sportType } = useApp();
+  const { sportType, season, format } = useApp();
   const sport = sportType.toLowerCase();
 
-  const [localSeason, setLocalSeason] = useState('All');
-  const [localFormat, setLocalFormat] = useState('All');
-  const [showPT, setShowPT]           = useState(false);
+  const [showPT, setShowPT] = useState(false);
   const [matches, setMatches]         = useState([]);
   const [pointsTable, setPT]          = useState([]);
   const [expandedKey, setExpandedKey] = useState(null);
   const [matchDetail, setDetail]      = useState(null);
   const [inningTab, setInningTab]     = useState(0);
 
-  const seasonArg = localSeason === 'All' ? undefined : localSeason.replace('S', '');
-  const formatArg = localFormat === 'All' ? undefined : localFormat;
+  const seasonArg = season === 'All' ? undefined : season;
+  const formatArg = format === 'All' ? undefined : format;
 
   useEffect(() => {
     try {
@@ -60,30 +56,8 @@ export default function Matches() {
   return (
     <div style={S.page}>
 
-      {/* ── FILTER BAR ── */}
+	  {/* ── FILTER BAR ── */}
       <div style={S.filterBar}>
-        <div style={S.filterRow}>
-          {SEASONS.map(s => (
-            <button
-              key={s}
-              onClick={() => setLocalSeason(s)}
-              style={localSeason === s ? S.pillOn : S.pillOff}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-        <div style={S.filterRow}>
-          {FORMATS.map(f => (
-            <button
-              key={f}
-              onClick={() => setLocalFormat(f)}
-              style={localFormat === f ? S.pillOn : S.pillOff}
-            >
-              {f}
-            </button>
-          ))}
-        </div>
         <div style={{ ...S.filterRow, justifyContent: 'flex-end' }}>
           <button
             onClick={() => setShowPT(p => !p)}
@@ -154,13 +128,20 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
             <div style={S.score}>{m.score2 || '-'}</div>
           </div>
         </div>
-        <div style={S.metaArea}>
+		<div style={S.metaArea}>
+          {/* Line 1: Ground · S6 M7 · Date (right aligned) */}
           <div style={S.metaRow}>
-            {m.ground  && <span style={S.chip}>{m.ground}</span>}
-            {m.season  && <span style={S.chip}>S{m.season}</span>}
-            {result    && <span style={S.resultTxt}>{result}</span>}
+            {m.ground && <span style={S.chip}>{m.ground}</span>}
+            {m.season && <span style={S.chip}>S{m.season} M{m.matchNum}</span>}
+            <span style={{flex:1}}/>
+            {m.date && <span style={S.chip}>
+              {new Date(m.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
+            </span>}
           </div>
-          {m.mom && <div style={S.momRow}>MoM: <strong>{m.mom}</strong></div>}
+          {/* Line 2: Result centered */}
+          {result && <div style={S.resultTxt}>{result}</div>}
+          {/* Line 3: Man of the Match */}
+          {m.mom && <div style={S.momRow}>Man of the Match: <strong>{m.mom}</strong></div>}
         </div>
       </button>
 
@@ -193,6 +174,7 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
               <BattingTable rows={currentInning.batters} />
               <BowlingTable rows={currentInning.bowlers} />
               <FieldingSection data={currentInning.fielding} />
+			  <FOWSection fow={currentInning.fow} />
             </>
           )}
         </div>
@@ -215,19 +197,22 @@ function BattingTable({ rows }) {
         <span style={S.tblNum}>SR</span>
       </div>
       {rows.map((b, i) => (
-        <div key={i} style={{ ...S.tblRow, background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
+        <div key={i} style={{
+          ...S.tblRow,
+          background: i % 2 === 0 ? '#fafafa' : '#fff'
+        }}>
           <div style={S.tblPlayer}>
-            <div style={S.tblPlayerName}>{b.player}</div>
-            {b.dismissal && <div style={S.dismissal}>{b.dismissal}</div>}
+            <div style={S.tblPlayerName}>
+              {b.player}{b.notOut ? '*' : ''}
+            </div>
+            <div style={S.dismissal}>{b.dismissal || 'not out'}</div>
           </div>
-          <span style={S.tblNum}>{b.runs  ?? '-'}</span>
+          <span style={S.tblNum}>{b.runs ?? '-'}</span>
           <span style={S.tblNum}>{b.balls ?? '-'}</span>
-          <span style={S.tblNum}>{b.fours ?? b['4s'] ?? '-'}</span>
-          <span style={S.tblNum}>{b.sixes ?? b['6s'] ?? '-'}</span>
+          <span style={S.tblNum}>{b.fours ?? '-'}</span>
+          <span style={S.tblNum}>{b.sixes ?? '-'}</span>
           <span style={S.tblNum}>
-            {typeof b.sr       === 'number' ? b.sr.toFixed(1)
-             : typeof b.strikeRate === 'number' ? b.strikeRate.toFixed(1)
-             : (b.sr ?? b.strikeRate ?? '-')}
+            {typeof b.sr === 'number' ? b.sr.toFixed(1) : '-'}
           </span>
         </div>
       ))}
@@ -299,6 +284,24 @@ function FieldingSection({ data }) {
       {lines.map((line, i) => (
         <div key={i} style={S.fieldItem}>{line}</div>
       ))}
+    </div>
+  );
+}
+
+function FOWSection({ fow }) {
+  if (!fow?.length) return null;
+  return (
+    <div style={S.tableWrap}>
+      <div style={S.tableTitle}>Fall of wickets</div>
+      <div style={S.fowRow}>
+        {fow.map((f, i) => (
+          <span key={i} style={S.fowItem}>
+            <span style={S.fowWkt}>{f.wicket}-{f.runs}</span>
+            <span style={S.fowPlayer}> ({f.player}{f.overs ? `, ${f.overs} ov` : ''})</span>
+            {i < fow.length - 1 && <span style={S.fowSep}>, </span>}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
@@ -406,8 +409,8 @@ const S = {
     color: ACCENT,
     borderRadius: 4,
   },
-  metaArea:  { marginTop: 8 },
-  metaRow:   { display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 5 },
+  metaArea: { marginTop: 6 },
+  metaRow: { display: 'flex', alignItems: 'center', gap: 5, marginTop: 6 },
   chip: {
     fontSize: 11,
     background: '#f5f5f5',
@@ -415,7 +418,7 @@ const S = {
     padding: '2px 7px',
     borderRadius: 4,
   },
-  resultTxt: { fontSize: 11, color: '#666' },
+  resultTxt: { fontSize: 11, color: '#666', textAlign: 'center', marginTop: 5 },
   momRow:    { fontSize: 11, color: '#999', marginTop: 3 },
   scorecard: { borderTop: '0.5px solid #f0f0f0', paddingBottom: 8 },
   tabRow:    { display: 'flex', padding: '8px 14px 4px', gap: 8 },
@@ -477,4 +480,9 @@ const S = {
   ptTeam:  { flex: 1, fontSize: 13, color: '#222' },
   ptNum:   { width: 30, textAlign: 'right', fontSize: 13, color: '#555' },
   empty:   { textAlign: 'center', padding: '28px 0', fontSize: 13, color: '#c0c0c0' },
+  fowRow:    { padding: '6px 14px 10px', flexWrap: 'wrap', display: 'flex' },
+  fowItem:   { fontSize: 11, color: '#555' },
+  fowWkt:    { fontWeight: 500, color: '#333' },
+  fowPlayer: { color: '#888' },
+  fowSep:    { color: '#ccc' },
 };

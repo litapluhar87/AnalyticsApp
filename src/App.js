@@ -7,30 +7,38 @@ import Charts from './pages/Charts';
 import Settings from './pages/Settings';
 
 export const AppContext = createContext();
-
 export function useApp() { return useContext(AppContext); }
 
 const TABS = [
-  { id: 'home',        label: 'Home',        color: '#0C447C' },
-  { id: 'matches',     label: 'Matches',     color: '#993C1D' },
-  { id: 'mycricket',   label: 'My Cricket',  color: '#534AB7' },
-  { id: 'leaderboard', label: 'Leaderboard', color: '#27500A' },
-  { id: 'charts',      label: 'Charts',      color: '#27500A' },
+  { id:'home',        label:'Home',        icon:'⌂',  color:'#0C447C' },
+  { id:'matches',     label:'Matches',     icon:'🏏', color:'#993C1D' },
+  { id:'mycricket',   label:'My Cricket',  icon:'👤', color:'#534AB7' },
+  { id:'leaderboard', label:'Leaderboard', icon:'★',  color:'#27500A' },
+  { id:'charts',      label:'Charts',      icon:'▦',  color:'#27500A' },
 ];
 
-const SPORT_TYPES = ['Classic', 'Box', 'Pair'];
-const FORMATS     = ['All', 'T12', 'Test'];
+const SPORT_TYPES = ['Classic','Box','Pair'];
+const SEASONS_BOX      = ['All','3','4','5','6'];
+const SEASONS_CLASSIC  = ['All','1','2','3','4','5','6'];
+const SEASONS_PAIR     = ['All','6'];
+const FORMATS          = ['All','T12','Test'];
 
 export default function App() {
   const [activeTab,    setActiveTab]    = useState('home');
   const [sportType,    setSportType]    = useState('Box');
-  const [format,       setFormat]       = useState('T12');
-  const [season,       setSeason]       = useState('6');
+  const [season,       setSeason]       = useState('All');
+  const [format,       setFormat]       = useState('All');
   const [showSettings, setShowSettings] = useState(false);
   const [currentUser,  setCurrentUser]  = useState('Rahul');
   const [isAdmin,      setIsAdmin]      = useState(true);
 
   const activeColor = TABS.find(t => t.id === activeTab)?.color || '#0C447C';
+
+  const seasonOptions = sportType === 'Classic'
+    ? SEASONS_CLASSIC
+    : sportType === 'Pair'
+      ? SEASONS_PAIR
+      : SEASONS_BOX;
 
   const ctx = {
     sportType, setSportType,
@@ -39,83 +47,113 @@ export default function App() {
     currentUser, setCurrentUser,
     isAdmin,
     activeColor,
-    navigateTo: setActiveTab,
+    navigateTo: (tab) => {
+      setShowSettings(false);
+      setActiveTab(tab);
+    },
   };
 
   const renderPage = () => {
-    if (showSettings) return <Settings onClose={() => setShowSettings(false)} />;
+    if (showSettings) return <Settings onClose={() => setShowSettings(false)}/>;
     switch (activeTab) {
-      case 'home':        return <Home />;
-      case 'matches':     return <Matches />;
-      case 'mycricket':   return <MyCricket />;
-      case 'leaderboard': return <Leaderboard />;
-      case 'charts':      return <Charts />;
-      default:            return <Home />;
+      case 'home':        return <Home/>;
+      case 'matches':     return <Matches/>;
+      case 'mycricket':   return <MyCricket/>;
+      case 'leaderboard': return <Leaderboard/>;
+      case 'charts':      return <Charts/>;
+      default:            return <Home/>;
     }
   };
 
   return (
     <AppContext.Provider value={ctx}>
-      <div style={styles.shell}>
+      <div style={S.shell}>
 
-        {/* Global header */}
-        <div style={{ ...styles.header, background: activeColor }}>
-          <div style={styles.headerTop}>
-            <div>
-              <div style={styles.appName}>RACL Cricket</div>
-              <div style={styles.appSub}>
-                {sportType} · {format} · Season {season}
+        {/* Sticky header */}
+        <div style={{ ...S.header, background: activeColor }}>
+		  <div style={S.headerRow}>
+
+            {/* Left: title only */}
+            <div style={S.titleBlock}>
+              <div style={S.appName}>RACL Cricket</div>
+            </div>
+
+            {/* Right: all three dropdowns + gear + avatar */}
+            <div style={S.rightBlock}>
+              <select
+                value={sportType}
+                onChange={e => {
+                  setSportType(e.target.value);
+                  setSeason('All');
+                }}
+                style={S.filterSelect}>
+                {SPORT_TYPES.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+              <select
+                value={season}
+                onChange={e => setSeason(e.target.value)}
+                style={S.filterSelect}>
+                {seasonOptions.map(s => (
+                  <option key={s} value={s}>
+                    {s === 'All' ? 'All' : `S${s}`}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={format}
+                onChange={e => setFormat(e.target.value)}
+                style={S.filterSelect}>
+                {FORMATS.map(f => (
+                  <option key={f} value={f}>{f}</option>
+                ))}
+              </select>
+              <button
+                style={S.gearBtn}
+                onClick={() => setShowSettings(s => !s)}>
+                ⚙
+              </button>
+              <div style={S.avatar}>
+                {currentUser.slice(0,2).toUpperCase()}
               </div>
             </div>
-            <div style={styles.headerRight}>
-              <button style={styles.gearBtn} onClick={() => setShowSettings(s => !s)}>⚙</button>
-              <div style={styles.avatar}>{currentUser.slice(0,2).toUpperCase()}</div>
-            </div>
-          </div>
 
-          {/* Sport type toggle */}
-          <div style={styles.pillRow}>
-            {SPORT_TYPES.map(s => (
-              <button key={s}
-                style={sportType === s ? styles.pillOn : styles.pillOff}
-                onClick={() => setSportType(s)}>
-                {s}
-              </button>
-            ))}
-          </div>
-
-          {/* Format toggle */}
-          <div style={{ ...styles.pillRow, marginTop: 6 }}>
-            {FORMATS.map(f => (
-              <button key={f}
-                style={format === f ? styles.pillOn : styles.pillOff}
-                onClick={() => setFormat(f)}>
-                {f}
-              </button>
-            ))}
           </div>
         </div>
 
         {/* Page content */}
-        <div style={styles.content}>
+        <div style={S.content}>
           {renderPage()}
         </div>
 
         {/* Bottom nav */}
         {!showSettings && (
-          <div style={styles.bottomNav}>
+          <div style={S.bottomNav}>
             {TABS.map(tab => (
-              <button key={tab.id}
-                style={styles.navItem}
+              <button
+                key={tab.id}
+                style={S.navItem}
                 onClick={() => setActiveTab(tab.id)}>
                 <div style={{
-                  ...styles.navBar,
-                  background: activeTab === tab.id ? tab.color : 'transparent'
+                  ...S.navBar,
+                  background: activeTab === tab.id
+                    ? tab.color
+                    : 'transparent'
                 }}/>
                 <span style={{
-                  ...styles.navLabel,
-                  color: activeTab === tab.id ? tab.color : 'var(--color-text-secondary)',
-                  fontWeight: activeTab === tab.id ? 500 : 400
+                  fontSize: 18,
+                  lineHeight: 1,
+                  filter: activeTab === tab.id ? 'none' : 'opacity(0.35)',
+                }}>
+                  {tab.icon}
+                </span>
+                <span style={{
+                  ...S.navLabel,
+                  color: activeTab === tab.id
+                    ? tab.color
+                    : '#aaa',
+                  fontWeight: activeTab === tab.id ? 500 : 400,
                 }}>
                   {tab.label}
                 </span>
@@ -123,12 +161,13 @@ export default function App() {
             ))}
           </div>
         )}
+
       </div>
     </AppContext.Provider>
   );
 }
 
-const styles = {
+const S = {
   shell: {
     maxWidth: 480,
     margin: '0 auto',
@@ -139,29 +178,45 @@ const styles = {
     background: '#f5f5f5',
   },
   header: {
-    padding: '12px 16px 14px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 200,
+    padding: '10px 14px 10px',
     flexShrink: 0,
   },
-  headerTop: {
+  headerRow: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    gap: 8,
+  },
+  titleBlock: {
+    flexShrink: 0,
   },
   appName: {
-    fontSize: 17,
-    fontWeight: 500,
+    fontSize: 20,
+    fontWeight: 600,
     color: '#fff',
+    letterSpacing: 0.3,
+    whiteSpace: 'nowrap',
   },
-  appSub: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
-    marginTop: 1,
-  },
-  headerRight: {
+  rightBlock: {
     display: 'flex',
     alignItems: 'center',
-    gap: 10,
+    gap: 6,
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  filterSelect: {
+    background: '#fff',
+    border: '1px solid rgba(255,255,255,0.25)',
+    color: '#333',
+    borderRadius: 8,
+    fontSize: 11,
+    padding: '4px 5px',
+    cursor: 'pointer',
+    outline: 'none',
+    maxWidth: 90,
   },
   gearBtn: {
     width: 28,
@@ -175,6 +230,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   avatar: {
     width: 28,
@@ -188,30 +244,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  pillRow: {
-    display: 'flex',
-    gap: 6,
-  },
-  pillOn: {
-    padding: '4px 12px',
-    borderRadius: 14,
-    fontSize: 11,
-    fontWeight: 500,
-    background: '#fff',
-    color: '#333',
-    border: 'none',
-    cursor: 'pointer',
-  },
-  pillOff: {
-    padding: '4px 12px',
-    borderRadius: 14,
-    fontSize: 11,
-    fontWeight: 500,
-    background: 'rgba(255,255,255,0.15)',
-    color: 'rgba(255,255,255,0.8)',
-    border: '1px solid rgba(255,255,255,0.2)',
-    cursor: 'pointer',
+    flexShrink: 0,
   },
   content: {
     flex: 1,
@@ -235,8 +268,8 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '8px 0 10px',
-    gap: 3,
+    padding: '6px 0 8px',
+    gap: 2,
     background: 'none',
     border: 'none',
     cursor: 'pointer',
@@ -245,8 +278,9 @@ const styles = {
     width: 20,
     height: 3,
     borderRadius: 2,
+    marginBottom: 1,
   },
   navLabel: {
-    fontSize: 10,
+    fontSize: 9,
   },
 };

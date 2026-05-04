@@ -119,8 +119,20 @@ function aggregatePlayerStats(rows, config) {
 // ─── Match functions ──────────────────────────────────────────────────────────
 
 function getMatches(sport, filters = {}) {
-  const { matches } = loadData(sport);
-  return filterMatches(matches, filters)
+  const { matches, players } = loadData(sport);
+
+  // Fill null dates from players data (needed for Test matches)
+  const enriched = matches.map(m => {
+    if (m.date) return m;
+    const firstPlayer = players.find(p =>
+      String(p.season)   === String(m.season) &&
+      String(p.matchNum) === String(m.matchNum) &&
+      p.date
+    );
+    return { ...m, date: firstPlayer?.date || null };
+  });
+
+  return filterMatches(enriched, filters)
     .sort((a, b) => {
       if (Number(b.season) !== Number(a.season)) return Number(b.season) - Number(a.season);
       return Number(b.matchNum) - Number(a.matchNum);
@@ -408,7 +420,7 @@ function getPlayerSpotlight(sport, playerName, season) {
 // ─── Scorecard function ───────────────────────────────────────────────────────
 
 function getScorecard(sport, season, matchNum) {
-  const { players, matches } = loadData(sport);
+  const { matches, players } = loadData(sport);
 
   const match = matches.find(m =>
     String(m.season)   === String(season) &&
@@ -416,18 +428,83 @@ function getScorecard(sport, season, matchNum) {
   );
   if (!match) return null;
 
-  // Get all player rows for this match
+  // Use innings data from matches JSON if available (has dismissals + FOW)
+  if (match.innings && match.innings.length > 0) {
+
+    // Get bowling data from players JSON (not in scorecard rows)
+    const matchPlayers = players.filter(p =>
+      String(p.season)   === String(season) &&
+      String(p.matchNum) === String(matchNum)
+    );
+
+    const innings = match.innings.map(inn => {
+      // Get bowlers from the opposing team's player records
+      const bowlingTeam = matchPlayers.filter(p => p.team !== inn.team);
+      const bowlers = bowlingTeam
+        .filter(p => p.bowling && p.bowling.overs > 0)
+        .sort((a, b) => (b.bowling.wickets || 0) - (a.bowling.wickets || 0))
+        .map(p => ({
+          player:  p.player,
+          overs:   p.bowling.overs   || 0,
+          maidens: p.bowling.maidens || 0,
+          runs:    p.bowling.runs    || 0,
+          wickets: p.bowling.wickets || 0,
+          economy: p.bowling.economy || 0,
+        }));
+
+      // Get fielding from batting team's player records
+      const battingTeamPlayers = matchPlayers.filter(p => p.team === inn.team);
+      // Fielding contributions from the bowling team
+      const fielding = bowlingTeam
+        .filter(p =>
+          (p.fielding?.catches       || 0) > 0 ||
+          (p.fielding?.stumpings     || 0) > 0 ||
+          (p.fielding?.directRunOuts || 0) > 0 ||
+          (p.fielding?.comboRunOuts  || 0) > 0
+        )
+        .map(p => ({
+          player:       p.player,
+          catches:      p.fielding.catches       || 0,
+          stumpings:    p.fielding.stumpings     || 0,
+          directRunOut: p.fielding.directRunOuts || 0,
+          comboRunOut:  p.fielding.comboRunOuts  || 0,
+        }));
+
+      // Enrich batters with SR calculated fresh
+	  const batters = inn.batters.map(b => ({
+        ...b,
+        sr: b.balls > 0
+          ? Math.round((b.runs / b.balls) * 1000) / 10
+          : 0,
+        notOut: b.dismissType === 'not out' ||
+                b.dismissType === 'retired' ||
+                b.dismissType === '',
+      }));
+
+      return {
+        team:    inn.team,
+        score:   inn.score,
+        overs:   inn.overs,
+        batters,
+        bowlers,
+        fielding,
+        fow:     inn.fow || [],
+      };
+    });
+
+    return { match, innings };
+  }
+
+  // Fallback: reconstruct from players JSON (older data without innings)
   const matchRows = players.filter(p =>
     String(p.season)   === String(season) &&
     String(p.matchNum) === String(matchNum)
   );
 
-  // Split into two teams
   const team1Rows = matchRows.filter(p => p.team === match.team1);
   const team2Rows = matchRows.filter(p => p.team === match.team2);
 
-  function buildInnings(rows, battingTeam, bowlingTeam) {
-    // Batting — rows where this team batted
+  function buildInnings(rows, battingTeam, bowlingTeamRows) {
     const batters = rows
       .filter(r => r.batting && !r.batting.dnb)
       .sort((a, b) => (a.batting.position || 99) - (b.batting.position || 99))
@@ -439,26 +516,25 @@ function getScorecard(sport, season, matchNum) {
         sixes:       r.batting.sixes  || 0,
         sr:          r.batting.sr     || 0,
         notOut:      r.batting.notOut || false,
-        dismissal:   r.batting.dismissalType || '',
-        dismissedBy: r.batting.dismissedBy   || '',
+        dismissal:   r.batting.dismissalType || 'not out',
+        dismissType: r.batting.dismissalType || '',
+        fielder:     r.batting.fielder || '',
+        bowler:      r.batting.dismissedBy || '',
       }));
 
-    // Bowling — get bowling figures from opposition rows
-    const allRows = matchRows.filter(p => p.team === bowlingTeam);
-    const bowlers = allRows
+    const bowlers = bowlingTeamRows
       .filter(r => r.bowling && r.bowling.overs > 0)
       .sort((a, b) => (b.bowling.wickets || 0) - (a.bowling.wickets || 0))
       .map(r => ({
         player:  r.player,
         overs:   r.bowling.overs   || 0,
+        maidens: r.bowling.maidens || 0,
         runs:    r.bowling.runs    || 0,
         wickets: r.bowling.wickets || 0,
         economy: r.bowling.economy || 0,
-        maidens: r.bowling.maidens || 0,
       }));
 
-    // Fielding — from opposition rows
-    const fielding = allRows
+    const fielding = bowlingTeamRows
       .filter(r =>
         (r.fielding?.catches       || 0) > 0 ||
         (r.fielding?.stumpings     || 0) > 0 ||
@@ -466,31 +542,25 @@ function getScorecard(sport, season, matchNum) {
         (r.fielding?.comboRunOuts  || 0) > 0
       )
       .map(r => ({
-        player:      r.player,
-        catches:     r.fielding.catches       || 0,
-        stumpings:   r.fielding.stumpings     || 0,
-        directRunOut:r.fielding.directRunOuts || 0,
-        comboRunOut: r.fielding.comboRunOuts  || 0,
+        player:       r.player,
+        catches:      r.fielding.catches       || 0,
+        stumpings:    r.fielding.stumpings     || 0,
+        directRunOut: r.fielding.directRunOuts || 0,
+        comboRunOut:  r.fielding.comboRunOuts  || 0,
       }));
 
-    return { team: battingTeam, batters, bowlers, fielding };
+    return { team: battingTeam, batters, bowlers, fielding, fow: [] };
   }
 
-  // Determine batting order from batFirst field
   const team1BatFirst = match.batFirst === match.team1;
-
   const innings1 = team1BatFirst
-    ? buildInnings(team1Rows, match.team1, match.team2)
-    : buildInnings(team2Rows, match.team2, match.team1);
-
+    ? buildInnings(team1Rows, match.team1, team2Rows)
+    : buildInnings(team2Rows, match.team2, team1Rows);
   const innings2 = team1BatFirst
-    ? buildInnings(team2Rows, match.team2, match.team1)
-    : buildInnings(team1Rows, match.team1, match.team2);
+    ? buildInnings(team2Rows, match.team2, team1Rows)
+    : buildInnings(team1Rows, match.team1, team2Rows);
 
-  return {
-    match,
-    innings: [innings1, innings2],
-  };
+  return { match, innings: [innings1, innings2] };
 }
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
