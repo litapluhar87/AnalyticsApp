@@ -73,7 +73,7 @@ export default function App() {
         <div style={{ ...S.header, background: activeColor }}>
           {/* Line 1: Title + Gear + Avatar */}
           <div style={S.headerRow}>
-            <div style={S.appName}>RACL Cricket</div>
+            <div style={S.appName}>RACL</div>
             <div style={S.headerRight}>
               <button
                 style={S.gearBtn}

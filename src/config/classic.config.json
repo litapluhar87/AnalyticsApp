@@ -6,7 +6,7 @@
   "currentSeason": 6,
   "formats": ["T12", "Test", "All"],
   "defaultFormat": "All",
-  "grounds": ["Wakad", "Saudagar", "Balewadi", "Moshi"],
+  "grounds": ["Moshi", "Wakad", "Balewadi", "Saudagar"],
   "players": [
     "Ajinath", "Amar", "Amol", "Andy", "Anil", "Avinash",
     "Eshwar", "Gaurav", "Macchi", "Mangesh", "Mithun", "Neeraj",

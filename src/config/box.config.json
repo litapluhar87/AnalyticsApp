@@ -6,11 +6,12 @@
   "currentSeason": 6,
   "formats": ["T12", "Test", "All"],
   "defaultFormat": "T12",
-  "grounds": ["Wakad", "Saudagar", "Balewadi", "Moshi"],
+  "grounds": ["Wakad", "Royal Turf", "Sangvi", "Hinjewadi"],
   "players": [
-    "Ajinath", "Amar", "Amol", "Anil", "Eshwar", "Gaurav",
-    "Macchi", "Mangesh", "Rahul", "Ranjit", "Sandy D", "Sandy N",
-    "Sarang", "Sudhir", "Sushil", "Vallabh"
+    "Ajinath", "Amar", "Amol", "Anil", "Avinash", "Eshwar",
+    "Gaurav", "Macchi", "Mangesh", "Mithun", "Neeraj", "Rahul",
+    "Ranjit", "Ravindra", "Sandy D", "Sandy N", "Sudhir",
+    "Sushil", "Vallabh"
   ],
   "teams": {
     "3": ["Energetic Avengers", "Resolute Titans", "Golden Phoenix", "Rising Abhyuday Warriors"],

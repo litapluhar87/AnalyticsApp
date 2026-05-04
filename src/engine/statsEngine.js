@@ -37,7 +37,7 @@ function filterPlayers(players, filters = {}) {
     if (filters.season         && String(p.season) !== String(filters.season))              return false;
     if (filters.format         && filters.format !== 'All' && p.format !== filters.format)  return false;
     if (filters.ground         && p.ground !== filters.ground)                              return false;
-    if (filters.batInning      && String(p.inning) !== String(filters.batInning))           return false;
+    if (filters.batInning && String(p.batting?.innings) !== String(filters.batInning))      return false;
     if (filters.battingPosition && String(p.batting?.position) !== String(filters.battingPosition)) return false;
     if (filters.winLoss === 'Win'  && !p.won)  return false;
     if (filters.winLoss === 'Loss' &&  p.won)  return false;
@@ -47,72 +47,157 @@ function filterPlayers(players, filters = {}) {
 
 // ─── Aggregation ──────────────────────────────────────────────────────────────
 
-function aggregatePlayerStats(rows, config) {
+function aggregatePlayerStats(rows, config, allMatchRows) {
   if (!rows.length) return null;
   const name = rows[0].player;
 
-  // Only count batting innings where player actually batted
   const batRows  = rows.filter(r => r.batting && !r.batting.dnb);
+  const battedCount = batRows.filter(r => r.batting.balls > 0 || r.batting.runs >= 0).length;
   const bowlRows = rows.filter(r => r.bowling && r.bowling.overs > 0);
 
-  const runs        = batRows.reduce((s, r)  => s + (r.batting.runs   || 0), 0);
-  const balls       = batRows.reduce((s, r)  => s + (r.batting.balls  || 0), 0);
-  const fours       = batRows.reduce((s, r)  => s + (r.batting.fours  || 0), 0);
-  const sixes       = batRows.reduce((s, r)  => s + (r.batting.sixes  || 0), 0);
-  const notOuts     = batRows.filter(r => r.batting.notOut || r.batting.retired).length;
-  const highScore   = batRows.length ? Math.max(...batRows.map(r => r.batting.runs || 0)) : 0;
+  const runs      = batRows.reduce((s, r) => s + (r.batting.runs   || 0), 0);
+  const balls     = batRows.reduce((s, r) => s + (r.batting.balls  || 0), 0);
+  const fours     = batRows.reduce((s, r) => s + (r.batting.fours  || 0), 0);
+  const sixes     = batRows.reduce((s, r) => s + (r.batting.sixes  || 0), 0);
+  const notOuts   = batRows.filter(r => r.batting.notOut || r.batting.retired).length;
+  const highScore = batRows.length ? Math.max(...batRows.map(r => r.batting.runs || 0)) : 0;
   const highScoreNO = batRows.find(r => (r.batting.runs || 0) === highScore)?.batting?.notOut || false;
 
-  const wickets     = bowlRows.reduce((s, r) => s + (r.bowling.wickets || 0), 0);
-  const overs       = bowlRows.reduce((s, r) => s + (r.bowling.oversDcml || r.bowling.overs || 0), 0);
-  const runsCon     = bowlRows.reduce((s, r) => s + (r.bowling.runs    || 0), 0);
-  const maidens     = bowlRows.reduce((s, r) => s + (r.bowling.maidens || 0), 0);
+  // New batting milestones
+  const ducks = batRows.filter(r =>
+    (r.batting.runs || 0) === 0 &&
+    !r.batting.notOut &&
+    !r.batting.retired
+  ).length;
+  const scores15 = batRows.filter(r => (r.batting.runs || 0) >= 15).length;
+  const scores30 = batRows.filter(r => (r.batting.runs || 0) >= 30).length;
 
-  const catches     = rows.reduce((s, r) => s + (r.fielding?.catches      || 0), 0);
-  const stumpings   = rows.reduce((s, r) => s + (r.fielding?.stumpings    || 0), 0);
-  const roDirects   = rows.reduce((s, r) => s + (r.fielding?.directRunOuts|| 0), 0);
-  const roCombos    = rows.reduce((s, r) => s + (r.fielding?.comboRunOuts || 0), 0);
-  const momCount    = rows.filter(r => r.isManOfMatch).length;
+  const wickets   = bowlRows.reduce((s, r) => s + (r.bowling.wickets || 0), 0);
+  const overs     = bowlRows.reduce((s, r) => s + (r.bowling.oversDcml || r.bowling.overs || 0), 0);
+  const runsCon   = bowlRows.reduce((s, r) => s + (r.bowling.runs    || 0), 0);
+  const maidens   = bowlRows.reduce((s, r) => s + (r.bowling.maidens || 0), 0);
 
-  // Read pre-calculated MVP from migration output
+  // Bowling balls (overs to balls)
+  const bowlBalls = bowlRows.reduce((s, r) => {
+    const o = r.bowling.oversDcml || r.bowling.overs || 0;
+    const fullOvers = Math.floor(o);
+    const partial   = Math.round((o - fullOvers) * 10);
+    return s + fullOvers * 6 + partial;
+  }, 0);
+
+  // Best bowling figures
+  let best = null;
+  bowlRows.forEach(r => {
+    const w = r.bowling.wickets || 0;
+    const ru = r.bowling.runs   || 0;
+    if (!best || w > best.w || (w === best.w && ru < best.r)) {
+      best = { w, r: ru };
+    }
+  });
+  const bestFigures = best ? `${best.w}/${best.r}` : '-';
+
+  // 2W and 3W hauls
+  const twoW   = bowlRows.filter(r => (r.bowling.wickets || 0) >= 2).length;
+  const threeW = bowlRows.filter(r => (r.bowling.wickets || 0) >= 3).length;
+
+  const catches    = rows.reduce((s, r) => s + (r.fielding?.catches       || 0), 0);
+  const stumpings  = rows.reduce((s, r) => s + (r.fielding?.stumpings     || 0), 0);
+  const roDirects  = rows.reduce((s, r) => s + (r.fielding?.directRunOuts || 0), 0);
+  const roCombos   = rows.reduce((s, r) => s + (r.fielding?.comboRunOuts  || 0), 0);
+  const momCount     = rows.filter(r => r.isManOfMatch).length;
+
+  // Captaincy
+  const captainRows  = rows.filter(r => r.captain === '1' || r.captain === 1);
+  const captainMatches = new Set(
+    captainRows.map(r => `${r.season}-${r.matchNum}`)
+  ).size;
+  const captainWins  = new Set(
+    captainRows.filter(r => r.won).map(r => `${r.season}-${r.matchNum}`)
+  ).size;
+
+  // Tie detection from match-level data
+  const matchKeys = new Set(rows.map(r => `${r.season}-${r.matchNum}`));
+  const matches   = matchKeys.size;
+
+  // Won count
+  const wonMatches = new Set(
+    rows.filter(r => r.won).map(r => `${r.season}-${r.matchNum}`)
+  ).size;
+
   const mvpBat   = rows.reduce((s, r) => s + (r.mvp?.bat   || 0), 0);
   const mvpBowl  = rows.reduce((s, r) => s + (r.mvp?.bowl  || 0), 0);
   const mvpField = rows.reduce((s, r) => s + (r.mvp?.field || 0), 0);
   const mvpTotal = rows.reduce((s, r) => s + (r.mvp?.total || 0), 0);
+  const mvpMomTotal = rows.reduce((s, r) => s + (r.mvp?.mom || 0), 0);
 
   const innings  = batRows.length;
   const outs     = innings - notOuts;
-  const matches  = new Set(rows.map(r => r.seasonMatch || `${r.season}-${r.matchNum}`)).size;
+
+  // Bowling SR = balls per wicket
+  const bowlingSR = wickets > 0
+    ? Math.round((bowlBalls / wickets) * 10) / 10
+    : null;
 
   return {
     player:        name,
     matches,
+    won:      wonMatches,
+    batted:   battedCount,
     innings,
     runs,
     balls,
     fours,
     sixes,
     notOuts,
+    ducks,
+    scores15,
+    scores30,
     highScore:     highScoreNO ? `${highScore}*` : `${highScore}`,
     wickets,
     oversBowled:   Math.round(overs * 10) / 10,
+    bowlBalls,
     runsConceded:  runsCon,
     maidens,
+    bestFigures,
+    twoW,
+    threeW,
     catches,
     stumpings,
     runOutsDirect: roDirects,
     runOutsCombo:  roCombos,
     totalFielding: catches + stumpings + roDirects + roCombos,
     momCount,
-    mvpBat:        Math.round(mvpBat   * 10) / 10,
-    mvpBowl:       Math.round(mvpBowl  * 10) / 10,
-    mvpField:      Math.round(mvpField * 10) / 10,
-    mvpTotal:      Math.round(mvpTotal * 10) / 10,
-    mvpPerInning:  innings > 0 ? Math.round((mvpTotal / innings) * 10) / 10 : 0,
-    average:       outs > 0 ? Math.round((runs / outs) * 10) / 10 : runs,
-    strikeRate:    balls > 0 ? Math.round((runs / balls) * 1000) / 10 : 0,
-    economy:       overs > 0 ? Math.round((runsCon / overs) * 10) / 10 : 0,
-    bowlingAvg:    wickets > 0 ? Math.round((runsCon / wickets) * 10) / 10 : null,
+    mvpBat:        Math.round(mvpBat      * 10) / 10,
+    mvpBowl:       Math.round(mvpBowl     * 10) / 10,
+    mvpField:      Math.round(mvpField    * 10) / 10,
+    mvpMom:        Math.round(mvpMomTotal * 10) / 10,
+    mvpTotal:      Math.round(mvpTotal    * 10) / 10,
+    mvpPerInning:  innings > 0
+      ? Math.round((mvpTotal / innings) * 10) / 10
+      : 0,
+    mvpBatPerInn:  innings > 0
+      ? Math.round((mvpBat      / innings) * 10) / 10 : 0,
+    mvpBowlPerInn: innings > 0
+      ? Math.round((mvpBowl     / innings) * 10) / 10 : 0,
+    mvpFieldPerInn:innings > 0
+      ? Math.round((mvpField    / innings) * 10) / 10 : 0,
+    mvpMomPerInn:  innings > 0
+      ? Math.round((mvpMomTotal / innings) * 10) / 10 : 0,
+    captainMatches,
+    captainWins,
+    average:       outs > 0
+      ? Math.round((runs / outs) * 10) / 10
+      : runs,
+    strikeRate:    balls > 0
+      ? Math.round((runs / balls) * 1000) / 10
+      : 0,
+    economy:       overs > 0
+      ? Math.round((runsCon / overs) * 10) / 10
+      : 0,
+    bowlingAvg:    wickets > 0
+      ? Math.round((runsCon / wickets) * 10) / 10
+      : null,
+    bowlingSR,
   };
 }
 
@@ -205,9 +290,15 @@ function getPlayerRecentForm(sport, playerName, n = 7) {
 
   return rows.map(r => {
     const match = matches.find(m =>
-      String(m.season) === String(r.season) &&
+      String(m.season)   === String(r.season) &&
       String(m.matchNum) === String(r.matchNum)
     );
+
+    // Detect tie from match result
+    const isTie = match?.result === 'Tie' ||
+                  match?.winner === 'Tie' ||
+                  match?.result?.toLowerCase().includes('tie');
+
     return {
       season:    r.season,
       matchNum:  r.matchNum,
@@ -217,10 +308,10 @@ function getPlayerRecentForm(sport, playerName, n = 7) {
       balls:     r.batting?.balls   || 0,
       notOut:    r.batting?.notOut  || false,
       wickets:   r.bowling?.wickets || 0,
-      overs:     r.bowling?.overs   || 0,
-      economy:   r.bowling?.economy || 0,
+      runsGiven: r.bowling?.runs    || 0,
       mom:       r.isManOfMatch     || false,
       won:       r.won              || false,
+      tied:      isTie              || false,
       mvpTotal:  r.mvp?.total       || 0,
       opponent:  match
         ? (match.team1 === r.team ? match.team2 : match.team1)
