@@ -71,44 +71,10 @@ export default function App() {
 
         {/* Sticky header */}
         <div style={{ ...S.header, background: activeColor }}>
-		  <div style={S.headerRow}>
-
-            {/* Left: title only */}
-            <div style={S.titleBlock}>
-              <div style={S.appName}>RACL Cricket</div>
-            </div>
-
-            {/* Right: all three dropdowns + gear + avatar */}
-            <div style={S.rightBlock}>
-              <select
-                value={sportType}
-                onChange={e => {
-                  setSportType(e.target.value);
-                  setSeason('All');
-                }}
-                style={S.filterSelect}>
-                {SPORT_TYPES.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <select
-                value={season}
-                onChange={e => setSeason(e.target.value)}
-                style={S.filterSelect}>
-                {seasonOptions.map(s => (
-                  <option key={s} value={s}>
-                    {s === 'All' ? 'All' : `S${s}`}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={format}
-                onChange={e => setFormat(e.target.value)}
-                style={S.filterSelect}>
-                {FORMATS.map(f => (
-                  <option key={f} value={f}>{f}</option>
-                ))}
-              </select>
+          {/* Line 1: Title + Gear + Avatar */}
+          <div style={S.headerRow}>
+            <div style={S.appName}>RACL Cricket</div>
+            <div style={S.headerRight}>
               <button
                 style={S.gearBtn}
                 onClick={() => setShowSettings(s => !s)}>
@@ -118,7 +84,38 @@ export default function App() {
                 {currentUser.slice(0,2).toUpperCase()}
               </div>
             </div>
-
+          </div>
+          {/* Line 2: All three dropdowns */}
+          <div style={S.dropdownRow}>
+            <select
+              value={sportType}
+              onChange={e => {
+                setSportType(e.target.value);
+                setSeason('All');
+              }}
+              style={S.filterSelect}>
+              {SPORT_TYPES.map(s => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+            <select
+              value={season}
+              onChange={e => setSeason(e.target.value)}
+              style={S.filterSelect}>
+              {seasonOptions.map(s => (
+                <option key={s} value={s}>
+                  {s === 'All' ? 'All' : `S${s}`}
+                </option>
+              ))}
+            </select>
+            <select
+              value={format}
+              onChange={e => setFormat(e.target.value)}
+              style={S.filterSelect}>
+              {FORMATS.map(f => (
+                <option key={f} value={f}>{f}</option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -171,13 +168,12 @@ const S = {
   shell: {
     maxWidth: 480,
     margin: '0 auto',
-    minHeight: '100vh',
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
     fontFamily: 'system-ui, -apple-system, sans-serif',
     background: '#f5f5f5',
-    overflowY: 'auto',
+    overflow: 'hidden',
   },
   header: {
     position: 'sticky',
@@ -191,10 +187,12 @@ const S = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 8,
+    marginBottom: 8,
   },
-  titleBlock: {
-    flexShrink: 0,
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
   },
   appName: {
     fontSize: 20,
@@ -203,23 +201,20 @@ const S = {
     letterSpacing: 0.3,
     whiteSpace: 'nowrap',
   },
-  rightBlock: {
+  dropdownRow: {
     display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    flex: 1,
-    justifyContent: 'flex-end',
+    gap: 8,
   },
   filterSelect: {
     background: '#fff',
     border: '1px solid rgba(255,255,255,0.25)',
     color: '#333',
     borderRadius: 8,
-    fontSize: 11,
-    padding: '4px 5px',
+    fontSize: 12,
+    padding: '5px 6px',
     cursor: 'pointer',
     outline: 'none',
-    maxWidth: 90,
+    flex: 1,
   },
   gearBtn: {
     width: 28,
@@ -251,20 +246,17 @@ const S = {
   },
   content: {
     flex: 1,
-    overflowY: 'visible',
-    paddingBottom: 70,
+    overflowY: 'auto',
+    paddingBottom: 16,
+    WebkitOverflowScrolling: 'touch',
   },
   bottomNav: {
-    position: 'sticky',
-    bottom: 0,
+    flexShrink: 0,
     width: '100%',
-    maxWidth: 480,
     background: '#fff',
     borderTop: '0.5px solid #e0e0e0',
     display: 'flex',
     zIndex: 100,
-    flexShrink: 0,
-    marginTop: 'auto',
   },
   navItem: {
     flex: 1,
