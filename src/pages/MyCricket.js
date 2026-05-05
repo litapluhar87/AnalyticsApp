@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../App';
 
 const engine = require('../engine/statsEngine');
@@ -8,44 +8,54 @@ const INNINGS_OPTS  = ['All', '1', '2'];
 const WINLOSS_OPTS  = ['All', 'Win', 'Loss'];
 const POSITION_OPTS = ['All','1','2','3','4','5','6','7','8'];
 
-// Convert decimal overs to cricket notation e.g. 13.5 -> 13.3
+const FILTER_CRITERIA = ['All','Season','Format','Ground','Bat Inning','Position','Result'];
+
 function fmtOvers(val) {
   if (!val && val !== 0) return '-';
-  const full    = Math.floor(val);
-  const balls   = Math.round((val - full) * 10);
-  // balls stored as tenths (0.5 = 3 balls out of 6)
+  const full  = Math.floor(val);
+  const balls = Math.round((val - full) * 10);
   const actualBalls = Math.round(balls * 6 / 10);
   return actualBalls === 0 ? `${full}` : `${full}.${actualBalls}`;
 }
 
-// Highlight colors for My Cricket purple theme
 const HL = { bg:'#534AB7', border:'#534AB7', text:'#fff' };
 
 export default function MyCricket() {
-  const { sportType, season, format, currentUser } = useApp();
+  const { sportType, currentUser } = useApp();
   const sport = sportType.toLowerCase();
 
   const [selectedPlayer, setSelectedPlayer] = useState(currentUser);
   const [playerList,     setPlayerList]     = useState([]);
   const [activeTab,      setActiveTab]      = useState('stats');
   const [grounds,        setGrounds]        = useState(['All']);
+  const [seasons,        setSeasons]        = useState(['All']);
 
+  // Stats filters
   const [ground,    setGround]    = useState('All');
   const [batInning, setBatInning] = useState('All');
   const [batPos,    setBatPos]    = useState('All');
   const [winLoss,   setWinLoss]   = useState('All');
-  const [pshipInning, setPshipInning] = useState('All');
-  const [pshipWicket, setPshipWicket] = useState('All');
-  
+  const [statSeason, setStatSeason] = useState('All');
+  const [statFormat, setStatFormat] = useState('All');
 
+  // Data
   const [stats,        setStats]        = useState(null);
   const [recentForm,   setRecentForm]   = useState([]);
   const [partnerships, setPartnerships] = useState([]);
 
-  const [comparePlayer,  setComparePlayer]  = useState('');
-  const [compareSeason1, setCompareSeason1] = useState('All');
-  const [compareSeason2, setCompareSeason2] = useState('All');
-  const [compareResult,  setCompareResult]  = useState(null);
+  // Partnership filters
+  const [pshipInning, setPshipInning] = useState('All');
+  const [pshipWicket, setPshipWicket] = useState('All');
+
+  // Compare
+  const [comparePlayer1, setComparePlayer1] = useState('');
+  const [comparePlayer2, setComparePlayer2] = useState('');
+  const [cmpCriteria1, setCmpCriteria1] = useState('All');
+  const [cmpValue1,    setCmpValue1]    = useState('All');
+  const [cmpCriteria2, setCmpCriteria2] = useState('All');
+  const [cmpValue2,    setCmpValue2]    = useState('All');
+  const [cmpStats1,      setCmpStats1]      = useState(null);
+  const [cmpStats2,      setCmpStats2]      = useState(null);
 
   useEffect(() => {
     const list = engine.getPlayerList(sport);
@@ -53,31 +63,75 @@ export default function MyCricket() {
     if (!list.includes(selectedPlayer)) setSelectedPlayer(list[0] || '');
     const cfg = engine.loadConfig(sport);
     setGrounds(['All', ...(cfg.grounds || [])]);
+    setSeasons(['All', ...(cfg.seasons || []).map(s => String(s))]);
     setGround('All');
+    setStatSeason('All');
+    setStatFormat('All');
   }, [sport]);
 
-  function buildFilters() {
+  // Reset compare value when criteria changes
+  useEffect(() => { setCmpValue1('All'); }, [cmpCriteria1]);
+  useEffect(() => { setCmpValue2('All'); }, [cmpCriteria2]);
+
+  function buildStatFilters() {
     const f = {};
-    if (season    !== 'All') f.season         = season;
-    if (format    !== 'All') f.format          = format;
-    if (ground    !== 'All') f.ground          = ground;
-    if (batInning !== 'All') f.batInning       = batInning;
-    if (batPos    !== 'All') f.battingPosition = batPos;
-    if (winLoss   !== 'All') f.winLoss         = winLoss;
+    if (statSeason !== 'All') f.season         = statSeason;
+    if (statFormat !== 'All') f.format          = statFormat;
+    if (ground     !== 'All') f.ground          = ground;
+    if (batInning  !== 'All') f.batInning       = batInning;
+    if (batPos     !== 'All') f.battingPosition = batPos;
+    if (winLoss    !== 'All') f.winLoss         = winLoss;
     return f;
   }
 
+  function buildCmpFilter1() {
+    const f = {};
+    if (cmpCriteria1 === 'Season'     && cmpValue1 !== 'All') f.season         = cmpValue1;
+    if (cmpCriteria1 === 'Format'     && cmpValue1 !== 'All') f.format         = cmpValue1;
+    if (cmpCriteria1 === 'Ground'     && cmpValue1 !== 'All') f.ground         = cmpValue1;
+    if (cmpCriteria1 === 'Bat Inning' && cmpValue1 !== 'All') f.batInning      = cmpValue1;
+    if (cmpCriteria1 === 'Position'   && cmpValue1 !== 'All') f.battingPosition= cmpValue1;
+    if (cmpCriteria1 === 'Result'     && cmpValue1 !== 'All') f.winLoss        = cmpValue1;
+    return f;
+  }
+
+  function buildCmpFilter2() {
+    const f = {};
+    if (cmpCriteria2 === 'Season'     && cmpValue2 !== 'All') f.season         = cmpValue2;
+    if (cmpCriteria2 === 'Format'     && cmpValue2 !== 'All') f.format         = cmpValue2;
+    if (cmpCriteria2 === 'Ground'     && cmpValue2 !== 'All') f.ground         = cmpValue2;
+    if (cmpCriteria2 === 'Bat Inning' && cmpValue2 !== 'All') f.batInning      = cmpValue2;
+    if (cmpCriteria2 === 'Position'   && cmpValue2 !== 'All') f.battingPosition= cmpValue2;
+    if (cmpCriteria2 === 'Result'     && cmpValue2 !== 'All') f.winLoss        = cmpValue2;
+    return f;
+  }
+
+  // Dynamic filter value options based on criteria
+  function getValueOpts(criteria) {
+    switch(criteria) {
+      case 'Season':     return ['All', ...seasons.filter(s=>s!=='All')];
+      case 'Format':     return ['All', 'T12', 'Test'];
+      case 'Ground':     return ['All', ...grounds.filter(g=>g!=='All')];
+      case 'Bat Inning': return ['All', '1', '2'];
+      case 'Position':   return POSITION_OPTS;
+      case 'Result':     return WINLOSS_OPTS;
+      default:           return ['All'];
+    }
+  }
+  const cmpValueOptions1 = useMemo(() => getValueOpts(cmpCriteria1), [cmpCriteria1, seasons, grounds]);
+  const cmpValueOptions2 = useMemo(() => getValueOpts(cmpCriteria2), [cmpCriteria2, seasons, grounds]);
+
   useEffect(() => {
     if (!selectedPlayer) return;
-    const filters = buildFilters();
+    const filters = buildStatFilters();
     try { setStats(engine.getPlayerStats(sport, selectedPlayer, filters)); }
     catch(_) { setStats(null); }
     try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, 10)); }
     catch(_) { setRecentForm([]); }
-	try {
+    try {
       const pfilters = {};
-      if (season      !== 'All') pfilters.season    = season;
-      if (format      !== 'All') pfilters.format    = format;
+      if (statSeason  !== 'All') pfilters.season    = statSeason;
+      if (statFormat  !== 'All') pfilters.format    = statFormat;
       if (pshipInning !== 'All') pfilters.batInning = pshipInning;
       if (pshipWicket !== 'All') pfilters.wicket    = pshipWicket;
       const pb = engine.getPartnershipLeaderboard(sport, pfilters, 'runs');
@@ -85,59 +139,79 @@ export default function MyCricket() {
         p.player1 === selectedPlayer || p.player2 === selectedPlayer
       ).slice(0, 10));
     } catch(_) { setPartnerships([]); }
-  }, [sport, season, format, selectedPlayer, ground, batInning, batPos, winLoss, pshipInning, pshipWicket]);
+  }, [sport, statSeason, statFormat, selectedPlayer, ground, batInning, batPos, winLoss, pshipInning, pshipWicket]);
 
-  function runCompare() {
-    try {
-      const f1 = {};
-      const f2 = {};
-      if (compareSeason1 !== 'All') f1.season = compareSeason1.replace('S','');
-      if (compareSeason2 !== 'All') f2.season = compareSeason2.replace('S','');
-      const p2 = comparePlayer && comparePlayer !== selectedPlayer
-        ? comparePlayer : selectedPlayer;
-      setCompareResult({
-        label1: `${selectedPlayer}${compareSeason1!=='All'?` (${compareSeason1})`:''}`,
-        label2: `${p2}${compareSeason2!=='All'?` (${compareSeason2})`:''}`,
-        s1: engine.getPlayerStats(sport, selectedPlayer, f1),
-        s2: engine.getPlayerStats(sport, p2, f2),
-      });
-    } catch(_) { setCompareResult(null); }
-  }
+  // Auto-compare whenever players or filter changes
+  useEffect(() => {
+    const p1 = comparePlayer1 || selectedPlayer;
+    const p2 = comparePlayer2 || selectedPlayer;
+    try { setCmpStats1(engine.getPlayerStats(sport, p1, buildCmpFilter1())); } catch(_) { setCmpStats1(null); }
+    try { setCmpStats2(engine.getPlayerStats(sport, p2, buildCmpFilter2())); } catch(_) { setCmpStats2(null); }
+  }, [sport, comparePlayer1, comparePlayer2, selectedPlayer, cmpCriteria1, cmpValue1, cmpCriteria2, cmpValue2]);
 
   const ini = (v, suffix='') => (v != null && v !== undefined) ? `${v}${suffix}` : '-';
-
   const hasCaptaincy = stats && stats.captainMatches > 0;
-  const hasAwards    = stats && (stats.momCount > 0 || stats.mosCount > 0);
+  const hasAwards    = stats && (stats.momCount > 0 || (stats.mosCount||0) > 0);
+  const TABS_LIST    = ['stats','partnerships','compare'];
 
-  const TABS_LIST = ['stats','partnerships','compare'];
+  // Compare metrics
+  const cmpMetrics = [
+    { label:'Matches',    k1:'matches',    k2:'matches' },
+    { label:'Runs',       k1:'runs',       k2:'runs' },
+    { label:'Average',    k1:'average',    k2:'average' },
+    { label:'Strike rate',k1:'strikeRate', k2:'strikeRate' },
+    { label:'High score', k1:'highScore',  k2:'highScore', parse:true },
+    { label:'Wickets',    k1:'wickets',    k2:'wickets' },
+    { label:'Economy',    k1:'economy',    k2:'economy', lower:true },
+    { label:'MVP total',  k1:'mvpTotal',   k2:'mvpTotal' },
+    { label:'MoM awards', k1:'momCount',   k2:'momCount' },
+  ];
 
   return (
     <div style={S.page}>
 
+      {/* Player selector */}
       <div style={S.selectorBar}>
-        <select value={selectedPlayer} onChange={e=>setSelectedPlayer(e.target.value)} style={S.select}>
-          {playerList.map(p=>(
+        <select
+          value={selectedPlayer}
+          onChange={e => setSelectedPlayer(e.target.value)}
+          style={S.selectBlue}>
+          {playerList.map(p => (
             <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
           ))}
         </select>
       </div>
 
+      {/* Tab bar */}
       <div style={S.tabBar}>
-        {TABS_LIST.map(t=>(
-          <button key={t} onClick={()=>setActiveTab(t)} style={{
+        {TABS_LIST.map(t => (
+          <button key={t} onClick={() => setActiveTab(t)} style={{
             ...S.tab,
-            color: activeTab===t ? ACCENT : '#aaa',
-            fontWeight: activeTab===t ? 500 : 400,
-            borderBottom: activeTab===t ? `2px solid ${ACCENT}` : '2px solid transparent',
+            color:       activeTab===t ? ACCENT : '#aaa',
+            fontWeight:  activeTab===t ? 500 : 400,
+            borderBottom:activeTab===t ? `2px solid ${ACCENT}` : '2px solid transparent',
           }}>
             {t.charAt(0).toUpperCase()+t.slice(1)}
           </button>
         ))}
       </div>
 
-	  {activeTab === 'stats' && (
+      {/* Stats filters */}
+      {activeTab === 'stats' && (
         <div style={S.filterBar}>
           <div style={S.filterGrid}>
+            <div style={S.filterItem}>
+              <div style={S.filterLabel}>Season</div>
+              <select value={statSeason} onChange={e=>setStatSeason(e.target.value)} style={S.filterSelect}>
+                {seasons.map(s=><option key={s} value={s}>{s==='All'?'All':`S${s}`}</option>)}
+              </select>
+            </div>
+            <div style={S.filterItem}>
+              <div style={S.filterLabel}>Format</div>
+              <select value={statFormat} onChange={e=>setStatFormat(e.target.value)} style={S.filterSelect}>
+                {['All','T12','Test'].map(f=><option key={f} value={f}>{f}</option>)}
+              </select>
+            </div>
             <div style={S.filterItem}>
               <div style={S.filterLabel}>Ground</div>
               <select value={ground} onChange={e=>setGround(e.target.value)} style={S.filterSelect}>
@@ -145,7 +219,7 @@ export default function MyCricket() {
               </select>
             </div>
             <div style={S.filterItem}>
-              <div style={S.filterLabel}>Bat inning</div>
+              <div style={S.filterLabel}>Bat inn</div>
               <select value={batInning} onChange={e=>setBatInning(e.target.value)} style={S.filterSelect}>
                 {INNINGS_OPTS.map(o=><option key={o} value={o}>{o==='All'?'All':o==='1'?'1st':'2nd'}</option>)}
               </select>
@@ -171,13 +245,12 @@ export default function MyCricket() {
         <div style={S.body}>
           {!stats ? <Empty/> : <>
 
-            {/* Matches + MVP in one row */}
             <Sec label="Matches · MVP per inning"/>
             <Grid5 items={[
-              {n:ini(stats.matches),        l:'Matches'},
-              {n:ini(stats.won),            l:'Won',      hl:HL},
-              {n:ini(stats.mvpBatPerInn),   l:'MVP Bat'},
-              {n:ini(stats.mvpBowlPerInn),  l:'MVP Bowl'},
+              {n:ini(stats.matches),       l:'Matches'},
+              {n:ini(stats.won),           l:'Won',      hl:HL},
+              {n:ini(stats.mvpBatPerInn),  l:'MVP Bat'},
+              {n:ini(stats.mvpBowlPerInn), l:'MVP Bowl'},
               {n:ini(stats.mvpMomPerInn),  l:'Total MVP', hl:HL},
             ]}/>
 
@@ -198,19 +271,18 @@ export default function MyCricket() {
             <Sec label="Bowling · Fielding"/>
             <Grid5 items={[
               {n:fmtOvers(stats.oversBowled), l:'Overs'},
-              {n:ini(stats.wickets),          l:'Wickets', hl:HL},
-              {n:ini(stats.bowlingAvg),       l:'Average'},
-              {n:ini(stats.bestFigures),      l:'Best'},
-              {n:ini(stats.bowlingSR),        l:'Strike rate'},
-              {n:ini(stats.economy),          l:'Economy'},
-              {n:ini(stats.twoW),             l:'2W hauls'},
-              {n:ini(stats.threeW),           l:'3W hauls'},
-              {n:ini(stats.catches),          l:'Catches'},
+              {n:ini(stats.wickets),           l:'Wickets', hl:HL},
+              {n:ini(stats.bowlingAvg),        l:'Average'},
+              {n:ini(stats.bestFigures),       l:'Best'},
+              {n:ini(stats.bowlingSR),         l:'Strike rate'},
+              {n:ini(stats.economy),           l:'Economy'},
+              {n:ini(stats.twoW),              l:'2W hauls'},
+              {n:ini(stats.threeW),            l:'3W hauls'},
+              {n:ini(stats.catches),           l:'Catches'},
               {n:ini((stats.runOutsDirect||0)+(stats.runOutsCombo||0)+(stats.stumpings||0)),
                l:'RunOut+St'},
             ]}/>
 
-            {/* Captaincy and Awards — conditional, same row */}
             {(hasCaptaincy || hasAwards) && (() => {
               const captItems = hasCaptaincy ? [
                 {n:ini(stats.captainMatches), l:'Matches led'},
@@ -219,64 +291,27 @@ export default function MyCricket() {
                   ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
                   : '-',                      l:'Win %'},
               ] : [];
-
               const awardItems = hasAwards ? [
                 {n:ini(stats.momCount),    l:'MoM', hl:HL},
                 {n:ini(stats.mosCount||0), l:'MoS', hl:HL},
               ] : [];
-
-              // Only show as many tiles as we have data for
               const allItems = [...captItems, ...awardItems];
-
-              // Calculate flex ratios for section labels
               const captFlex  = captItems.length;
               const awardFlex = awardItems.length;
-
               return (
                 <>
                   <div style={S.dualSecRow}>
-                    {hasCaptaincy && (
-                      <div style={{
-                        ...S.secLabel,
-                        flex: captFlex,
-                      }}>
-                        Captaincy
-                      </div>
-                    )}
-                    {hasAwards && (
-                      <div style={{
-                        ...S.secLabel,
-                        flex: awardFlex,
-                        textAlign: 'left',
-                        marginLeft: hasCaptaincy ? 4 : 0,
-                      }}>
-                        Awards
-                      </div>
-                    )}
+                    {hasCaptaincy && <div style={{...S.secLabel, flex:captFlex}}>Captaincy</div>}
+                    {hasAwards && <div style={{...S.secLabel, flex:awardFlex, marginLeft:hasCaptaincy?4:0}}>Awards</div>}
                   </div>
-                  <div style={{
-                    display:'grid',
-                    gridTemplateColumns:'repeat(5, minmax(0,1fr))',
-                    gap:5,
-                    marginBottom:4,
-                  }}>
+                  <div style={{display:'grid', gridTemplateColumns:'repeat(5,minmax(0,1fr))', gap:5, marginBottom:4}}>
                     {Array.from({length:5}).map((_,i) => {
                       const item = allItems[i];
                       if (!item) return <div key={i}/>;
                       return (
-                        <div key={i} style={{
-                          ...S.statCard,
-                          background:  item.hl ? item.hl.bg     : '#fff',
-                          borderColor: item.hl ? item.hl.border : '#eee',
-                        }}>
-                          <div style={{
-                            ...S.statNum,
-                            color: item.hl ? item.hl.text : '#111',
-                          }}>{item.n}</div>
-                          <div style={{
-                            ...S.statLbl,
-                            color: item.hl ? item.hl.text : '#aaa',
-                          }}>{item.l}</div>
+                        <div key={i} style={{...S.statCard, background:item.hl?item.hl.bg:'#fff', borderColor:item.hl?item.hl.border:'#eee'}}>
+                          <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
+                          <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
                         </div>
                       );
                     })}
@@ -288,7 +323,7 @@ export default function MyCricket() {
             <Sec label="Recent form"/>
             <div style={S.card}>
               <div style={S.formDots}>
-                {recentForm.map((r,i)=>(
+                {recentForm.map((r,i) => (
                   <div key={i} style={{
                     ...S.dot,
                     background: r.tied?'#888': r.won?'#3B6D11':'#993C1D',
@@ -298,7 +333,7 @@ export default function MyCricket() {
                   </div>
                 ))}
               </div>
-              {recentForm.map((r,i)=>(
+              {recentForm.map((r,i) => (
                 <div key={i} style={S.formRow}>
                   <span style={S.formId}>S{r.season} M{r.matchNum}</span>
                   <span style={S.formBat}>
@@ -313,46 +348,36 @@ export default function MyCricket() {
         </div>
       )}
 
-	  {/* ── PARTNERSHIPS TAB ── */}
+      {/* ── PARTNERSHIPS TAB ── */}
       {activeTab==='partnerships' && (
         <div style={S.body}>
-
-          {/* Partnership filters */}
-          <div style={{...S.filterBar, margin:'0 -12px 10px', padding:'8px 12px'}}>
-            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:6}}>
-              <div style={S.filterItem}>
-                <div style={S.filterLabel}>Bat inning</div>
-                <select
-                  value={pshipInning}
-                  onChange={e=>setPshipInning(e.target.value)}
-                  style={S.filterSelect}>
-                  <option value="All">All</option>
-                  <option value="1">1st innings</option>
-                  <option value="2">2nd innings</option>
-                </select>
-              </div>
-              <div style={S.filterItem}>
-                <div style={S.filterLabel}>Wicket</div>
-                <select
-                  value={pshipWicket}
-                  onChange={e=>setPshipWicket(e.target.value)}
-                  style={S.filterSelect}>
-                  <option value="All">All</option>
-                  {[1,2,3,4,5,6,7,8,9,10].map(w=>(
-                    <option key={w} value={w}>{w}{w===1?'st':w===2?'nd':w===3?'rd':'th'} wicket</option>
-                  ))}
-                </select>
-              </div>
+          <div style={S.inlineFilterBar}>
+            <div style={S.filterItem}>
+              <div style={S.filterLabel}>Bat inning</div>
+              <select value={pshipInning} onChange={e=>setPshipInning(e.target.value)} style={S.filterSelect}>
+                <option value="All">All</option>
+                <option value="1">1st innings</option>
+                <option value="2">2nd innings</option>
+              </select>
+            </div>
+            <div style={S.filterItem}>
+              <div style={S.filterLabel}>Wicket</div>
+              <select value={pshipWicket} onChange={e=>setPshipWicket(e.target.value)} style={S.filterSelect}>
+                <option value="All">All</option>
+                {[1,2,3,4,5,6,7,8,9,10].map(w=>(
+                  <option key={w} value={w}>{w}{w===1?'st':w===2?'nd':w===3?'rd':'th'} wicket</option>
+                ))}
+              </select>
             </div>
           </div>
 
           <Sec label={`${selectedPlayer}'s partnerships`}/>
           {partnerships.length===0 ? <Empty/> : (
             <div style={S.card}>
-              {partnerships.map((p,i)=>{
-                const partner   = p.player1===selectedPlayer ? p.player2 : p.player1;
-                const maxRuns   = partnerships[0]?.runs || 1;
-                const barWidth  = Math.round((p.runs / maxRuns) * 100);
+              {partnerships.map((p,i) => {
+                const partner  = p.player1===selectedPlayer ? p.player2 : p.player1;
+                const maxRuns  = partnerships[0]?.runs || 1;
+                const barWidth = Math.round((p.runs / maxRuns) * 100);
                 return (
                   <div key={i} style={S.pshipRow}>
                     <div style={{flex:1}}>
@@ -360,12 +385,8 @@ export default function MyCricket() {
                       <div style={S.pshipDetail}>
                         {p.count} stand{p.count!==1?'s':''} · {p.balls} balls
                       </div>
-                      {/* Bar */}
                       <div style={S.barTrack}>
-                        <div style={{
-                          ...S.barFill,
-                          width: `${barWidth}%`,
-                        }}/>
+                        <div style={{...S.barFill, width:`${barWidth}%`}}/>
                       </div>
                     </div>
                     <div style={{textAlign:'right', marginLeft:10, flexShrink:0}}>
@@ -383,75 +404,122 @@ export default function MyCricket() {
       {/* ── COMPARE TAB ── */}
       {activeTab==='compare' && (
         <div style={S.body}>
-          <Sec label="Compare players"/>
-          <div style={S.card}>
-            <div style={{padding:'10px 14px'}}>
-              <div style={S.cmpPlayerRow}>
-                <div style={{flex:1}}>
-                  <div style={S.filterLabel}>Player 1</div>
-                  <select value={selectedPlayer} disabled style={{...S.select,opacity:0.7}}>
-                    <option>{selectedPlayer}</option>
-                  </select>
-                </div>
-                <div style={S.cmpVs}>vs</div>
-                <div style={{flex:1}}>
-                  <div style={S.filterLabel}>Player 2</div>
-                  <select value={comparePlayer} onChange={e=>setComparePlayer(e.target.value)} style={S.select}>
-                    <option value="">Same (cross-season)</option>
-                    {playerList.filter(p=>p!==selectedPlayer).map(p=>(
-                      <option key={p} value={p}>{p}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div style={S.cmpPlayerRow}>
-                <div style={{flex:1}}>
-                  <div style={S.filterLabel}>Season 1</div>
-                  <select value={compareSeason1} onChange={e=>setCompareSeason1(e.target.value)} style={S.select}>
-                    {['All','3','4','5','6'].map(s=>(
-                      <option key={s} value={s}>{s==='All'?'All':`S${s}`}</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={S.cmpVs}></div>
-                <div style={{flex:1}}>
-                  <div style={S.filterLabel}>Season 2</div>
-                  <select value={compareSeason2} onChange={e=>setCompareSeason2(e.target.value)} style={S.select}>
-                    {['All','3','4','5','6'].map(s=>(
-                      <option key={s} value={s}>{s==='All'?'All':`S${s}`}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <button onClick={runCompare} style={S.cmpBtn}>Compare →</button>
+
+          {/* Player selectors */}
+          <div style={S.cmpPlayerRow}>
+            <div style={{flex:1}}>
+              <div style={S.filterLabel}>Player 1</div>
+              <select
+                value={comparePlayer1 || selectedPlayer}
+                onChange={e => setComparePlayer1(e.target.value)}
+                style={S.select}>
+                {playerList.map(p=>(
+                  <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
+                ))}
+              </select>
+            </div>
+            <div style={S.cmpVs}>vs</div>
+            <div style={{flex:1}}>
+              <div style={S.filterLabel}>Player 2</div>
+              <select
+                value={comparePlayer2 || selectedPlayer}
+                onChange={e => setComparePlayer2(e.target.value)}
+                style={S.select}>
+                {playerList.map(p=>(
+                  <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {compareResult && (
-            <div style={S.card}>
-              <div style={S.cmpHeader}>
-                <span style={{color:ACCENT,fontWeight:500,fontSize:12}}>{compareResult.label1}</span>
-                <span style={{color:'#aaa',fontSize:11}}>vs</span>
-                <span style={{color:'#185FA5',fontWeight:500,fontSize:12}}>{compareResult.label2}</span>
-              </div>
-              {[
-                ['Matches',    compareResult.s1?.matches,    compareResult.s2?.matches],
-                ['Runs',       compareResult.s1?.runs,       compareResult.s2?.runs],
-                ['Average',    compareResult.s1?.average,    compareResult.s2?.average],
-                ['Strike rate',compareResult.s1?.strikeRate, compareResult.s2?.strikeRate],
-                ['Wickets',    compareResult.s1?.wickets,    compareResult.s2?.wickets],
-                ['Economy',    compareResult.s1?.economy,    compareResult.s2?.economy],
-                ['MVP total',  compareResult.s1?.mvpTotal,   compareResult.s2?.mvpTotal],
-                ['MoM count',  compareResult.s1?.momCount,   compareResult.s2?.momCount],
-              ].map(([label,v1,v2])=>(
-                <div key={label} style={S.cmpRow}>
-                  <span style={{...S.cmpVal,color:ACCENT}}>{v1??'-'}</span>
-                  <span style={S.cmpLbl}>{label}</span>
-                  <span style={{...S.cmpVal,color:'#185FA5',textAlign:'right'}}>{v2??'-'}</span>
+		  {/* Compare by — single criteria, individual values */}
+          <div style={{marginBottom:10}}>
+            <div style={S.filterLabel}>Compare by</div>
+            <select
+              value={cmpCriteria1}
+              onChange={e => { setCmpCriteria1(e.target.value); setCmpCriteria2(e.target.value); }}
+              style={{...S.filterSelect, width:'100%', marginBottom:8}}>
+              {FILTER_CRITERIA.map(c=><option key={c} value={c}>{c}</option>)}
+            </select>
+            {cmpCriteria1 !== 'All' && (
+              <div style={S.cmpPlayerRow}>
+                <div style={{flex:1}}>
+                  <div style={S.filterLabel}>P1 value</div>
+                  <select
+                    value={cmpValue1}
+                    onChange={e=>setCmpValue1(e.target.value)}
+                    style={S.filterSelect}>
+                    {cmpValueOptions1.map(v=><option key={v} value={v}>{v}</option>)}
+                  </select>
                 </div>
-              ))}
+                <div style={{width:8}}/>
+                <div style={{flex:1}}>
+                  <div style={S.filterLabel}>P2 value</div>
+                  <select
+                    value={cmpValue2}
+                    onChange={e=>setCmpValue2(e.target.value)}
+                    style={S.filterSelect}>
+                    {cmpValueOptions2.map(v=><option key={v} value={v}>{v}</option>)}
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Compare results — auto updates */}
+          <div style={S.card}>
+            {/* Header row */}
+            <div style={S.cmpHeader}>
+              <span style={{color:ACCENT, fontWeight:500, fontSize:12}}>
+                {comparePlayer1 || selectedPlayer}
+              </span>
+              <span style={{color:'#ccc', fontSize:10}}>vs</span>
+              <span style={{color:'#185FA5', fontWeight:500, fontSize:12}}>
+                {comparePlayer2 || selectedPlayer}
+              </span>
             </div>
-          )}
+
+            {/* Metric rows with bars */}
+            {cmpMetrics.map(({label, k1, k2, lower, parse}) => {
+              const raw1 = cmpStats1?.[k1];
+              const raw2 = cmpStats2?.[k2];
+              const v1   = parse ? parseInt(raw1) || 0 : Number(raw1) || 0;
+              const v2   = parse ? parseInt(raw2) || 0 : Number(raw2) || 0;
+              const max  = Math.max(v1, v2, 0.001);
+              // For lower-is-better (economy), flip bar logic
+              const bar1 = lower
+                ? (v2 > 0 ? Math.round((v2/max)*100) : 100)
+                : Math.round((v1/max)*100);
+              const bar2 = lower
+                ? (v1 > 0 ? Math.round((v1/max)*100) : 100)
+                : Math.round((v2/max)*100);
+              const win1 = lower ? v1 < v2 : v1 > v2;
+              const win2 = lower ? v2 < v1 : v2 > v1;
+
+              return (
+                <div key={label} style={S.cmpMetricRow}>
+                  {/* Left side — value then bar below */}
+                  <div style={S.cmpSide}>
+                    <div style={S.cmpValLeft}>{raw1??'-'}</div>
+                    <div style={S.cmpBarTrackLeft}>
+                      <div style={{...S.cmpBarLeft, width:`${bar1}%`, background:ACCENT}}/>
+                    </div>
+                  </div>
+
+                  {/* Label */}
+                  <div style={S.cmpMetricLabel}>{label}</div>
+
+                  {/* Right side — value then bar below */}
+                  <div style={S.cmpSideRight}>
+                    <div style={S.cmpValRight}>{raw2??'-'}</div>
+                    <div style={S.cmpBarTrackRight}>
+                      <div style={{...S.cmpBarRight, width:`${bar2}%`, background:'#185FA5'}}/>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
@@ -461,22 +529,16 @@ export default function MyCricket() {
 function Grid5({ items }) {
   return (
     <div style={S.grid5}>
-      {items.map((item,i) => item ? (
+      {items.map((item,i) => (
         <div key={i} style={{
           ...S.statCard,
-          background: item.hl ? item.hl.bg   : '#fff',
-          borderColor:item.hl ? item.hl.border: '#eee',
+          background:  item.hl ? item.hl.bg     : '#fff',
+          borderColor: item.hl ? item.hl.border : '#eee',
         }}>
-          <div style={{
-            ...S.statNum,
-            color: item.hl ? item.hl.text : '#111',
-          }}>{item.n}</div>
-          <div style={{
-            ...S.statLbl,
-            color: item.hl ? item.hl.text : '#aaa',
-          }}>{item.l}</div>
+          <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
+          <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
         </div>
-      ) : <div key={i}/>)}
+      ))}
     </div>
   );
 }
@@ -494,8 +556,12 @@ const S = {
   selectorBar: { padding:'10px 12px 6px', background:'#fff', borderBottom:'0.5px solid #eee' },
   select: {
     width:'100%', padding:'7px 8px', borderRadius:8,
-    border:'0.5px solid #ddd', fontSize:12, color:'#222',
-    background:'#fafafa',
+    border:'0.5px solid #ddd', fontSize:12, color:'#222', background:'#fafafa',
+  },
+  selectBlue: {
+    width:'100%', padding:'7px 8px', borderRadius:8,
+    border:'1.5px solid #534AB7', fontSize:13, color:'#534AB7',
+    background:'#EEEDFE', fontWeight:500,
   },
   tabBar: { display:'flex', background:'#fff', borderBottom:'0.5px solid #eee' },
   tab: {
@@ -503,21 +569,33 @@ const S = {
     border:'none', background:'none', cursor:'pointer',
     borderBottom:'2px solid transparent',
   },
-  filterBar:   { padding:'8px 12px', background:'#f8f8f8', borderBottom:'0.5px solid #eee' },
-  filterGrid:  { display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:6 },
-  filterItem:  { display:'flex', flexDirection:'column', gap:2 },
-  filterLabel: { fontSize:9, color:'#aaa', fontWeight:500, letterSpacing:0.5, textTransform:'uppercase' },
-  filterSelect:{ padding:'4px 4px', borderRadius:6, border:'0.5px solid #ddd', fontSize:11, color:'#333', background:'#fff', width:'100%' },
+  filterBar: {
+    padding:'8px 12px', background:'#f8f8f8',
+    borderBottom:'0.5px solid #eee',
+  },
+  inlineFilterBar: {
+    display:'grid', gridTemplateColumns:'1fr 1fr',
+    gap:6, padding:'8px 0 10px',
+  },
+  filterGrid: {
+    display:'grid',
+    gridTemplateColumns:'repeat(3,1fr)',
+    gap:6,
+  },
+  filterItem:   { display:'flex', flexDirection:'column', gap:2 },
+  filterLabel:  { fontSize:9, color:'#aaa', fontWeight:500, letterSpacing:0.5, textTransform:'uppercase' },
+  filterSelect: {
+    padding:'5px 4px', borderRadius:6,
+    border:'0.5px solid #ddd', fontSize:11,
+    color:'#333', background:'#fff', width:'100%',
+  },
   body:    { padding:'10px 12px 0' },
   secLabel: {
     fontSize:10, fontWeight:500, color:'#888',
     letterSpacing:0.7, textTransform:'uppercase',
     margin:'12px 0 5px',
   },
-  dualSecRow: {
-    display:'flex', alignItems:'center',
-    margin:'12px 0 5px',
-  },
+  dualSecRow: { display:'flex', alignItems:'center', margin:'12px 0 5px' },
   grid5: {
     display:'grid',
     gridTemplateColumns:'repeat(5,minmax(0,1fr))',
@@ -525,11 +603,10 @@ const S = {
   },
   statCard: {
     borderRadius:8, border:'0.5px solid #eee',
-    padding:'7px 4px', textAlign:'center',
-    background:'#fff',
+    padding:'7px 4px', textAlign:'center', background:'#fff',
   },
-  statNum:  { fontSize:14, fontWeight:500, color:'#111', lineHeight:1.2 },
-  statLbl:  { fontSize:8, color:'#aaa', marginTop:2, lineHeight:1.2 },
+  statNum: { fontSize:14, fontWeight:500, color:'#111', lineHeight:1.2 },
+  statLbl: { fontSize:8, color:'#aaa', marginTop:2, lineHeight:1.2 },
   card: {
     background:'#fff', borderRadius:10,
     border:'0.5px solid #eee', overflow:'hidden', marginBottom:8,
@@ -544,41 +621,76 @@ const S = {
     display:'flex', alignItems:'center', padding:'7px 14px',
     borderTop:'0.5px solid #f5f5f5', gap:8,
   },
-  formId:   { fontSize:11, color:'#bbb', width:52, flexShrink:0 },
-  formBat:  { flex:1, fontSize:12, fontWeight:500, color:'#222' },
-  formBowl: { fontSize:11, color:'#888' },
-  momTrophy:{ fontSize:12 },
-  pshipRow: { display:'flex', alignItems:'center', padding:'10px 14px', borderBottom:'0.5px solid #f5f5f5' },
+  formId:    { fontSize:11, color:'#bbb', width:52, flexShrink:0 },
+  formBat:   { flex:1, fontSize:12, fontWeight:500, color:'#222' },
+  formBowl:  { fontSize:11, color:'#888' },
+  momTrophy: { fontSize:12 },
+  pshipRow: {
+    display:'flex', alignItems:'center', padding:'10px 14px',
+    borderBottom:'0.5px solid #f5f5f5',
+  },
   pshipName:   { fontSize:13, fontWeight:500, color:'#222' },
   pshipDetail: { fontSize:11, color:'#aaa', marginTop:2 },
   pshipRuns:   { fontSize:15, fontWeight:500, color:'#222' },
   pshipSR:     { fontSize:11, color:'#aaa', marginTop:2 },
   barTrack: {
-    height: 3,
-    background: '#f0f0f0',
-    borderRadius: 2,
-    marginTop: 6,
-    overflow: 'hidden',
+    height:3, background:'#f0f0f0', borderRadius:2,
+    marginTop:6, overflow:'hidden',
   },
   barFill: {
-    height: 3,
-    background: ACCENT,
-    borderRadius: 2,
-    transition: 'width 0.4s ease',
+    height:3, background:ACCENT, borderRadius:2,
+    transition:'width 0.4s ease',
   },
-  cmpPlayerRow:{ display:'flex', gap:8, alignItems:'flex-end', marginBottom:10 },
-  cmpVs: { fontSize:11, color:'#aaa', paddingBottom:8, flexShrink:0, width:16, textAlign:'center' },
-  cmpBtn: {
-    width:'100%', marginTop:8, padding:'10px',
-    borderRadius:8, border:'none', background:ACCENT,
-    color:'#fff', fontSize:13, fontWeight:500, cursor:'pointer',
+
+  // Compare styles
+  cmpPlayerRow: { display:'flex', gap:8, alignItems:'flex-end', marginBottom:10 },
+  cmpVs: {
+    fontSize:11, color:'#aaa', paddingBottom:8,
+    flexShrink:0, width:16, textAlign:'center',
   },
   cmpHeader: {
     display:'flex', justifyContent:'space-between', alignItems:'center',
     padding:'10px 14px', borderBottom:'0.5px solid #f0f0f0',
+    background:'#fafafa',
   },
-  cmpRow: { display:'flex', alignItems:'center', padding:'8px 14px', borderBottom:'0.5px solid #f5f5f5' },
-  cmpVal: { width:70, fontSize:13, fontWeight:500 },
-  cmpLbl: { flex:1, fontSize:11, color:'#aaa', textAlign:'center' },
+  cmpMetricRow: {
+    display:'flex', alignItems:'center',
+    padding:'8px 10px', borderBottom:'0.5px solid #f5f5f5',
+    gap:6,
+  },
+  cmpSide: {
+    flex:1, display:'flex', flexDirection:'column', alignItems:'flex-end', gap:2,
+  },
+  cmpSideRight: {
+    flex:1, display:'flex', flexDirection:'column', alignItems:'flex-start', gap:2,
+  },
+  cmpValLeft: {
+    fontSize:13, fontWeight:500, color:ACCENT, minWidth:28, textAlign:'right',
+  },
+  cmpValRight: {
+    fontSize:13, fontWeight:500, color:'#185FA5', minWidth:28,
+  },
+  cmpMetricLabel: {
+    fontSize:10, color:'#aaa', width:62, textAlign:'center',
+    flexShrink:0, lineHeight:1.2,
+  },
+  cmpBarTrackLeft: {
+    width:'100%', height:4, background:'#f0f0f0',
+    borderRadius:2, overflow:'hidden',
+    display:'flex', justifyContent:'flex-end',
+  },
+  cmpBarTrackRight: {
+    width:'100%', height:4, background:'#f0f0f0',
+    borderRadius:2, overflow:'hidden',
+  },
+  cmpBarLeft: {
+    height:4, borderRadius:2,
+    transition:'width 0.3s ease',
+  },
+  cmpBarRight: {
+    height:4, borderRadius:2,
+    transition:'width 0.3s ease',
+  },
+
   empty: { textAlign:'center', padding:'28px 0', fontSize:13, color:'#ccc' },
 };
