@@ -402,9 +402,11 @@ function getMVPLeaderboard(sport, filters = {}, sortBy = 'totalPoints') {
 function getPartnershipLeaderboard(sport, filters = {}, sortBy = 'runs') {
   const { partnerships } = loadData(sport);
   const filtered = partnerships.filter(p => {
-    if (filters.season && String(p.season) !== String(filters.season)) return false;
-    if (filters.format && filters.format !== 'All' && p.format !== filters.format) return false;
-    if (filters.ground && p.ground !== filters.ground) return false;
+    if (filters.season    && String(p.season)    !== String(filters.season))    return false;
+    if (filters.format    && filters.format !== 'All' && p.format !== filters.format) return false;
+    if (filters.ground    && p.ground    !== filters.ground)    return false;
+    if (filters.batInning && String(p.batInning) !== String(filters.batInning)) return false;
+    if (filters.wicket    && String(p.wicket)    !== String(filters.wicket))    return false;
     return true;
   });
 
