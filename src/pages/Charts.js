@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../App';
 
 const engine = require('../engine/statsEngine');
@@ -18,9 +18,9 @@ const CHART_TABS = [
 ];
 
 const VIEW_MODES = [
-  { id:'total',   label:'Total'       },
-  { id:'season',  label:'By season'   },
-  { id:'innings', label:'By inning'   },
+  { id:'total',   label:'Total'     },
+  { id:'season',  label:'By season' },
+  { id:'innings', label:'By inning' },
 ];
 
 const MVP_COMPONENTS = [
@@ -33,32 +33,27 @@ export default function Charts() {
   const { sportType, season, format } = useApp();
   const sport = sportType.toLowerCase();
 
-  const [chartTab,    setChartTab]    = useState('runs');
-  const [viewMode,    setViewMode]    = useState('total');
-  const [mvpComp,     setMvpComp]     = useState('mvpMomPerInn');
-  const [ground,      setGround]      = useState('All');
-  const [team,        setTeam]        = useState('All');
-  const [result,      setResult]      = useState('All');
-  const [batInning,   setBatInning]   = useState('All');
-  const [position,    setPosition]    = useState('All');
-  const [selPlayers,  setSelPlayers]  = useState([]);
-  const [playerList,  setPlayerList]  = useState([]);
-  const [grounds,     setGrounds]     = useState(['All']);
-  const [teams,       setTeams]       = useState(['All']);
-  const [seasons,     setSeasons]     = useState([]);
-  const [isLandscape, setIsLandscape] = useState(false);
-  const [chartData,   setChartData]   = useState(null);
-  const canvasRef = useRef(null);
-  const overlayRef = useRef(null);
+  const [chartTab,   setChartTab]   = useState('runs');
+  const [viewMode,   setViewMode]   = useState('total');
+  const [mvpComp,    setMvpComp]    = useState('mvpMomPerInn');
+  const [ground,     setGround]     = useState('All');
+  const [team,       setTeam]       = useState('All');
+  const [result,     setResult]     = useState('All');
+  const [batInning,  setBatInning]  = useState('All');
+  const [position,   setPosition]   = useState('All');
+  const [selPlayers, setSelPlayers] = useState([]);
+  const [playerList, setPlayerList] = useState([]);
+  const [grounds,    setGrounds]    = useState(['All']);
+  const [teams,      setTeams]      = useState(['All']);
+  const [seasons,    setSeasons]    = useState([]);
+  const [isLandscape,setIsLandscape]= useState(false);
+  const [chartData,  setChartData]  = useState(null);
 
-  // Orientation detection
+  // Mobile-only orientation detection
   useEffect(() => {
     function checkOrientation() {
-      // Only trigger landscape mode on actual mobile devices
-      // Desktop browsers are always "landscape" by window ratio
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      const isLand   = window.innerWidth > window.innerHeight;
-      setIsLandscape(isMobile && isLand);
+      setIsLandscape(isMobile && window.innerWidth > window.innerHeight);
     }
     checkOrientation();
     window.addEventListener('resize', checkOrientation);
@@ -70,7 +65,7 @@ export default function Charts() {
   }, []);
 
   useEffect(() => {
-    const cfg = engine.loadConfig(sport);
+    const cfg  = engine.loadConfig(sport);
     const list = engine.getPlayerList(sport);
     setPlayerList(list);
     setSelPlayers([]);
@@ -79,19 +74,18 @@ export default function Charts() {
     try { setTeams(engine.getAllTeams(sport)); } catch(_) { setTeams(['All']); }
   }, [sport]);
 
-  function buildFilters(extraFilters = {}) {
+  function buildFilters(extra = {}) {
     const f = {};
-    if (season   !== 'All') f.season   = season;
-    if (format   !== 'All') f.format   = format;
-    if (ground   !== 'All') f.ground   = ground;
-    if (team     !== 'All') f.team     = team;
-    if (result   !== 'All') f.winLoss  = result;
-    if (batInning !== 'All') f.batInning = batInning;
-    if (position  !== 'All') f.battingPosition = position;
-    return { ...f, ...extraFilters };
+    if (season    !== 'All') f.season           = season;
+    if (format    !== 'All') f.format            = format;
+    if (ground    !== 'All') f.ground            = ground;
+    if (team      !== 'All') f.team              = team;
+    if (result    !== 'All') f.winLoss           = result;
+    if (batInning !== 'All') f.batInning         = batInning;
+    if (position  !== 'All') f.battingPosition   = position;
+    return { ...f, ...extra };
   }
 
-  // Get active players — selected or top 8
   function getActivePlayers() {
     if (selPlayers.length > 0) return selPlayers;
     try {
@@ -117,6 +111,7 @@ export default function Charts() {
           x:     p.strikeRate || 0,
           y:     p.average    || 0,
           r:     Math.max(4, Math.min(14, p.innings || 1)),
+          label: `${p.innings} inn`,
         }))});
         return;
       }
@@ -128,58 +123,69 @@ export default function Charts() {
           color: PLAYER_COLORS[i % PLAYER_COLORS.length],
           x:     p.economy    || 0,
           y:     p.bowlingAvg || 0,
-          r:     Math.max(4, Math.min(14, p.wickets || 1)),
+          r:     Math.max(4, Math.min(14, p.innings || 1)),
+          label: `${p.innings} inn`,
         }))});
         return;
       }
 
-      // Column charts
-      const players = getActivePlayers();
-      const statKey = chartTab === 'runs'    ? 'runs'
-                    : chartTab === 'wickets' ? 'wickets'
-                    : mvpComp;
+      const players  = getActivePlayers();
+      const statKey  = chartTab === 'runs'    ? 'runs'
+                     : chartTab === 'wickets' ? 'wickets'
+                     : mvpComp;
+      const activeSns = season !== 'All' ? [Number(season)] : seasons;
 
       if (viewMode === 'total') {
+        // Sort by total value descending
         const bars = players.map((p, i) => {
           const st = engine.getPlayerStats(sport, p, buildFilters());
-          return {
-            player: p,
-            value:  st?.[statKey] || 0,
-            color:  PLAYER_COLORS[i % PLAYER_COLORS.length],
-          };
+          return { player:p, value: st?.[statKey] || 0, color: PLAYER_COLORS[i % PLAYER_COLORS.length] };
         }).sort((a,b) => b.value - a.value);
-        setChartData({ type:'bar', viewMode:'total', bars, statKey });
+        setChartData({ type:'hbar', bars, statKey });
         return;
       }
 
       if (viewMode === 'season') {
-        const activeSns = season !== 'All' ? [Number(season)] : seasons;
-        const series = players.map((p, i) => ({
-          player: p,
-          color:  PLAYER_COLORS[i % PLAYER_COLORS.length],
-          values: activeSns.map(s => {
-            const st = engine.getPlayerStats(sport, p, buildFilters({ season: s }));
-            return st?.[statKey] || 0;
-          }),
-        }));
-        setChartData({ type:'grouped', viewMode:'season', seasons: activeSns, series, statKey });
+        // Group by player first, then seasons within each player
+        // Sort players by their total value
+        const playerTotals = players.map((p,i) => {
+          const total = activeSns.reduce((s, sn) => {
+            const st = engine.getPlayerStats(sport, p, buildFilters({ season: sn }));
+            return s + (st?.[statKey] || 0);
+          }, 0);
+          return { player:p, total, color: PLAYER_COLORS[i % PLAYER_COLORS.length],
+            values: activeSns.map(sn => {
+              const st = engine.getPlayerStats(sport, p, buildFilters({ season: sn }));
+              return { season: sn, value: st?.[statKey] || 0 };
+            })
+          };
+        }).sort((a,b) => b.total - a.total);
+
+        setChartData({ type:'playerGrouped', viewMode:'season', players: playerTotals,
+          seasons: activeSns, statKey, scrollable: true });
         return;
       }
 
       if (viewMode === 'innings') {
-        const activeSns = season !== 'All' ? [Number(season)] : seasons;
-        const labels = [];
-        activeSns.forEach(s => { labels.push(`S${s} Inn1`); labels.push(`S${s} Inn2`); });
-        const series = players.map((p, i) => ({
-          player: p,
-          color:  PLAYER_COLORS[i % PLAYER_COLORS.length],
-          values: activeSns.flatMap(s => {
-            const st1 = engine.getPlayerStats(sport, p, buildFilters({ season: s, batInning: '1' }));
-            const st2 = engine.getPlayerStats(sport, p, buildFilters({ season: s, batInning: '2' }));
-            return [st1?.[statKey] || 0, st2?.[statKey] || 0];
-          }),
-        }));
-        setChartData({ type:'grouped', viewMode:'innings', seasons: labels, series, statKey });
+        const playerTotals = players.map((p,i) => {
+          const total = activeSns.reduce((s, sn) => {
+            const st1 = engine.getPlayerStats(sport, p, buildFilters({ season:sn, batInning:'1' }));
+            const st2 = engine.getPlayerStats(sport, p, buildFilters({ season:sn, batInning:'2' }));
+            return s + (st1?.[statKey]||0) + (st2?.[statKey]||0);
+          }, 0);
+          const values = activeSns.flatMap(sn => {
+            const st1 = engine.getPlayerStats(sport, p, buildFilters({ season:sn, batInning:'1' }));
+            const st2 = engine.getPlayerStats(sport, p, buildFilters({ season:sn, batInning:'2' }));
+            return [
+              { label:`S${sn} I1`, value: st1?.[statKey]||0 },
+              { label:`S${sn} I2`, value: st2?.[statKey]||0 },
+            ];
+          });
+          return { player:p, total, color: PLAYER_COLORS[i % PLAYER_COLORS.length], values };
+        }).sort((a,b) => b.total - a.total);
+
+        setChartData({ type:'playerGrouped', viewMode:'innings', players: playerTotals,
+          seasons: activeSns, statKey, scrollable: true });
         return;
       }
     } catch(_) { setChartData(null); }
@@ -191,16 +197,9 @@ export default function Charts() {
     );
   }
 
-  const showBatFilters  = chartTab === 'runs'    || chartTab === 'mvp';
-  const showPlayerFilter = chartTab !== 'batmap' && chartTab !== 'bowlmap';
-  const showViewMode     = chartTab !== 'batmap' && chartTab !== 'bowlmap';
-
-  const chartContent = (
-    <ChartRenderer
-      data={chartData}
-      isLandscape={isLandscape}
-    />
-  );
+  const showBatFilters   = chartTab === 'runs'    || chartTab === 'mvp';
+  const showPlayerFilter = chartTab !== 'batmap'  && chartTab !== 'bowlmap';
+  const showViewMode     = chartTab !== 'batmap'  && chartTab !== 'bowlmap';
 
   return (
     <div style={S.page}>
@@ -215,32 +214,30 @@ export default function Charts() {
         ))}
       </div>
 
-      {/* View mode toggle */}
+      {/* View mode */}
       {showViewMode && (
         <div style={S.viewModeRow}>
           {VIEW_MODES.map(v => (
-            <button key={v.id} onClick={() => setViewMode(v.id)}
-              style={{
-                ...S.vmBtn,
-                background:   viewMode===v.id ? ACCENT : '#f0f0f0',
-                color:        viewMode===v.id ? '#fff'  : '#555',
-              }}>
+            <button key={v.id} onClick={() => setViewMode(v.id)} style={{
+              ...S.vmBtn,
+              background: viewMode===v.id ? ACCENT : '#f0f0f0',
+              color:      viewMode===v.id ? '#fff'  : '#555',
+            }}>
               {v.label}
             </button>
           ))}
         </div>
       )}
 
-      {/* MVP component selector */}
+      {/* MVP component */}
       {chartTab === 'mvp' && (
         <div style={S.mvpRow}>
           {MVP_COMPONENTS.map(c => (
-            <button key={c.id} onClick={() => setMvpComp(c.id)}
-              style={{
-                ...S.vmBtn,
-                background: mvpComp===c.id ? '#185FA5' : '#f0f0f0',
-                color:      mvpComp===c.id ? '#fff'    : '#555',
-              }}>
+            <button key={c.id} onClick={() => setMvpComp(c.id)} style={{
+              ...S.vmBtn,
+              background: mvpComp===c.id ? '#185FA5' : '#f0f0f0',
+              color:      mvpComp===c.id ? '#fff'    : '#555',
+            }}>
               {c.label}
             </button>
           ))}
@@ -253,21 +250,35 @@ export default function Charts() {
           <FilterCell label="Ground" value={ground} set={setGround} opts={grounds}/>
           <FilterCell label="Team"   value={team}   set={setTeam}   opts={teams}/>
           <FilterCell label="Result" value={result}  set={setResult} opts={['All','Win','Loss']}/>
-          {showBatFilters && (
-            <FilterCell label="Bat inn" value={batInning} set={setBatInning} opts={['All','1','2']}/>
-          )}
-          {showBatFilters && (
-            <FilterCell label="Position" value={position} set={setPosition}
+          {showBatFilters && <>
+            <FilterCell label="Bat inn"  value={batInning} set={setBatInning} opts={['All','1','2']}/>
+            <FilterCell label="Position" value={position}  set={setPosition}
               opts={['All','1','2','3','4','5','6','7','8']}/>
-          )}
+          </>}
         </div>
       </div>
 
-      {/* Player multi-select */}
+      {/* Chart area */}
+      <div style={S.chartArea}>
+        {!chartData
+          ? <div style={S.empty}>No data available</div>
+          : <ChartRenderer data={chartData} isLandscape={false}/>
+        }
+      </div>
+
+      {/* Rotate hint */}
+      <div style={S.rotateHint}>
+        <RotateIcon/>
+        <span style={S.rotateText}>Rotate phone for full view</span>
+      </div>
+
+      {/* Player selector — after chart */}
       {showPlayerFilter && (
         <div style={S.playerFilter}>
-          <div style={S.filterLabel}>
-            Players {selPlayers.length > 0 ? `(${selPlayers.length} selected)` : '(showing top 8)'}
+          <div style={S.playerFilterHeader}>
+            <span style={S.filterLabel}>
+              Select players {selPlayers.length > 0 ? `· ${selPlayers.length} selected` : '· showing top 8'}
+            </span>
             {selPlayers.length > 0 && (
               <button onClick={() => setSelPlayers([])} style={S.clearBtn}>Clear</button>
             )}
@@ -275,15 +286,14 @@ export default function Charts() {
           <div style={S.playerChips}>
             {playerList.map((p, i) => {
               const selected = selPlayers.includes(p);
-              const color    = PLAYER_COLORS[
-                selected ? selPlayers.indexOf(p) % PLAYER_COLORS.length : i % PLAYER_COLORS.length
-              ];
+              const idx      = selected ? selPlayers.indexOf(p) : i;
+              const color    = PLAYER_COLORS[idx % PLAYER_COLORS.length];
               return (
                 <button key={p} onClick={() => togglePlayer(p)} style={{
                   ...S.playerChip,
-                  background:  selected ? color : '#f5f5f5',
-                  color:       selected ? '#fff' : '#555',
-                  borderColor: selected ? color : '#e0e0e0',
+                  background:  selected ? color   : '#f5f5f5',
+                  color:       selected ? '#fff'  : '#555',
+                  borderColor: selected ? color   : '#e0e0e0',
                 }}>
                   {p}
                 </button>
@@ -293,26 +303,10 @@ export default function Charts() {
         </div>
       )}
 
-      {/* Chart area */}
-      <div style={S.chartArea}>
-        {!chartData ? (
-          <div style={S.empty}>No data available</div>
-        ) : (
-          <>
-            {chartContent}
-            <div style={S.rotateHint}>
-              ⤢ Rotate phone for full view
-            </div>
-          </>
-        )}
-      </div>
-
       {/* Landscape fullscreen overlay */}
       {isLandscape && chartData && (
         <div style={S.overlay}>
-          <div style={S.overlayChart}>
-            <ChartRenderer data={chartData} isLandscape={true}/>
-          </div>
+          <ChartRenderer data={chartData} isLandscape={true}/>
         </div>
       )}
 
@@ -320,70 +314,83 @@ export default function Charts() {
   );
 }
 
-// ── Chart renderer ────────────────────────────────────────────────────────────
+// ── Rotate icon ───────────────────────────────────────────────────────────────
+function RotateIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+      stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+      style={{verticalAlign:'middle', marginRight:5}}>
+      <rect x="4" y="6" width="10" height="14" rx="2"/>
+      <path d="M18 8 C21 8 21 16 18 16" strokeDasharray="2 1"/>
+      <polyline points="16 6 18 8 16 10"/>
+    </svg>
+  );
+}
 
+// ── Chart renderer ────────────────────────────────────────────────────────────
 function ChartRenderer({ data, isLandscape }) {
-  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const canvasRef    = useRef(null);
+  const [containerW, setContainerW] = useState(320);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerW(containerRef.current.offsetWidth || 320);
+    }
+  }, [isLandscape]);
+
+  const W = isLandscape ? window.innerWidth - 32 : containerW;
+  const H = isLandscape ? window.innerHeight - 40
+          : data?.type === 'hbar'         ? Math.max(180, (data.bars?.length || 1) * 28 + 20)
+          : data?.type === 'playerGrouped'? Math.max(200, (data.players?.length || 1) * 40 + 40)
+          : 220;
+
+  // Pixel ratio for sharp rendering
+  const dpr = window.devicePixelRatio || 1;
 
   useEffect(() => {
     if (!canvasRef.current || !data) return;
     const canvas = canvasRef.current;
-    const ctx    = canvas.getContext('2d');
-    const W = canvas.width;
-    const H = canvas.height;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = `${W}px`;
+    canvas.style.height = `${H}px`;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, W, H);
 
-    if (data.type === 'scatter') {
-      drawScatter(ctx, W, H, data);
-    } else if (data.type === 'bar') {
-      drawBar(ctx, W, H, data);
-    } else if (data.type === 'grouped') {
-      drawGrouped(ctx, W, H, data);
-    }
-  }, [data, isLandscape]);
-
-  const W = isLandscape ? window.innerWidth  - 32 : Math.min(320, window.innerWidth - 24);
-  const H = isLandscape ? window.innerHeight - 60 : 220;
+    if (data.type === 'scatter')       drawScatter(ctx, W, H, data);
+    else if (data.type === 'hbar')     drawHBar(ctx, W, H, data);
+    else if (data.type === 'playerGrouped') drawPlayerGrouped(ctx, W, H, data);
+  }, [data, W, H, dpr]);
 
   return (
-    <div>
-      <canvas
-        ref={canvasRef}
-        width={W}
-        height={H}
-        style={{ display:'block', margin:'0 auto', maxWidth:'100%' }}
-      />
-      {data && <Legend data={data}/>}
+    <div ref={containerRef} style={{width:'100%', overflowX: data?.scrollable ? 'auto' : 'visible'}}>
+      <canvas ref={canvasRef} style={{display:'block'}}/>
+      <Legend data={data}/>
     </div>
   );
 }
 
 function Legend({ data }) {
-  if (data.type === 'scatter') {
-    return (
-      <div style={S.legend}>
-        {data.dots?.slice(0,8).map((d,i) => (
-          <div key={i} style={S.legItem}>
-            <div style={{...S.legDot, background:d.color}}/>
-            <span style={S.legLabel}>{d.name}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  if (data.series) {
-    return (
-      <div style={S.legend}>
-        {data.series.map((s,i) => (
-          <div key={i} style={S.legItem}>
-            <div style={{...S.legDot, background:s.color}}/>
-            <span style={S.legLabel}>{s.player}</span>
-          </div>
-        ))}
-      </div>
-    );
-  }
-  return null;
+  if (!data) return null;
+  const items = data.type === 'scatter'
+    ? data.dots?.map(d => ({ label: d.name, color: d.color }))
+    : data.type === 'hbar'
+      ? null
+      : data.players?.map(p => ({ label: p.player, color: p.color }));
+
+  if (!items?.length) return null;
+  return (
+    <div style={S.legend}>
+      {items.map((item,i) => (
+        <div key={i} style={S.legItem}>
+          <div style={{...S.legDot, background:item.color}}/>
+          <span style={S.legLabel}>{item.label}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ── Drawing functions ─────────────────────────────────────────────────────────
@@ -392,42 +399,50 @@ function drawScatter(ctx, W, H, data) {
   const { dots, subtype } = data;
   if (!dots?.length) return;
 
-  const padL = 42, padR = 16, padT = 16, padB = 32;
+  const padL = 46, padR = 16, padT = 20, padB = 36;
   const cW = W - padL - padR;
   const cH = H - padT - padB;
 
-  const xs = dots.map(d => d.x);
-  const ys = dots.map(d => d.y);
-  const minX = Math.max(0, Math.min(...xs) - 5);
-  const maxX = Math.max(...xs) + 5;
-  const minY = Math.max(0, Math.min(...ys) - 2);
-  const maxY = Math.max(...ys) + 2;
+  const xs   = dots.map(d => d.x);
+  const ys   = dots.map(d => d.y);
+  // Dynamic scaling — don't start from zero
+  const xPad = (Math.max(...xs) - Math.min(...xs)) * 0.1 || 2;
+  const yPad = (Math.max(...ys) - Math.min(...ys)) * 0.1 || 2;
+  const minX = Math.max(0, Math.min(...xs) - xPad);
+  const maxX = Math.max(...xs) + xPad;
+  const minY = Math.max(0, Math.min(...ys) - yPad);
+  const maxY = Math.max(...ys) + yPad;
 
   function px(x) { return padL + ((x-minX)/(maxX-minX||1))*cW; }
   function py(y) { return padT + (1-(y-minY)/(maxY-minY||1))*cH; }
 
-  // Grid
-  ctx.strokeStyle = '#f0f0f0';
-  ctx.lineWidth = 1;
+  // Grid lines
+  ctx.strokeStyle = '#f0f0f0'; ctx.lineWidth = 1;
   [0,0.25,0.5,0.75,1].forEach(r => {
-    const y = padT + r * cH;
+    const y = padT + r*cH;
     ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
     const val = (maxY - r*(maxY-minY)).toFixed(1);
-    ctx.fillStyle = '#aaa'; ctx.font = '9px sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(val, padL - 4, y + 3);
+    ctx.fillStyle = '#999'; ctx.font = '9px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(val, padL-4, y+3);
+  });
+
+  // X axis ticks
+  [0,0.25,0.5,0.75,1].forEach(r => {
+    const x   = padL + r*cW;
+    const val = (minX + r*(maxX-minX)).toFixed(1);
+    ctx.fillStyle = '#999'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(val, x, H-padB+14);
   });
 
   // Axis labels
-  ctx.fillStyle = '#888'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
-  const xLabel = subtype === 'bowling' ? 'Economy (lower better)' : 'Strike rate';
+  const xLabel = subtype === 'bowling' ? 'Economy (lower = better)' : 'Strike rate';
+  const yLabel = subtype === 'bowling' ? 'Avg (lower = better)'     : 'Avg';
+  ctx.fillStyle = '#666'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
   ctx.fillText(xLabel, padL + cW/2, H - 4);
 
-  // Y axis label
   ctx.save();
   ctx.translate(12, padT + cH/2);
   ctx.rotate(-Math.PI/2);
-  const yLabel = subtype === 'bowling' ? 'Avg (lower better)' : 'Avg';
   ctx.fillText(yLabel, 0, 0);
   ctx.restore();
 
@@ -438,28 +453,30 @@ function drawScatter(ctx, W, H, data) {
     ctx.arc(x, y, d.r, 0, Math.PI*2);
     ctx.fillStyle = d.color + 'CC';
     ctx.fill();
+    ctx.strokeStyle = d.color;
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-    // Name label
     ctx.fillStyle = '#333';
-    ctx.font = '8px sans-serif';
+    ctx.font = 'bold 9px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(d.name, x, y - d.r - 3);
   });
 }
 
-function drawBar(ctx, W, H, data) {
+function drawHBar(ctx, W, H, data) {
   const { bars } = data;
   if (!bars?.length) return;
 
-  const padL = 70, padR = 40, padT = 10, padB = 10;
-  const cW = W - padL - padR;
-  const cH = H - padT - padB;
-  const maxVal = Math.max(...bars.map(b => b.value), 1);
-  const barH   = Math.floor(cH / bars.length) - 4;
+  const padL = 72, padR = 36, padT = 8, padB = 8;
+  const cW   = W - padL - padR;
+  const cH   = H - padT - padB;
+  const barH = Math.max(16, Math.floor(cH / bars.length) - 4);
+  const maxV = Math.max(...bars.map(b => b.value), 1);
 
   bars.forEach((b, i) => {
-    const y    = padT + i * (barH + 4);
-    const barW = (b.value / maxVal) * cW;
+    const y    = padT + i*(barH+4);
+    const barW = (b.value/maxV)*cW;
 
     ctx.fillStyle = b.color;
     ctx.beginPath();
@@ -467,68 +484,85 @@ function drawBar(ctx, W, H, data) {
     ctx.fill();
 
     // Player name
-    ctx.fillStyle = '#444';
-    ctx.font = `${Math.min(11, barH)}px sans-serif`;
+    ctx.fillStyle = '#333';
+    ctx.font = `${Math.min(12, barH-2)}px sans-serif`;
     ctx.textAlign = 'right';
-    ctx.fillText(b.player, padL - 4, y + barH/2 + 4);
+    ctx.fillText(b.player, padL-5, y+barH/2+4);
 
     // Value
     ctx.fillStyle = '#555';
     ctx.font = '10px sans-serif';
     ctx.textAlign = 'left';
-    ctx.fillText(b.value, padL + barW + 4, y + barH/2 + 4);
+    ctx.fillText(b.value, padL+barW+5, y+barH/2+4);
   });
 }
 
-function drawGrouped(ctx, W, H, data) {
-  const { seasons, series } = data;
-  if (!seasons?.length || !series?.length) return;
+function drawPlayerGrouped(ctx, W, H, data) {
+  const { players, viewMode } = data;
+  if (!players?.length) return;
 
-  const padL = 28, padR = 10, padT = 16, padB = 32;
-  const cW = W - padL - padR;
-  const cH = H - padT - padB;
+  const padL = 28, padR = 12, padT = 20, padB = 40;
+  const cW   = W - padL - padR;
+  const cH   = H - padT - padB;
 
-  const allVals = series.flatMap(s => s.values);
-  const maxVal  = Math.max(...allVals, 1);
+  // Each player gets a group; within group, one bar per season/inning
+  const numGroups  = players.length;
+  const barsPerGrp = players[0]?.values?.length || 1;
+  const allVals    = players.flatMap(p => p.values.map(v => typeof v === 'object' ? v.value : v));
+  const maxVal     = Math.max(...allVals, 1);
 
-  const grpW  = cW / seasons.length;
-  const barW  = Math.max(2, Math.min(16, (grpW / series.length) - 2));
-  const grpPad = (grpW - barW * series.length) / 2;
+  const grpW   = cW / numGroups;
+  const barW   = Math.max(3, Math.min(20, (grpW * 0.85) / barsPerGrp));
+  const grpPad = (grpW - barW * barsPerGrp) / 2;
 
   // Grid lines
-  [0, 0.25, 0.5, 0.75, 1].forEach(r => {
-    const y = padT + r * cH;
+  [0,0.25,0.5,0.75,1].forEach(r => {
+    const y = padT + r*cH;
     ctx.strokeStyle = '#f0f0f0'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W-padR, y); ctx.stroke();
-    const val = Math.round(maxVal * (1-r));
-    ctx.fillStyle = '#aaa'; ctx.font = '8px sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText(val, padL - 3, y + 3);
+    ctx.fillStyle = '#999'; ctx.font = '8px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(Math.round(maxVal*(1-r)), padL-3, y+3);
   });
 
-  // Bars
-  series.forEach((s, si) => {
-    s.values.forEach((v, gi) => {
-      const bH  = (v / maxVal) * cH;
-      const x   = padL + gi * grpW + grpPad + si * barW;
-      const y   = padT + cH - bH;
-      ctx.fillStyle = s.color;
+  players.forEach((p, gi) => {
+    p.values.forEach((v, bi) => {
+      const val  = typeof v === 'object' ? v.value : v;
+      const bH   = (val/maxVal)*cH;
+      const x    = padL + gi*grpW + grpPad + bi*barW;
+      const y    = padT + cH - bH;
+
+      // Alternate shading within player group
+      const alpha = bi % 2 === 0 ? 'FF' : 'BB';
+      ctx.fillStyle = p.color + alpha;
       ctx.beginPath();
-      ctx.roundRect(x, y, barW - 1, Math.max(bH, 1), 2);
+      ctx.roundRect(x, y, Math.max(barW-1, 1), Math.max(bH, 1), 2);
       ctx.fill();
     });
+
+    // Player name below
+    const cx = padL + gi*grpW + grpW/2;
+    ctx.fillStyle = '#444'; ctx.font = 'bold 9px sans-serif'; ctx.textAlign = 'center';
+    // Truncate long names
+    const name = p.player.length > 7 ? p.player.slice(0,6)+'…' : p.player;
+    ctx.fillText(name, cx, H - padB + 14);
+    ctx.fillStyle = '#888'; ctx.font = '8px sans-serif';
+    ctx.fillText(p.total, cx, H - padB + 24);
   });
 
-  // X labels
-  seasons.forEach((s, i) => {
-    const x = padL + i * grpW + grpW/2;
-    ctx.fillStyle = '#aaa'; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
-    const label = typeof s === 'number' ? `S${s}` : s;
-    ctx.fillText(label, x, H - 8);
-  });
+  // Season/inning labels at very bottom if space
+  if (barsPerGrp <= 4 && players.length > 0) {
+    players[0].values.forEach((v, bi) => {
+      const label = typeof v === 'object' ? v.label || v.season : '';
+      if (!label) return;
+      // Show only for first player group as reference
+      const x = padL + grpPad + bi*barW + barW/2;
+      ctx.fillStyle = '#bbb'; ctx.font = '7px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(label, x, H - padB + 34);
+    });
+  }
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
 function FilterCell({ label, value, set, opts }) {
   return (
     <div style={S.filterItem}>
@@ -541,7 +575,7 @@ function FilterCell({ label, value, set, opts }) {
 }
 
 const S = {
-  page: { paddingBottom:16 },
+  page:        { paddingBottom:16 },
   chartTabRow: {
     display:'flex', overflowX:'auto', background:'#fff',
     borderBottom:'0.5px solid #eee', scrollbarWidth:'none',
@@ -585,44 +619,39 @@ const S = {
     border:'0.5px solid #ddd', fontSize:11,
     color:'#333', background:'#fff', width:'100%',
   },
+  chartArea: { padding:'12px 12px 0' },
+  rotateHint: {
+    display:'flex', alignItems:'center', justifyContent:'center',
+    padding:'8px 12px 0', gap:4,
+  },
+  rotateText: { fontSize:13, color:'#333', fontWeight:500 },
   playerFilter: {
-    padding:'8px 12px 6px',
-    background:'#fff', borderBottom:'0.5px solid #eee',
+    padding:'10px 12px 8px',
+    borderTop:'0.5px solid #eee',
   },
-  playerChips: {
-    display:'flex', flexWrap:'wrap', gap:5, marginTop:5,
+  playerFilterHeader: {
+    display:'flex', alignItems:'center',
+    justifyContent:'space-between', marginBottom:6,
   },
+  playerChips: { display:'flex', flexWrap:'wrap', gap:5 },
   playerChip: {
-    padding:'3px 10px', borderRadius:14, fontSize:11,
+    padding:'4px 10px', borderRadius:14, fontSize:11,
     border:'1px solid #e0e0e0', cursor:'pointer',
     fontWeight:500, transition:'all 0.15s',
   },
   clearBtn: {
-    marginLeft:8, fontSize:10, color:ACCENT,
-    background:'none', border:'none', cursor:'pointer',
-    textDecoration:'underline', padding:0,
-  },
-  chartArea: {
-    padding:'12px 12px 0',
-  },
-  rotateHint: {
-    textAlign:'center', fontSize:10,
-    color:'#aaa', marginTop:8,
+    fontSize:11, color:ACCENT, background:'none',
+    border:'none', cursor:'pointer', textDecoration:'underline',
   },
   overlay: {
     position:'fixed', top:0, left:0,
     width:'100vw', height:'100vh',
     background:'#fff', zIndex:999,
     display:'flex', alignItems:'center',
-    justifyContent:'center',
-    padding:16,
-  },
-  overlayChart: {
-    width:'100%',
+    justifyContent:'center', padding:16,
   },
   legend: {
-    display:'flex', flexWrap:'wrap', gap:8,
-    marginTop:8, paddingLeft:4,
+    display:'flex', flexWrap:'wrap', gap:8, marginTop:8, paddingLeft:4,
   },
   legItem:  { display:'flex', alignItems:'center', gap:4 },
   legDot:   { width:8, height:8, borderRadius:'50%', flexShrink:0 },
