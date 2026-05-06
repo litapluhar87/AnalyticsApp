@@ -56,7 +56,8 @@ export default function Home() {
     } catch(_) {}
 
     try {
-      setRecentMatches(engine.getRecentMatches(sport, 2));
+      const allMatches = engine.getMatches(sport, filters);
+      setRecentMatches(allMatches.slice(0, 2));
     } catch(_) { setRecentMatches([]); }
 
     try {
@@ -196,7 +197,8 @@ export default function Home() {
       </div>
 
       <div style={S.body}>
-
+		<SeriesLeader sport={sport} filters={filters}/>
+		
         {/* ── RECENT MATCHES ── */}
         <div style={S.secRow}>
           <div style={S.secLabel}>Recent matches</div>
@@ -263,7 +265,7 @@ export default function Home() {
           style={S.secRow}
           onClick={() => navigateTo('leaderboard')}
         >
-          <div style={S.secLabel}>Overall MVP</div>
+          <div style={S.secLabel}>MVP</div>
           <div style={S.secLink}>See all →</div>
         </div>
 
@@ -283,8 +285,8 @@ export default function Home() {
                 </div>
                 <div style={S.lbName}>{p.player}</div>
                 <div style={S.lbRight}>
-                  <div style={S.lbVal}>{p.mvpTotal}</div>
-                  <div style={S.lbSub}>{p.mvpPerInning}/inn</div>
+                  <div style={S.lbVal}>{p.mvpMomPerInn ?? p.mvpPerInning}</div>
+                  <div style={S.lbSub}>per inn</div>
                 </div>
               </div>
             ))}
@@ -476,5 +478,92 @@ const S = {
   empty: {
     textAlign: 'center', padding: '20px 0',
     fontSize: 13, color: '#ccc',
+  },
+}
+function SeriesLeader({ sport, filters }) {
+  const [leader, setLeader] = React.useState(null);
+
+  React.useEffect(() => {
+    try {
+      // Get most recent match to determine current season/format
+      const matches = engine.getMatches(sport, filters);
+      if (!matches.length) { setLeader(null); return; }
+
+      // Use filters or derive from most recent match
+      const recentMatch = matches[0];
+      const activeFilters = { ...filters };
+      if (!activeFilters.season) activeFilters.season = recentMatch.season;
+      if (!activeFilters.format && recentMatch.format !== 'All') {
+        activeFilters.format = recentMatch.format;
+      }
+
+      const table = engine.getPointsTable(sport, activeFilters);
+      if (!table.length) { setLeader(null); return; }
+
+      const top = table[0];
+      const second = table[1];
+      if (!second) { setLeader(null); return; }
+
+      setLeader({
+        team1:  top.team,
+        wins1:  top.won,
+        team2:  second.team,
+        wins2:  second.won,
+        season: activeFilters.season,
+        format: activeFilters.format,
+      });
+    } catch(_) { setLeader(null); }
+  }, [sport, JSON.stringify(filters)]);
+
+  if (!leader) return null;
+
+  const margin = leader.wins1 - leader.wins2;
+  const tied   = margin === 0;
+
+  return (
+    <div style={SL.box}>
+      <div style={SL.label}>Series standing</div>
+      <div style={SL.row}>
+        <div style={SL.team1}>
+          <div style={SL.tname}>{leader.team1}</div>
+          <div style={SL.score}>{leader.wins1}</div>
+        </div>
+        <div style={SL.vs}>
+          {tied ? 'Tied' : `leads by ${margin}`}
+        </div>
+        <div style={SL.team2}>
+          <div style={SL.tname}>{leader.team2}</div>
+          <div style={SL.score}>{leader.wins2}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const SL = {
+  box: {
+    background: '#fff',
+    borderRadius: 10,
+    border: '0.5px solid #eee',
+    padding: '10px 14px',
+    marginBottom: 10,
+    boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+  },
+  label: {
+    fontSize: 10, fontWeight: 500, color: '#aaa',
+    letterSpacing: 0.7, textTransform: 'uppercase',
+    marginBottom: 8,
+  },
+  row: {
+    display: 'flex', alignItems: 'center',
+  },
+  team1: { flex: 1 },
+  team2: { flex: 1, textAlign: 'right' },
+  tname: { fontSize: 12, fontWeight: 500, color: '#222' },
+  score: { fontSize: 22, fontWeight: 600, color: '#0C447C', marginTop: 2 },
+  vs: {
+    fontSize: 11, color: '#aaa',
+    padding: '0 10px', textAlign: 'center',
+    flexShrink: 0,
   },
 };

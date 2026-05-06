@@ -33,14 +33,16 @@ function filterMatches(matches, filters = {}) {
 
 function filterPlayers(players, filters = {}) {
   return players.filter(p => {
-    if (filters.playerName     && p.player !== filters.playerName)                          return false;
-    if (filters.season         && String(p.season) !== String(filters.season))              return false;
-    if (filters.format         && filters.format !== 'All' && p.format !== filters.format)  return false;
-    if (filters.ground         && p.ground !== filters.ground)                              return false;
-    if (filters.batInning && String(p.batting?.innings) !== String(filters.batInning))      return false;
+    if (filters.playerName      && p.player !== filters.playerName)                          return false;
+    if (filters.season          && String(p.season)   !== String(filters.season))            return false;
+    if (filters.format          && filters.format !== 'All' && p.format !== filters.format)  return false;
+    if (filters.ground          && p.ground !== filters.ground)                              return false;
+    if (filters.team            && p.team   !== filters.team)                                return false;
+    if (filters.matchNum        && String(p.matchNum) !== String(filters.matchNum))          return false;
+    if (filters.batInning       && String(p.batting?.innings) !== String(filters.batInning)) return false;
     if (filters.battingPosition && String(p.batting?.position) !== String(filters.battingPosition)) return false;
-    if (filters.winLoss === 'Win'  && !p.won)  return false;
-    if (filters.winLoss === 'Loss' &&  p.won)  return false;
+    if (filters.winLoss === 'Win'  && !p.won) return false;
+    if (filters.winLoss === 'Loss' &&  p.won) return false;
     return true;
   });
 }
@@ -170,6 +172,7 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
     mvpBat:        Math.round(mvpBat      * 10) / 10,
     mvpBowl:       Math.round(mvpBowl     * 10) / 10,
     mvpField:      Math.round(mvpField    * 10) / 10,
+	mvpFieldPerInn: innings > 0 ? Math.round((mvpField / innings) * 10) / 10 : 0,
     mvpMom:        Math.round(mvpMomTotal * 10) / 10,
     mvpTotal:      Math.round(mvpTotal    * 10) / 10,
     mvpPerInning:  innings > 0
@@ -335,7 +338,16 @@ function buildPlayerMap(sport, filters) {
 
 function getBattingLeaderboard(sport, filters = {}, sortBy = 'runs') {
   const { byPlayer, config } = buildPlayerMap(sport, filters);
-  const min = config.leaderboardConfig.minInningsForBatting;
+  const rawMin = config.leaderboardConfig.minInningsForBatting;
+  // Lower threshold when filtering to single match or small dataset
+  const uniqueMatches = new Set(
+    Object.values(byPlayer).flat().map(r => `${r.season}-${r.matchNum}`)
+  ).size;
+  const min = filters.season || filters.matchNum || filters.ground ||
+              filters.team   || filters.batInning || filters.battingPosition ||
+              filters.winLoss
+    ? 1
+    : rawMin;
   const sortFns = {
     runs:       (a, b) => b.runs       - a.runs,
     average:    (a, b) => b.average    - a.average,
@@ -353,15 +365,25 @@ function getBattingLeaderboard(sport, filters = {}, sortBy = 'runs') {
 
 function getBowlingLeaderboard(sport, filters = {}, sortBy = 'wickets') {
   const { byPlayer, config } = buildPlayerMap(sport, filters);
-  const min = config.leaderboardConfig.minInningsForBowling;
+  const rawMin = config.leaderboardConfig.minInningsForBowling;
+  const uniqueMatches = new Set(
+    Object.values(byPlayer).flat().map(r => `${r.season}-${r.matchNum}`)
+  ).size;
+  const min = filters.season || filters.matchNum || filters.ground ||
+              filters.team   || filters.batInning || filters.battingPosition ||
+              filters.winLoss
+    ? 1
+    : rawMin;
   const sortFns = {
-    wickets:  (a, b) => b.wickets    - a.wickets,
-    economy:  (a, b) => a.economy    - b.economy,
-    average:  (a, b) => (a.bowlingAvg || 999) - (b.bowlingAvg || 999),
+    wickets:   (a, b) => b.wickets    - a.wickets,
+    economy:   (a, b) => a.economy    - b.economy,
+    average:   (a, b) => (a.bowlingAvg||999) - (b.bowlingAvg||999),
+    bowlingSR: (a, b) => (a.bowlingSR||999) - (b.bowlingSR||999),
+    maidens:   (a, b) => b.maidens    - a.maidens,
   };
   return Object.values(byPlayer)
     .map(rows => aggregatePlayerStats(rows, config))
-    .filter(p => p && p.innings >= min && p.wickets > 0)
+    .filter(p => p && p.innings >= min && p.oversBowled > 0)
     .sort(sortFns[sortBy] || sortFns.wickets)
     .map((p, i) => ({ ...p, rank: i + 1 }));
 }
@@ -369,10 +391,10 @@ function getBowlingLeaderboard(sport, filters = {}, sortBy = 'wickets') {
 function getFieldingLeaderboard(sport, filters = {}, sortBy = 'total') {
   const { byPlayer, config } = buildPlayerMap(sport, filters);
   const sortFns = {
-    total:     (a, b) => b.totalFielding - a.totalFielding,
-    catches:   (a, b) => b.catches       - a.catches,
-    stumpings: (a, b) => b.stumpings     - a.stumpings,
-    runOuts:   (a, b) => (b.runOutsDirect + b.runOutsCombo) - (a.runOutsDirect + a.runOutsCombo),
+    total:      (a, b) => b.totalFielding  - a.totalFielding,
+    catches:    (a, b) => b.catches        - a.catches,
+    runOuts:    (a, b) => (b.runOutsDirect+b.runOutsCombo+b.stumpings) - (a.runOutsDirect+a.runOutsCombo+a.stumpings),
+    fieldPoints:(a, b) => b.mvpFieldPerInn - a.mvpFieldPerInn,
   };
   return Object.values(byPlayer)
     .map(rows => aggregatePlayerStats(rows, config))
@@ -655,11 +677,94 @@ function getScorecard(sport, season, matchNum) {
 
   return { match, innings: [innings1, innings2] };
 }
+
+// ─── Enhanced leaderboard with 60% threshold for MVP ─────────────────────────
+
+function getMVPLeaderboardEnhanced(sport, filters = {}, sortBy = 'totalPoints') {
+  const { players, matches } = loadData(sport);
+  const config = loadConfig(sport);
+  const min = config.leaderboardConfig.minMatchesForMVP;
+
+  // 60% threshold only applies when filtering by season, format, ground, team
+  // NOT when filtering by match, batInning, battingPosition, winLoss
+  const thresholdFilters = ['season', 'format', 'ground', 'team'];
+  const hasThresholdExemptFilter = ['matchNum', 'batInning', 'battingPosition', 'winLoss']
+    .some(k => filters[k] && filters[k] !== 'All');
+
+  // Build match-level filters (only season/format/ground/team)
+  // Count total matches using player records so team filter works correctly
+  const matchLevelFilters = {};
+  thresholdFilters.forEach(k => {
+    if (filters[k]) matchLevelFilters[k] = filters[k];
+  });
+
+  const matchLevelPlayers = filterPlayers(players, matchLevelFilters);
+  const totalMatches = new Set(
+    matchLevelPlayers.map(p => `${p.season}-${p.matchNum}`)
+  ).size;
+  const threshold60 = hasThresholdExemptFilter
+    ? 0  // disable threshold
+    : Math.max(1, Math.ceil(totalMatches * 0.6));
+
+  // For team filter — get players who played for that team
+  // by filtering player records directly
+  const filteredPlayers = filterPlayers(players, filters);
+
+  const byPlayer = {};
+  filteredPlayers.forEach(row => {
+    if (!byPlayer[row.player]) byPlayer[row.player] = [];
+    byPlayer[row.player].push(row);
+  });
+
+  const sortFns = {
+    totalPoints:  (a, b) => b.mvpMomPerInn   - a.mvpMomPerInn,
+    batPoints:    (a, b) => b.mvpBatPerInn   - a.mvpBatPerInn,
+    bowlPoints:   (a, b) => b.mvpBowlPerInn  - a.mvpBowlPerInn,
+    fieldPoints:  (a, b) => b.mvpFieldPerInn - a.mvpFieldPerInn,
+    momCount:     (a, b) => b.momCount       - a.momCount,
+    mosCount:     (a, b) => (b.mosCount||0)  - (a.mosCount||0),
+  };
+
+  const hasAnyFilter = Object.keys(filters).some(k => filters[k] && filters[k] !== 'All');
+  const allPlayers = Object.values(byPlayer)
+    .map(rows => aggregatePlayerStats(rows, config))
+    .filter(p => p && p.matches >= (hasAnyFilter ? 1 : min));
+
+  const sortFn = sortFns[sortBy] || sortFns.totalPoints;
+
+  if (hasThresholdExemptFilter || totalMatches <= 1) {
+    // No grouping — just show everyone sorted
+    const sorted = allPlayers
+      .sort(sortFn)
+      .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
+    return { group1: sorted, group2: [], totalMatches, threshold60 };
+  }
+
+  // Split into two groups based on 60% threshold
+  const group1 = allPlayers
+    .filter(p => p.matches >= threshold60)
+    .sort(sortFn)
+    .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
+
+  const group2 = allPlayers
+    .filter(p => p.matches < threshold60)
+    .sort(sortFn)
+    .map((p, i) => ({ ...p, rank: group1.length + i + 1, qualified: false }));
+
+  return { group1, group2, totalMatches, threshold60 };
+}
+
+function getAllTeams(sport) {
+  const { players } = loadData(sport);
+  return ['All', ...new Set(players.map(p => p.team).filter(Boolean))].sort();
+}
+
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 module.exports = {
   loadData,
   loadConfig,
+  getAllTeams,
   getMatches,
   getMatchById,
   getScorecard,
@@ -671,6 +776,7 @@ module.exports = {
   getBowlingLeaderboard,
   getFieldingLeaderboard,
   getMVPLeaderboard,
+  getMVPLeaderboardEnhanced,
   getPartnershipLeaderboard,
   comparePlayers,
   comparePlayerSeasons,

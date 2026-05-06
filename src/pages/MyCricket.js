@@ -21,7 +21,7 @@ function fmtOvers(val) {
 const HL = { bg:'#534AB7', border:'#534AB7', text:'#fff' };
 
 export default function MyCricket() {
-  const { sportType, currentUser } = useApp();
+  const { sportType, season, format, currentUser } = useApp();
   const sport = sportType.toLowerCase();
 
   const [selectedPlayer, setSelectedPlayer] = useState(currentUser);
@@ -35,8 +35,6 @@ export default function MyCricket() {
   const [batInning, setBatInning] = useState('All');
   const [batPos,    setBatPos]    = useState('All');
   const [winLoss,   setWinLoss]   = useState('All');
-  const [statSeason, setStatSeason] = useState('All');
-  const [statFormat, setStatFormat] = useState('All');
 
   // Data
   const [stats,        setStats]        = useState(null);
@@ -65,22 +63,20 @@ export default function MyCricket() {
     setGrounds(['All', ...(cfg.grounds || [])]);
     setSeasons(['All', ...(cfg.seasons || []).map(s => String(s))]);
     setGround('All');
-    setStatSeason('All');
-    setStatFormat('All');
   }, [sport]);
 
   // Reset compare value when criteria changes
   useEffect(() => { setCmpValue1('All'); }, [cmpCriteria1]);
   useEffect(() => { setCmpValue2('All'); }, [cmpCriteria2]);
 
-  function buildStatFilters() {
+function buildStatFilters() {
     const f = {};
-    if (statSeason !== 'All') f.season         = statSeason;
-    if (statFormat !== 'All') f.format          = statFormat;
-    if (ground     !== 'All') f.ground          = ground;
-    if (batInning  !== 'All') f.batInning       = batInning;
-    if (batPos     !== 'All') f.battingPosition = batPos;
-    if (winLoss    !== 'All') f.winLoss         = winLoss;
+    if (season    !== 'All') f.season          = season;
+    if (format    !== 'All') f.format          = format;
+    if (ground    !== 'All') f.ground          = ground;
+    if (batInning !== 'All') f.batInning       = batInning;
+    if (batPos    !== 'All') f.battingPosition = batPos;
+    if (winLoss   !== 'All') f.winLoss         = winLoss;
     return f;
   }
 
@@ -139,7 +135,7 @@ export default function MyCricket() {
         p.player1 === selectedPlayer || p.player2 === selectedPlayer
       ).slice(0, 10));
     } catch(_) { setPartnerships([]); }
-  }, [sport, statSeason, statFormat, selectedPlayer, ground, batInning, batPos, winLoss, pshipInning, pshipWicket]);
+  }, [sport, season, format, selectedPlayer, ground, batInning, batPos, winLoss, pshipInning, pshipWicket]);
 
   // Auto-compare whenever players or filter changes
   useEffect(() => {
@@ -199,19 +195,7 @@ export default function MyCricket() {
       {/* Stats filters */}
       {activeTab === 'stats' && (
         <div style={S.filterBar}>
-          <div style={S.filterGrid}>
-            <div style={S.filterItem}>
-              <div style={S.filterLabel}>Season</div>
-              <select value={statSeason} onChange={e=>setStatSeason(e.target.value)} style={S.filterSelect}>
-                {seasons.map(s=><option key={s} value={s}>{s==='All'?'All':`S${s}`}</option>)}
-              </select>
-            </div>
-            <div style={S.filterItem}>
-              <div style={S.filterLabel}>Format</div>
-              <select value={statFormat} onChange={e=>setStatFormat(e.target.value)} style={S.filterSelect}>
-                {['All','T12','Test'].map(f=><option key={f} value={f}>{f}</option>)}
-              </select>
-            </div>
+          <div style={{...S.filterGrid, gridTemplateColumns:'repeat(4,1fr)'}}>
             <div style={S.filterItem}>
               <div style={S.filterLabel}>Ground</div>
               <select value={ground} onChange={e=>setGround(e.target.value)} style={S.filterSelect}>
@@ -286,14 +270,14 @@ export default function MyCricket() {
             {(hasCaptaincy || hasAwards) && (() => {
               const captItems = hasCaptaincy ? [
                 {n:ini(stats.captainMatches), l:'Matches led'},
-                {n:ini(stats.captainWins),    l:'Won', hl:HL},
+                {n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
                 {n:stats.captainMatches > 0
                   ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
                   : '-',                      l:'Win %'},
               ] : [];
               const awardItems = hasAwards ? [
-                {n:ini(stats.momCount),    l:'MoM', hl:HL},
-                {n:ini(stats.mosCount||0), l:'MoS', hl:HL},
+                {n:ini(stats.momCount),    l:'MoM', hl:(stats.momCount||0)>0    ? HL : null},
+                {n:ini(stats.mosCount||0), l:'MoS', hl:(stats.mosCount||0)>0    ? HL : null},
               ] : [];
               const allItems = [...captItems, ...awardItems];
               const captFlex  = captItems.length;
