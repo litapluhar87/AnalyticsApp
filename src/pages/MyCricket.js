@@ -4,6 +4,8 @@ import { useApp } from '../App';
 const engine = require('../engine/statsEngine');
 const ACCENT = '#534AB7';
 
+const awardsEngine = require('../engine/awardsEngine');
+
 const INNINGS_OPTS  = ['All', '1', '2'];
 const WINLOSS_OPTS  = ['All', 'Win', 'Loss'];
 const POSITION_OPTS = ['All','1','2','3','4','5','6','7','8'];
@@ -122,6 +124,15 @@ function buildStatFilters() {
     const filters = buildStatFilters();
     try { setStats(engine.getPlayerStats(sport, selectedPlayer, filters)); }
     catch(_) { setStats(null); }
+	try {
+      const counts = awardsEngine.getPlayerAwardCounts(sport, selectedPlayer);
+      setStats(prev => prev ? {
+        ...prev,
+        mosCount:       counts.mosCount,
+        orangeCapCount: counts.orangeCapCount,
+        purpleCapCount: counts.purpleCapCount,
+      } : null);
+    } catch(_) {}
     try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, 10)); }
     catch(_) { setRecentForm([]); }
     try {
@@ -147,7 +158,12 @@ function buildStatFilters() {
 
   const ini = (v, suffix='') => (v != null && v !== undefined) ? `${v}${suffix}` : '-';
   const hasCaptaincy = stats && stats.captainMatches > 0;
-  const hasAwards    = stats && (stats.momCount > 0 || (stats.mosCount||0) > 0);
+  const hasAwards = stats && (
+    stats.momCount > 0 ||
+    (stats.mosCount||0) > 0 ||
+    (stats.orangeCapCount||0) > 0 ||
+    (stats.purpleCapCount||0) > 0
+  );
   const TABS_LIST    = ['stats','partnerships','compare'];
 
   // Compare metrics
@@ -276,8 +292,10 @@ function buildStatFilters() {
                   : '-',                      l:'Win %'},
               ] : [];
               const awardItems = hasAwards ? [
-                {n:ini(stats.momCount),    l:'MoM', hl:(stats.momCount||0)>0    ? HL : null},
-                {n:ini(stats.mosCount||0), l:'MoS', hl:(stats.mosCount||0)>0    ? HL : null},
+                {n:ini(stats.momCount),        l:'MoM',    hl:(stats.momCount||0)>0        ? HL : null},
+                {n:ini(stats.mosCount||0),     l:'MoS',    hl:(stats.mosCount||0)>0        ? HL : null},
+                {n:ini(stats.orangeCapCount||0),l:'🟠 Cap', hl:(stats.orangeCapCount||0)>0 ? HL : null},
+                {n:ini(stats.purpleCapCount||0),l:'🟣 Cap', hl:(stats.purpleCapCount||0)>0 ? HL : null},
               ] : [];
               const allItems = [...captItems, ...awardItems];
               const captFlex  = captItems.length;

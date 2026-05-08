@@ -1,0 +1,39 @@
+{
+  "mos": {
+    "classic": {
+      "1-T12":  "Amol",
+      "2-T12":  "Amol",
+      "3-T12":  "Rahul",
+      "3-Test": "Eshwar"
+    },
+    "box": {
+      "5-T12": "Amar",
+      "6-T12": "Rahul"
+    },
+    "pair": {}
+  },
+  "orangeCap": {
+    "classic": {
+      "1-T12": "Amar",
+      "2-T12": "Rahul",
+      "3-T12": "Rahul"
+    },
+    "box": {
+      "5-T12": "Amar",
+      "6-T12": "Amar"
+    },
+    "pair": {}
+  },
+  "purpleCap": {
+    "classic": {
+      "1-T12": "Amol",
+      "2-T12": "Sudhir",
+      "3-T12": "Sushil"
+    },
+    "box": {
+      "5-T12": "Amar",
+      "6-T12": "Rahul"
+    },
+    "pair": {}
+  }
+}

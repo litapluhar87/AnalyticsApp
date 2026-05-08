@@ -169,6 +169,9 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
     runOutsCombo:  roCombos,
     totalFielding: catches + stumpings + roDirects + roCombos,
     momCount,
+	momCount,
+    // mosCount is computed by awardsEngine — placeholder here
+    mosCount: 0,
     mvpBat:        Math.round(mvpBat      * 10) / 10,
     mvpBowl:       Math.round(mvpBowl     * 10) / 10,
     mvpField:      Math.round(mvpField    * 10) / 10,

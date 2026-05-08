@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../App';
 
 const engine = require('../engine/statsEngine');
+const awardsEngine = require('../engine/awardsEngine');
 const ACCENT = '#0C447C';
 
 export default function Settings({ onClose }) {
@@ -98,7 +99,22 @@ export default function Settings({ onClose }) {
             </div>
           </>
         )}
-
+		
+		{/* Awards */}
+        <Sec label="Awards history"/>
+        <div style={S.card}>
+          {awardsEngine.getAllAwards(sport).map((a, i) => (
+            <div key={i} style={S.row}>
+              <span style={S.rowLabel}>S{a.season} {a.format}</span>
+              <div style={{textAlign:'right'}}>
+                {a.mos        && <div style={S.awardLine}>MoS: {a.mos}</div>}
+                {a.orangeCap  && <div style={S.awardLine}>🟠 {a.orangeCap}</div>}
+                {a.purpleCap  && <div style={S.awardLine}>🟣 {a.purpleCap}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+		
         {/* About */}
         <Sec label="About"/>
         <div style={S.card}>
@@ -167,6 +183,7 @@ const S = {
   },
   rowLabel: { fontSize:12, color:'#888' },
   rowValue: { fontSize:12, fontWeight:500, color:'#222', textAlign:'right', maxWidth:'55%' },
+  awardLine: { fontSize:11, color:'#555', marginTop:2 },
   uploadArea: {
     padding:'20px 14px', textAlign:'center',
   },
