@@ -113,9 +113,12 @@ export default function Charts() {
     try {
       if (chartTab === 'batmap') {
         const lb = engine.getBattingLeaderboard(sport, buildFilters(), 'runs');
+        const filtered = selPlayers.length > 0
+          ? lb.filter(p => selPlayers.includes(p.player))
+          : lb;
         setChartData({
           type:'scatter', subtype:'batting',
-          dots: lb.map((p,i) => ({
+          dots: filtered.map((p,i) => ({
             name:  p.player,
             color: PLAYER_COLORS[i % PLAYER_COLORS.length],
             x:     p.strikeRate || 0,
@@ -128,9 +131,12 @@ export default function Charts() {
 
       if (chartTab === 'bowlmap') {
         const lb = engine.getBowlingLeaderboard(sport, buildFilters(), 'wickets');
+        const filtered = selPlayers.length > 0
+          ? lb.filter(p => selPlayers.includes(p.player))
+          : lb;
         setChartData({
           type:'scatter', subtype:'bowling',
-          dots: lb.map((p,i) => ({
+          dots: filtered.map((p,i) => ({
             name:  p.player,
             color: PLAYER_COLORS[i % PLAYER_COLORS.length],
             x:     p.economy    || 0,
@@ -149,9 +155,10 @@ export default function Charts() {
       if (viewMode === 'total') {
         const bars = players.map((p, i) => {
           const st = engine.getPlayerStats(sport, p, buildFilters());
+          const raw = Number(st?.[statKey]) || 0;
           return {
             player: p,
-            value:  Number(st?.[statKey]) || 0,
+            value:  chartTab === 'mvp' ? Math.round(raw * 10) / 10 : raw,
             color:  PLAYER_COLORS[i % PLAYER_COLORS.length],
           };
         })
@@ -174,7 +181,8 @@ export default function Charts() {
         const playerData = players.map((p, i) => {
           const values = activeSns.map(s => {
             const st  = engine.getPlayerStats(sport, p, buildFilters({ season: s }));
-            return Number(st?.[statKey]) || 0;
+            const raw = Number(st?.[statKey]) || 0;
+            return chartTab === 'mvp' ? Math.round(raw * 10) / 10 : raw;
           });
           const total = values.reduce((a,b) => a+b, 0);
           return { player:p, total, color: PLAYER_COLORS[i % PLAYER_COLORS.length], values };
@@ -202,8 +210,9 @@ export default function Charts() {
           matchNums.forEach(mn => {
             const st1 = engine.getPlayerStats(sport, p, buildFilters({ matchNum: mn, batInning:'1' }));
             const st2 = engine.getPlayerStats(sport, p, buildFilters({ matchNum: mn, batInning:'2' }));
-            const v1  = Number(st1?.[statKey]) || 0;
-            const v2  = Number(st2?.[statKey]) || 0;
+            const round = v => chartTab === 'mvp' ? Math.round(v * 10) / 10 : v;
+            const v1  = round(Number(st1?.[statKey]) || 0);
+            const v2  = round(Number(st2?.[statKey]) || 0);
             if (v1 > 0 || v2 > 0) {
               values.push({ label:`M${mn} I1`, value:v1 });
               values.push({ label:`M${mn} I2`, value:v2 });
@@ -242,7 +251,7 @@ export default function Charts() {
   function clearAll()   { setSelPlayers([playerList[0]]); }
 
   const showBatFilters   = chartTab === 'runs' || chartTab === 'mvp';
-  const showPlayerFilter = chartTab !== 'batmap' && chartTab !== 'bowlmap';
+  const showPlayerFilter = true;
   const showViewMode     = chartTab !== 'batmap' && chartTab !== 'bowlmap';
 
   return (
@@ -310,6 +319,11 @@ export default function Charts() {
           </>}
         </div>
       </div>
+	  
+	  {/* Rotate hint */}
+      <div style={S.rotateHint}>
+        <span style={S.rotateText}>🔄Rotate phone for full view</span>
+      </div>
 
       {/* Chart */}
       <div style={S.chartArea}>
@@ -323,8 +337,7 @@ export default function Charts() {
 
       {/* Rotate hint */}
       <div style={S.rotateHint}>
-        <RotateIcon/>
-        <span style={S.rotateText}>Rotate phone for full view</span>
+        <span style={S.rotateText}>🔄Rotate phone for full view</span>
       </div>
 
       {/* Player selector */}
@@ -366,19 +379,6 @@ export default function Charts() {
       )}
 
     </div>
-  );
-}
-
-// ── Rotate icon ───────────────────────────────────────────────────────────────
-function RotateIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-      stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      style={{verticalAlign:'middle', marginRight:4}}>
-      <rect x="3" y="7" width="11" height="15" rx="2"/>
-      <path d="M17 5 C20 5 21 8 21 12 C21 16 20 19 17 19"/>
-      <polyline points="15 3 17 5 15 7"/>
-    </svg>
   );
 }
 
@@ -436,23 +436,7 @@ function ChartRenderer({ data, isLandscape }) {
 }
 
 function Legend({ data }) {
-  if (!data) return null;
-  const items = data.type === 'scatter'
-    ? data.dots?.map(d => ({ label:d.name, color:d.color }))
-    : data.type === 'hbar'
-      ? data.bars?.map(b => ({ label:b.player, color:b.color }))
-      : data.players?.map(p => ({ label:p.player, color:p.color }));
-  if (!items?.length) return null;
-  return (
-    <div style={S.legend}>
-      {items.map((item,i) => (
-        <div key={i} style={S.legItem}>
-          <div style={{...S.legDot, background:item.color}}/>
-          <span style={S.legLabel}>{item.label}</span>
-        </div>
-      ))}
-    </div>
-  );
+  return null;
 }
 
 // ── Drawing functions ─────────────────────────────────────────────────────────
@@ -531,12 +515,6 @@ function drawScatter(ctx, W, H, data) {
   ctx.rotate(-Math.PI/2);
   ctx.fillText(yLabel, 0, 0);
   ctx.restore();
-
-  // "Best" label for bowling
-  if (subtype === 'bowling') {
-    ctx.fillStyle = '#3B6D11'; ctx.font = '9px sans-serif'; ctx.textAlign = 'right';
-    ctx.fillText('← best performers', W-padR, padT-8);
-  }
 
   // Dots
   dots.forEach(d => {
@@ -717,10 +695,15 @@ const S = {
   },
   chartArea:   { padding:'12px 12px 0' },
   rotateHint: {
-    display:'flex', alignItems:'center', justifyContent:'center',
-    padding:'8px 0 4px',
+    display:'flex', justifyContent:'center',
+    padding:'8px 12px 4px',
   },
-  rotateText:  { fontSize:13, color:'#333', fontWeight:500 },
+  rotateText: {
+    display:'flex', alignItems:'center', gap:5,
+    fontSize:11, color:'#555', fontWeight:500,
+    background:'#f8f8f8', border:'0.5px solid #e0e0e0',
+    borderRadius:16, padding:'5px 14px',
+  },
   playerFilter: {
     padding:'10px 12px 12px',
     borderTop:'0.5px solid #eee',

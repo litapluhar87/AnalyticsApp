@@ -1,0 +1,10 @@
+{
+  "carousel": {
+    "playerEligibilityThreshold": 0.25
+  },
+  "leaderboard": {
+    "mvpQualificationThreshold": 0.6,
+    "recentFormMatches": 10,
+    "partnershipPreviewCount": 10
+  }
+}

@@ -16,7 +16,8 @@
     "classic": {
       "1-T12": "Amar",
       "2-T12": "Rahul",
-      "3-T12": "Rahul"
+      "3-T12": "Rahul",
+	  "3-Test": "Amar"
     },
     "box": {
       "5-T12": "Amar",
@@ -28,7 +29,8 @@
     "classic": {
       "1-T12": "Amol",
       "2-T12": "Sudhir",
-      "3-T12": "Sushil"
+      "3-T12": "Sushil",
+	  "3-Test": "Eshwar"
     },
     "box": {
       "5-T12": "Amar",

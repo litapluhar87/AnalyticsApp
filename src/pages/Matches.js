@@ -66,7 +66,7 @@ export default function Matches() {
         <button
           onClick={() => setShowPT(p => !p)}
           style={showPT ? S.pillOn : S.pillOff}>
-          {showPT ? '📊 Points Table' : '📊 Points Table'}
+          {showPT ? '✖ Close' : '📊 Points Table'}
         </button>
         {ptFilters.season && (
           <span style={S.ptFilterLabel}>
@@ -338,7 +338,6 @@ function FOWSection({ fow }) {
 function PointsTableView({ data, onBack }) {
   return (
     <div style={{ padding: '0 12px 16px' }}>
-      <button style={S.backBtn} onClick={onBack}>← Back to Matches</button>
       {data.length === 0 ? <Empty /> : (
         <div style={S.ptCard}>
           <div style={S.ptHead}>
@@ -363,6 +362,7 @@ function PointsTableView({ data, onBack }) {
           ))}
         </div>
       )}
+	  <button style={S.backBtn} onClick={onBack}>← Back to Matches</button>
     </div>
   );
 }

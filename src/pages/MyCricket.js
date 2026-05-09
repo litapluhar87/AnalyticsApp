@@ -8,7 +8,7 @@ const awardsEngine = require('../engine/awardsEngine');
 
 const INNINGS_OPTS  = ['All', '1', '2'];
 const WINLOSS_OPTS  = ['All', 'Win', 'Loss'];
-const POSITION_OPTS = ['All','1','2','3','4','5','6','7','8'];
+const POSITION_OPTS = ['All','1','2','3','4','5','6','7','8','9','10','11'];
 
 const FILTER_CRITERIA = ['All','Season','Format','Ground','Bat Inning','Position','Result'];
 

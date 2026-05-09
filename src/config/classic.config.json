@@ -2,7 +2,7 @@
   "id": "classic",
   "name": "Classic Cricket",
   "shortName": "Classic",
-  "seasons": [1, 2, 3, 4, 5, 6],
+  "seasons": [1, 2, 3, 6],
   "currentSeason": 6,
   "formats": ["T12", "Test", "All"],
   "defaultFormat": "All",
@@ -14,12 +14,10 @@
     "Sarang", "Shashi", "Sudhir", "Sushil", "Tushar", "Vallabh"
   ],
   "teams": {
-    "1": ["Energetic Avengers", "Resolute Titans", "Golden Phoenix", "Rising Abhyuday Warriors", "AjinkyaTara", "Storm Dragons"],
-    "2": ["Energetic Avengers", "Resolute Titans", "Golden Phoenix", "Rising Abhyuday Warriors", "AjinkyaTara", "Storm Dragons"],
-    "3": ["Energetic Avengers", "Resolute Titans", "Golden Phoenix", "Rising Abhyuday Warriors", "AjinkyaTara", "Storm Dragons"],
-    "4": [],
-    "5": [],
-    "6": ["Energetic Avengers", "Resolute Titans"]
+    "1": ["Energetic Avengers", "Resolute Titans"],
+    "2": ["Energetic Avengers", "Resolute Titans"],
+    "3": ["Golden Phoenix", "Rising Abhyuday Warriors"],
+    "6": ["AjinkyaTara", "Storm Dragons"]
   },
   "teamAcronyms": {
     "Energetic Avengers": "EA",

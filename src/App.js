@@ -13,14 +13,12 @@ const TABS = [
   { id:'home',        label:'Home',        icon:'⌂',  color:'#0C447C' },
   { id:'matches',     label:'Matches',     icon:'🏏', color:'#993C1D' },
   { id:'mycricket',   label:'My Cricket',  icon:'👤', color:'#534AB7' },
-  { id:'leaderboard', label:'Leaderboard', icon:'★',  color:'#27500A' },
-  { id:'charts',      label:'Charts',      icon:'▦',  color:'#27500A' },
+  { id:'leaderboard', label:'Leaderboard', icon:'🏆',  color:'#27500A' },
+  { id:'charts',      label:'Charts',      icon:'📈',  color:'#27500A' },
 ];
 
 const SPORT_TYPES = ['Classic','Box','Pair'];
-const SEASONS_BOX      = ['All','3','4','5','6'];
-const SEASONS_CLASSIC  = ['All','1','2','3','4','5','6'];
-const SEASONS_PAIR     = ['All','6'];
+const SEASONS_PAIR = ['All','6'];
 const FORMATS          = ['All','T12','Test'];
 
 export default function App() {
@@ -34,11 +32,15 @@ export default function App() {
 
   const activeColor = TABS.find(t => t.id === activeTab)?.color || '#0C447C';
 
-  const seasonOptions = sportType === 'Classic'
-    ? SEASONS_CLASSIC
-    : sportType === 'Pair'
-      ? SEASONS_PAIR
-      : SEASONS_BOX;
+  const seasonOptions = React.useMemo(() => {
+    if (sportType === 'Pair') return SEASONS_PAIR;
+    try {
+      const cfg = require('./config/' + sportType.toLowerCase() + '.config.json');
+      return ['All', ...(cfg.seasons || []).map(s => String(s))];
+    } catch(_) {
+      return ['All'];
+    }
+  }, [sportType]);
 
   const ctx = {
     sportType, setSportType,
