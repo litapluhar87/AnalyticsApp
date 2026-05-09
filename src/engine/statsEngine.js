@@ -319,6 +319,7 @@ function getPlayerRecentForm(sport, playerName, n = 7) {
       won:       r.won              || false,
       tied:      isTie              || false,
       mvpTotal:  r.mvp?.total       || 0,
+      mvpMom:    r.mvp?.mom         || 0,
       opponent:  match
         ? (match.team1 === r.team ? match.team2 : match.team1)
         : '',
@@ -606,7 +607,9 @@ function getScorecard(sport, season, matchNum) {
         batters,
         bowlers,
         fielding,
-        fow:     inn.fow || [],
+        fow:     inn.fow    || [],
+        extras:  inn.extras || 0,
+        dnb:     inn.dnb    || [],
       };
     });
 

@@ -137,8 +137,8 @@ function buildStatFilters() {
     catch(_) { setRecentForm([]); }
     try {
       const pfilters = {};
-      if (statSeason  !== 'All') pfilters.season    = statSeason;
-      if (statFormat  !== 'All') pfilters.format    = statFormat;
+      if (season  !== 'All') pfilters.season = season;
+      if (format  !== 'All') pfilters.format = format;
       if (pshipInning !== 'All') pfilters.batInning = pshipInning;
       if (pshipWicket !== 'All') pfilters.wicket    = pshipWicket;
       const pb = engine.getPartnershipLeaderboard(sport, pfilters, 'runs');
@@ -322,7 +322,11 @@ function buildStatFilters() {
               );
             })()}
 
-            <Sec label="Recent form"/>
+            <div style={S.sectionDivider}>
+              <div style={S.dividerLine}/>
+              <span style={S.dividerText}>RECENT FORM</span>
+              <div style={S.dividerLine}/>
+            </div>
             <div style={S.card}>
               <div style={S.formDots}>
                 {recentForm.map((r,i) => (
@@ -335,16 +339,29 @@ function buildStatFilters() {
                   </div>
                 ))}
               </div>
-              {recentForm.map((r,i) => (
-                <div key={i} style={S.formRow}>
-                  <span style={S.formId}>S{r.season} M{r.matchNum}</span>
-                  <span style={S.formBat}>
-                    {r.runs}{r.notOut?'*':''} ({r.balls})
-                    {r.mom && <span style={S.momTrophy}> 🏆</span>}
-                  </span>
-                  <span style={S.formBowl}>{r.wickets}/{r.runsGiven}</span>
-                </div>
-              ))}
+              {(() => {
+                const maxMvp = Math.max(...recentForm.map(r => r.mvpMom || 0), 1);
+                return recentForm.map((r,i) => (
+                  <div key={i} style={S.formRow}>
+                    <span style={S.formId}>S{r.season} M{r.matchNum}</span>
+                    <span style={S.formBat}>
+                      {r.runs}{r.notOut?'*':''} ({r.balls})
+                      {r.mom && <span style={S.momTrophy}> 🏆</span>}
+                    </span>
+                    <span style={S.formBowl}>{r.wickets}/{r.runsGiven}</span>
+                    <div style={S.mvpBarWrap}>
+                      <span style={S.mvpBarVal}>{Math.round(r.mvpMom||0)}</span>
+                      <div style={S.mvpBarTrack}>
+                        <div style={{
+                          ...S.mvpBarFill,
+                          width:`${Math.round(((r.mvpMom||0)/maxMvp)*100)}%`,
+                        }}/>
+                      </div>
+                      <span style={S.mvpBarLabel}>MVP</span>
+                    </div>
+                  </div>
+                ));
+              })()}
             </div>
           </>}
         </div>
@@ -435,12 +452,12 @@ function buildStatFilters() {
           </div>
 
 		  {/* Compare by — single criteria, individual values */}
-          <div style={{marginBottom:10}}>
-            <div style={S.filterLabel}>Compare by</div>
+          <div style={{marginBottom:10, textAlign:'center'}}>
+            <div style={{...S.filterLabel, textAlign:'center', marginBottom:4}}>Compare by</div>
             <select
               value={cmpCriteria1}
               onChange={e => { setCmpCriteria1(e.target.value); setCmpCriteria2(e.target.value); }}
-              style={{...S.filterSelect, width:'100%', marginBottom:8}}>
+              style={{...S.filterSelect, width:'50%', marginBottom:8}}>
               {FILTER_CRITERIA.map(c=><option key={c} value={c}>{c}</option>)}
             </select>
             {cmpCriteria1 !== 'All' && (
@@ -515,7 +532,7 @@ function buildStatFilters() {
                   <div style={S.cmpSideRight}>
                     <div style={S.cmpValRight}>{raw2??'-'}</div>
                     <div style={S.cmpBarTrackRight}>
-                      <div style={{...S.cmpBarRight, width:`${bar2}%`, background:'#185FA5'}}/>
+                      <div style={{...S.cmpBarRight, width:`${bar2}%`, background:ACCENT}}/>
                     </div>
                   </div>
                 </div>
@@ -592,6 +609,11 @@ const S = {
     color:'#333', background:'#fff', width:'100%',
   },
   body:    { padding:'10px 12px 0' },
+  mvpBarWrap:  { display:'flex', alignItems:'center', gap:4, marginLeft:6, flexShrink:0 },
+  mvpBarVal:   { fontSize:10, color:'#534AB7', width:24, textAlign:'right', flexShrink:0 },
+  mvpBarTrack: { width:40, height:4, background:'#f0f0f0', borderRadius:2, overflow:'hidden' },
+  mvpBarFill:  { height:4, background:'#534AB7', borderRadius:2, transition:'width 0.3s' },
+  mvpBarLabel: { fontSize:9, color:'#aaa', flexShrink:0 },
   secLabel: {
     fontSize:10, fontWeight:500, color:'#888',
     letterSpacing:0.7, textTransform:'uppercase',
@@ -643,6 +665,12 @@ const S = {
     height:3, background:ACCENT, borderRadius:2,
     transition:'width 0.4s ease',
   },
+  sectionDivider: {
+    display:'flex', alignItems:'center', gap:8,
+    margin:'16px 0 8px',
+  },
+  dividerLine: { flex:1, height:'0.5px', background:'#e0e0e0' },
+  dividerText: { fontSize:12, color:'#aaa', whiteSpace:'nowrap', fontWeight:500, textAlign:'left' },
 
   // Compare styles
   cmpPlayerRow: { display:'flex', gap:8, alignItems:'flex-end', marginBottom:10 },
@@ -670,7 +698,7 @@ const S = {
     fontSize:13, fontWeight:500, color:ACCENT, minWidth:28, textAlign:'right',
   },
   cmpValRight: {
-    fontSize:13, fontWeight:500, color:'#185FA5', minWidth:28,
+    fontSize:13, fontWeight:500, color:ACCENT, minWidth:28,
   },
   cmpMetricLabel: {
     fontSize:10, color:'#aaa', width:62, textAlign:'center',
