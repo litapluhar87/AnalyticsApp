@@ -9,7 +9,8 @@ export default function Matches() {
   const { sportType, season, format } = useApp();
   const sport = sportType.toLowerCase();
 
-  const [showPT, setShowPT] = useState(false);
+  const [showPT,      setShowPT]      = useState(false);
+  const [ptFilters,   setPtFilters]   = useState({});
   const [matches, setMatches]         = useState([]);
   const [pointsTable, setPT]          = useState([]);
   const [expandedKey, setExpandedKey] = useState(null);
@@ -24,21 +25,25 @@ export default function Matches() {
       const filters = {};
       if (seasonArg) filters.season = seasonArg;
       if (formatArg) filters.format = formatArg;
-      setMatches(engine.getMatches(sport, filters) || []);
+      const m = engine.getMatches(sport, filters) || [];
+      setMatches(m);
+      // Auto-derive PT filters from most recent match
+      if (m.length > 0) {
+        const recent = m[0];
+        const pf = { season: String(recent.season) };
+        if (recent.format && recent.format !== 'All') pf.format = recent.format;
+        setPtFilters(pf);
+      }
     } catch (_) { setMatches([]); }
     setExpandedKey(null);
     setDetail(null);
   }, [sport, seasonArg, formatArg]);
 
   useEffect(() => {
-    if (!showPT) return;
     try {
-      const filters = {};
-      if (seasonArg) filters.season = seasonArg;
-      if (formatArg) filters.format = formatArg;
-      setPT(engine.getPointsTable(sport, filters) || []);
+      setPT(engine.getPointsTable(sport, ptFilters) || []);
     } catch (_) { setPT([]); }
-  }, [showPT, sport, seasonArg, formatArg]);
+  }, [sport, ptFilters]);
 
   function toggleMatch(key, season, matchNum) {
     if (expandedKey === key) {
@@ -56,16 +61,18 @@ export default function Matches() {
   return (
     <div style={S.page}>
 
-	  {/* ── FILTER BAR ── */}
-      <div style={S.filterBar}>
-        <div style={{ ...S.filterRow, justifyContent: 'flex-end' }}>
-          <button
-            onClick={() => setShowPT(p => !p)}
-            style={showPT ? S.pillOn : S.pillOff}
-          >
-            Points Table
-          </button>
-        </div>
+	  {/* ── STICKY POINTS TABLE BAR ── */}
+      <div style={S.ptBar}>
+        <button
+          onClick={() => setShowPT(p => !p)}
+          style={showPT ? S.pillOn : S.pillOff}>
+          {showPT ? '📊 Points Table' : '📊 Points Table'}
+        </button>
+        {ptFilters.season && (
+          <span style={S.ptFilterLabel}>
+            S{ptFilters.season}{ptFilters.format ? ` · ${ptFilters.format}` : ''}
+          </span>
+        )}
       </div>
 
       {/* ── CONTENT ── */}
@@ -171,7 +178,11 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
 
 		  {currentInning && (
             <>
-              <BattingTable rows={currentInning.batters} />
+              <BattingTable
+                rows={currentInning.batters}
+                dnb={currentInning.dnb}
+                extras={currentInning.extras}
+              />
               <BowlingTable rows={currentInning.bowlers} />
               <FieldingSection data={currentInning.fielding} />
 			  <FOWSection fow={currentInning.fow} />
@@ -183,7 +194,7 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
   );
 }
 
-function BattingTable({ rows }) {
+function BattingTable({ rows, dnb, extras }) {
   if (!rows?.length) return null;
   return (
     <div style={S.tableWrap}>
@@ -216,6 +227,24 @@ function BattingTable({ rows }) {
           </span>
         </div>
       ))}
+      {/* Extras */}
+      {extras > 0 && (
+        <div style={{...S.tblRow, background:'#f8f8f8'}}>
+          <div style={{...S.tblPlayer, color:'#888'}}>Extras</div>
+          <span style={{...S.tblNum, color:'#888'}}>{extras}</span>
+          <span style={S.tblNum}/>
+          <span style={S.tblNum}/>
+          <span style={S.tblNum}/>
+          <span style={S.tblNum}/>
+        </div>
+      )}
+      {/* Did not bat */}
+      {dnb?.length > 0 && (
+        <div style={S.dnbRow}>
+          <span style={S.dnbLabel}>Did not bat: </span>
+          <span style={S.dnbNames}>{dnb.join(', ')}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -350,6 +379,20 @@ const S = {
     borderBottom: '0.5px solid #e8e8e8',
   },
   filterRow: { display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 },
+  ptBar: {
+    position:'sticky',
+    top: 0,
+    zIndex: 50,
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'space-between',
+    padding:'7px 12px',
+    background:'#fff',
+    borderBottom:'0.5px solid #eee',
+  },
+  ptFilterLabel: {
+    fontSize:11, color:'#888',
+  },
   pillOn: {
     padding: '5px 14px',
     borderRadius: 16,
@@ -485,4 +528,7 @@ const S = {
   fowWkt:    { fontWeight: 500, color: '#333' },
   fowPlayer: { color: '#888' },
   fowSep:    { color: '#ccc' },
+  dnbRow:   { padding:'6px 12px', background:'#fafafa', borderTop:'0.5px solid #f0f0f0' },
+  dnbLabel: { fontSize:11, color:'#aaa', fontStyle:'italic' },
+  dnbNames: { fontSize:11, color:'#666' },
 };

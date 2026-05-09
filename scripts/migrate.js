@@ -124,6 +124,8 @@ function parseMatches(wb, scorecardSheets) {
               overs:   String(r[3] || ''),
               batters: [],
               fow:     [],
+              extras:  0,
+              dnb:     [],
             };
             inFOW = false;
             continue;
@@ -132,11 +134,34 @@ function parseMatches(wb, scorecardSheets) {
           if (!currentInning) continue;
 
           // Batting row: col[1] is player string, col[6] is runs number or col[5]==='Extras'
-		  if (
+		  // Extras row — col[5]==='Extras', value in col[6]
+          // Also catches DNB+Extras combined row
+          if (r[5] === 'Extras' && r[6] !== '') {
+            currentInning.extras = Number(r[6]) || 0;
+            // Also check for DNB on same row
+            if (typeof r[1] === 'string' && r[1].startsWith('Did not bat')) {
+              const dnbPart = r[1].replace('Did not bat -', '').replace('Did not bat-', '').trim();
+              dnbPart.split(',').map(p => p.trim()).filter(Boolean).forEach(p => {
+                currentInning.dnb = currentInning.dnb || [];
+                currentInning.dnb.push(p);
+              });
+            }
+            continue;
+          }
+
+          // Standalone DNB row (no extras)
+          if (typeof r[1] === 'string' && r[1].startsWith('Did not bat')) {
+            const dnbPart = r[1].replace('Did not bat -', '').replace('Did not bat-', '').trim();
+            dnbPart.split(',').map(p => p.trim()).filter(Boolean).forEach(p => {
+              currentInning.dnb = currentInning.dnb || [];
+              currentInning.dnb.push(p);
+            });
+            continue;
+          }
+
+          if (
             typeof r[1] === 'string' && r[1] !== '' &&
-            !r[1].startsWith('Did not bat') &&
             r[1] !== 'Man of the Match' &&
-            r[5] !== 'Extras' &&
             r[4] !== 'overs'
           ) {
             // Check if this looks like a batter row

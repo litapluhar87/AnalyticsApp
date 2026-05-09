@@ -375,7 +375,7 @@ const C = {
     fontSize:14, fontWeight:700, color:'#fff', letterSpacing:1,
   },
   groupName: { fontSize:18, fontWeight:600, color:'#fff', marginBottom:12 },
-  groupGrid: { display:'grid', gridTemplateColumns:'repeat(4,80px)', gap:6, justifyContent: 'center' },
+  groupGrid: { display:'grid', gridTemplateColumns:'repeat(4,60px)', gap:6, justifyContent: 'center' },
   playerCard: {
     padding:'12px 12px 24px',
     textAlign:'center',
@@ -393,7 +393,7 @@ const C = {
     fontSize:14, fontWeight:600, color:'#fff',
   },
   playerName: { fontSize:20, fontWeight:600, color:'#fff', marginBottom:8 },
-  playerGrid: { display:'grid', gridTemplateColumns:'repeat(4,80px)', gap:6, justifyContent: 'center' },
+  playerGrid: { display:'grid', gridTemplateColumns:'repeat(4,60px)', gap:6, justifyContent: 'center' },
   statBox: {
     background:'rgba(255,255,255,0.12)',
     borderRadius:8, padding:'6px 4px',
