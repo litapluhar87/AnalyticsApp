@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../App';
+const appConfig = require('../config/app.config.json');
 
 const engine       = require('../engine/statsEngine');
 const awardsEngine = require('../engine/awardsEngine');
@@ -55,7 +56,7 @@ export default function Home() {
     try {
       const allMatches = engine.getMatches(sport, filters);
       const totalMatches = allMatches.length;
-      const threshold25 = Math.ceil(totalMatches * 0.25);
+      const threshold25 = Math.ceil(totalMatches * (appConfig.carousel?.playerEligibilityThreshold || 0.25));
 
       const players = engine.getPlayerList(sport);
 

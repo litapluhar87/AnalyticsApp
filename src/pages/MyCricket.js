@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../App';
+const appConfig = require('../config/app.config.json');
 
 const engine = require('../engine/statsEngine');
 const ACCENT = '#534AB7';
@@ -133,7 +134,7 @@ function buildStatFilters() {
         purpleCapCount: counts.purpleCapCount,
       } : null);
     } catch(_) {}
-    try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, 10)); }
+    try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, appConfig.leaderboard?.recentFormMatches || 10)); }
     catch(_) { setRecentForm([]); }
     try {
       const pfilters = {};
@@ -144,7 +145,7 @@ function buildStatFilters() {
       const pb = engine.getPartnershipLeaderboard(sport, pfilters, 'runs');
       setPartnerships(pb.filter(p =>
         p.player1 === selectedPlayer || p.player2 === selectedPlayer
-      ).slice(0, 10));
+      ).slice(0, appConfig.leaderboard?.partnershipPreviewCount || 10));
     } catch(_) { setPartnerships([]); }
   }, [sport, season, format, selectedPlayer, ground, batInning, batPos, winLoss, pshipInning, pshipWicket]);
 

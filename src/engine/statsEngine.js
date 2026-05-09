@@ -3,6 +3,9 @@
 // ─── Cache & Loaders ─────────────────────────────────────────────────────────
 
 const cache = {};
+const appConfig = (() => {
+  try { return require('../config/app.config.json'); } catch(_) { return {}; }
+})();
 
 function loadConfig(sport) {
   if (cache[`cfg_${sport}`]) return cache[`cfg_${sport}`];
@@ -284,7 +287,7 @@ function getPlayerStats(sport, playerName, filters = {}) {
   return aggregatePlayerStats(rows, config);
 }
 
-function getPlayerRecentForm(sport, playerName, n = 7) {
+function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.recentFormMatches || 10)) {
   const { players, matches } = loadData(sport);
   const rows = players
     .filter(p => p.player === playerName)
@@ -708,9 +711,10 @@ function getMVPLeaderboardEnhanced(sport, filters = {}, sortBy = 'totalPoints') 
   const totalMatches = new Set(
     matchLevelPlayers.map(p => `${p.season}-${p.matchNum}`)
   ).size;
+  const mvpThreshold = appConfig.leaderboard?.mvpQualificationThreshold || 0.6;
   const threshold60 = hasThresholdExemptFilter
-    ? 0  // disable threshold
-    : Math.max(1, Math.ceil(totalMatches * 0.6));
+    ? 0
+    : Math.max(1, Math.ceil(totalMatches * mvpThreshold));
 
   // For team filter — get players who played for that team
   // by filtering player records directly
