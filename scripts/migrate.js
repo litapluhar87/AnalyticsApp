@@ -122,7 +122,9 @@ function parseMatches(wb, scorecardSheets) {
               team:    String(r[1] || ''),
               score:   String(r[2] || ''),
               overs:   String(r[3] || ''),
+              bowlingTeam: String(r[11] || ''),
               batters: [],
+              bowlers: [],
               fow:     [],
               extras:  0,
               dnb:     [],
@@ -272,7 +274,20 @@ function parseMatches(wb, scorecardSheets) {
                 sixes:        num(r[9]),
               });
 
+              // Bowling on same row — col[11]=bowler, col[12]=overs, col[13]=maidens, col[14]=runs, col[15]=wickets
+              if (typeof r[11] === 'string' && r[11] !== '' && typeof r[12] === 'number') {
+                currentInning.bowlers.push({
+                  player:  String(r[11]),
+                  overs:   num(r[12]),
+                  maidens: num(r[13]),
+                  runs:    num(r[14]),
+                  wickets: num(r[15]),
+                  economy: num(r[12]) > 0 ? Math.round((num(r[14]) / num(r[12])) * 10) / 10 : 0,
+                });
+              }
+
               // FOW on same row — col 17=wicket, 18=player, 19=runs
+
 			  if (
                 typeof r[17] === 'number' &&
                 r[17] >= 1 && r[17] <= 11 &&

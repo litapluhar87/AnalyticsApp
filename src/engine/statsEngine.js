@@ -559,41 +559,51 @@ function getScorecard(sport, season, matchNum) {
       String(p.matchNum) === String(matchNum)
     );
 
-    const innings = match.innings.map(inn => {
-      // Get bowlers from the opposing team's player records
-      const bowlingTeam = matchPlayers.filter(p => p.team !== inn.team);
-      const bowlers = bowlingTeam
-        .filter(p => p.bowling && p.bowling.overs > 0)
-        .sort((a, b) => (b.bowling.wickets || 0) - (a.bowling.wickets || 0))
-        .map(p => ({
-          player:  p.player,
-          overs:   p.bowling.overs   || 0,
-          maidens: p.bowling.maidens || 0,
-          runs:    p.bowling.runs    || 0,
-          wickets: p.bowling.wickets || 0,
-          economy: p.bowling.economy || 0,
-        }));
+    const innings = match.innings.map((inn, innIdx) => {
+      // Use bowlers from scorecard innings data if available
+      const bowlers = inn.bowlers?.length > 0
+        ? inn.bowlers.map(b => ({
+            player:  b.player,
+            overs:   b.overs   || 0,
+            maidens: b.maidens || 0,
+            runs:    b.runs    || 0,
+            wickets: b.wickets || 0,
+            economy: b.economy || 0,
+          }))
+        : (() => {
+            // Fallback: get from players JSON for T12 matches
+            const bowlingTeamRows = matchPlayers.filter(p => p.team !== inn.team);
+            return bowlingTeamRows
+              .filter(r => r.bowling && r.bowling.overs > 0)
+              .sort((a, b) => (b.bowling.wickets||0) - (a.bowling.wickets||0))
+              .map(r => ({
+                player:  r.player,
+                overs:   r.bowling.overs   || 0,
+                maidens: r.bowling.maidens || 0,
+                runs:    r.bowling.runs    || 0,
+                wickets: r.bowling.wickets || 0,
+                economy: r.bowling.economy || 0,
+              }));
+          })();
 
-      // Get fielding from batting team's player records
-      const battingTeamPlayers = matchPlayers.filter(p => p.team === inn.team);
-      // Fielding contributions from the bowling team
-      const fielding = bowlingTeam
-        .filter(p =>
-          (p.fielding?.catches       || 0) > 0 ||
-          (p.fielding?.stumpings     || 0) > 0 ||
-          (p.fielding?.directRunOuts || 0) > 0 ||
-          (p.fielding?.comboRunOuts  || 0) > 0
+      // Fielding from players JSON — bowling team
+      const bowlingTeamPlayers = matchPlayers.filter(p => p.team !== inn.team);
+      const fielding = bowlingTeamPlayers
+        .filter(r =>
+          (r.fielding?.catches       || 0) > 0 ||
+          (r.fielding?.stumpings     || 0) > 0 ||
+          (r.fielding?.directRunOuts || 0) > 0 ||
+          (r.fielding?.comboRunOuts  || 0) > 0
         )
-        .map(p => ({
-          player:       p.player,
-          catches:      p.fielding.catches       || 0,
-          stumpings:    p.fielding.stumpings     || 0,
-          directRunOut: p.fielding.directRunOuts || 0,
-          comboRunOut:  p.fielding.comboRunOuts  || 0,
+        .map(r => ({
+          player:       r.player,
+          catches:      r.fielding.catches       || 0,
+          stumpings:    r.fielding.stumpings     || 0,
+          directRunOut: r.fielding.directRunOuts || 0,
+          comboRunOut:  r.fielding.comboRunOuts  || 0,
         }));
 
-      // Enrich batters with SR calculated fresh
-	  const batters = inn.batters.map(b => ({
+      const batters = inn.batters.map(b => ({
         ...b,
         sr: b.balls > 0
           ? Math.round((b.runs / b.balls) * 1000) / 10
@@ -615,7 +625,6 @@ function getScorecard(sport, season, matchNum) {
         dnb:     inn.dnb    || [],
       };
     });
-
     return { match, innings };
   }
 

@@ -122,7 +122,14 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
             <div style={{ ...S.teamName, fontWeight: t1Won ? 700 : 400, color: t1Won ? ACCENT : '#333' }}>
               {m.team1}
             </div>
-            <div style={S.score}>{m.score1 || '-'}</div>
+            {m.format === 'Test' && m.innings?.length === 4 ? (
+              <>
+                <div style={S.score}>{m.innings[0]?.score || '-'} {m.innings[0]?.overs ? <span style={S.overs}>({m.innings[0]?.overs} ov)</span> : null}</div>
+                <div style={{...S.score, fontSize:16, color:'#222'}}>{m.innings[2]?.score || '-'} {m.innings[2]?.overs ? <span style={S.overs}>({m.innings[2]?.overs} ov)</span> : null}</div>
+              </>
+            ) : (
+              <div style={S.score}>{m.score1 || '-'} {m.overs1 ? <span style={S.overs}>({m.overs1} ov)</span> : null}</div>
+            )}
           </div>
           <div style={S.vsBlock}>
             <span style={S.vs}>vs</span>
@@ -132,7 +139,14 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
             <div style={{ ...S.teamName, fontWeight: t2Won ? 700 : 400, color: t2Won ? ACCENT : '#333' }}>
               {m.team2}
             </div>
-            <div style={S.score}>{m.score2 || '-'}</div>
+            {m.format === 'Test' && m.innings?.length === 4 ? (
+              <>
+                <div style={S.score}>{m.innings[1]?.score || '-'} {m.innings[1]?.overs ? <span style={S.overs}>({m.innings[1]?.overs} ov)</span> : null}</div>
+                <div style={{...S.score, fontSize:16, color:'#222'}}>{m.innings[3]?.score || '-'} {m.innings[3]?.overs ? <span style={S.overs}>({m.innings[3]?.overs} ov)</span> : null}</div>
+              </>
+            ) : (
+              <div style={S.score}>{m.score2 || '-'} {m.overs2 ? <span style={S.overs}>({m.overs2} ov)</span> : null}</div>
+            )}
           </div>
         </div>
 		<div style={S.metaArea}>
@@ -158,14 +172,17 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
           {innings.length > 0 && (
             <div style={S.tabRow}>
               {innings.map((inn, i) => {
-                const label = inn?.team || inn?.battingTeam || `Innings ${i + 1}`;
+                const innNum  = Math.floor(i/2) + 1;
+                const label   = innings.length === 4
+                  ? `${inn.team?.split(' ')[0]} Inn${innNum}`
+                  : `${inn.team || `Inn ${i+1}`} bat`;
                 return (
                   <button
                     key={i}
                     onClick={() => onTabChange(i)}
                     style={{ ...S.tab, ...(inningTab === i ? S.tabActive : {}) }}
                   >
-                    {label} bat
+                    {label}
                   </button>
                 );
               })}
@@ -257,9 +274,9 @@ function BowlingTable({ rows }) {
       <div style={S.tblHead}>
         <span style={S.tblPlayer}>Bowler</span>
         <span style={S.tblNum}>O</span>
+        <span style={S.tblNum}>M</span>
         <span style={S.tblNum}>R</span>
         <span style={S.tblNum}>W</span>
-        <span style={S.tblNum}>Eco</span>
       </div>
       {rows.map((b, i) => {
         const wkts = b.wickets ?? 0;
@@ -267,12 +284,10 @@ function BowlingTable({ rows }) {
           <div key={i} style={{ ...S.tblRow, background: i % 2 === 0 ? '#fafafa' : '#fff' }}>
             <span style={S.tblPlayer}>{b.bowler || b.player}</span>
             <span style={S.tblNum}>{b.overs ?? '-'}</span>
+			<span style={S.tblNum}>{b.maidens  ?? '-'}</span>
             <span style={S.tblNum}>{b.runs  ?? '-'}</span>
-            <span style={{ ...S.tblNum, fontWeight: wkts > 0 ? 700 : 400, color: wkts > 0 ? ACCENT : 'inherit' }}>
+			<span style={{ ...S.tblNum, fontWeight: wkts > 0 ? 700 : 400, color: wkts > 0 ? ACCENT : 'inherit' }}>
               {wkts}
-            </span>
-            <span style={S.tblNum}>
-              {typeof b.economy === 'number' ? b.economy.toFixed(1) : (b.economy ?? '-')}
             </span>
           </div>
         );
@@ -436,6 +451,7 @@ const S = {
   teamBlock: { flex: 1, display: 'flex', flexDirection: 'column' },
   teamName:  { fontSize: 13 },
   score:     { fontSize: 16, fontWeight: 600, color: '#111', marginTop: 3 },
+  overs:     { fontSize: 10, fontWeight: 300, color: '#888', marginTop: 3 },
   vsBlock: {
     display: 'flex',
     flexDirection: 'column',
@@ -461,8 +477,8 @@ const S = {
     padding: '2px 7px',
     borderRadius: 4,
   },
-  resultTxt: { fontSize: 11, color: '#666', textAlign: 'center', marginTop: 5 },
-  momRow:    { fontSize: 11, color: '#999', marginTop: 3 },
+  resultTxt: { fontSize: 12, color: '#222', textAlign: 'center', marginTop: 8 },
+  momRow:    { fontSize: 11, color: '#888', textAlign: 'center', marginTop: 3 },
   scorecard: { borderTop: '0.5px solid #f0f0f0', paddingBottom: 8 },
   tabRow:    { display: 'flex', padding: '8px 14px 4px', gap: 8 },
   tab: {

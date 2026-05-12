@@ -295,8 +295,8 @@ function buildStatFilters() {
               const awardItems = hasAwards ? [
                 {n:ini(stats.momCount),        l:'MoM',    hl:(stats.momCount||0)>0        ? HL : null},
                 {n:ini(stats.mosCount||0),     l:'MoS',    hl:(stats.mosCount||0)>0        ? HL : null},
-                {n:ini(stats.orangeCapCount||0),l:'🟠 Cap', hl:(stats.orangeCapCount||0)>0 ? HL : null},
-                {n:ini(stats.purpleCapCount||0),l:'🟣 Cap', hl:(stats.purpleCapCount||0)>0 ? HL : null},
+                //{n:ini(stats.orangeCapCount||0),l:'🟠 Cap', hl:(stats.orangeCapCount||0)>0 ? HL : null},
+                //{n:ini(stats.purpleCapCount||0),l:'🟣 Cap', hl:(stats.purpleCapCount||0)>0 ? HL : null},
               ] : [];
               const allItems = [...captItems, ...awardItems];
               const captFlex  = captItems.length;
