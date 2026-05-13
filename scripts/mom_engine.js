@@ -52,16 +52,17 @@ function calcBattingPoints(batter, rules) {
   points += sixes * r.boundaryBonus.six;
 
   // Strike rate bonus/penalty
-  // Convert SR threshold (e.g. 1.0 → 100, 0.75 → 75)
+  // Bonus:   0.3 x (SR - Threshold) x runs
+  // Penalty: 0.3 x (SR - Threshold) x balls  [diff negative so result negative]
   if (balls > 0) {
     const actualSR    = (runs / balls) * 100;
     const thresholdSR = r.strikeRate.threshold * 100;
     const srDiff      = actualSR - thresholdSR;
 
     if (srDiff > 0) {
-      points += srDiff * r.strikeRate.bonusMultiplier;
+      points += srDiff * r.strikeRate.bonusMultiplier * runs;
     } else {
-      const penalty = srDiff * r.strikeRate.penaltyMultiplier;
+      const penalty = srDiff * r.strikeRate.penaltyMultiplier * balls;
       points += Math.max(penalty, r.strikeRate.maxPenalty);
     }
   }
@@ -75,9 +76,10 @@ function calcBattingPoints(batter, rules) {
     if (runs >= threshold) points += bonus;
   }
 
-  // Not out bonus: applied to batting points (before not-out) if >= minimumPoints
-  if (isNotOut && points >= r.notOutBonus.minimumPoints) {
-    points += points * r.notOutBonus.multiplier;
+  // Not out bonus: 0.2 x runs (raw runs only, not batting points)
+  // Applied only if runs >= minimumPoints threshold
+  if (isNotOut && runs >= r.notOutBonus.minimumPoints) {
+    points += runs * r.notOutBonus.multiplier;
   }
 
   return points;

@@ -123,6 +123,7 @@ Each innings object:
 ━━━ BATTER OBJECT ━━━
 {
   "player":      canonical name from player map (see below),
+  "captain":     "1" if this player has (c) or (C) next to their name in the scorecard, else "",
   "runs":        integer,
   "balls":       integer,
   "fours":       integer,
@@ -132,6 +133,9 @@ Each innings object:
   "fielder":     canonical name of fielder, or "" if not applicable,
   "bowler":      canonical name of bowler, or "" if run out / not out
 }
+
+NOTE on captain: The captain marker (c) appears next to the player name in the batting list.
+Each team has exactly one captain. Set "captain": "1" for that player, "" for all others.
 
 DISMISSAL RULES:
 - bowled          → dismissType "b",  fielder ""
@@ -197,7 +201,7 @@ ${playerMap}
       "overs":       "<X.Y>",
       "bowlingTeam": "<bowling team>",
       "extras":      0,
-      "batters":     [],
+      "batters":     [{ "player": "", "captain": "", "runs": 0, "balls": 0, "fours": 0, "sixes": 0, "dismissal": "", "dismissType": "", "fielder": "", "bowler": "" }],
       "bowlers":     [],
       "fow":         [],
       "dnb":         []
@@ -222,7 +226,7 @@ async function callClaudeAPI(pdfBase64, prompt) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
+      model:      'claude-sonnet-4-20250514',
       max_tokens: 8000,
       messages: [
         {
