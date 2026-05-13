@@ -155,7 +155,7 @@ function calcBowlMvp(bowler, battingInnings, rules) {
   if (overs > 0) {
     const eco  = runs / overs;
     const diff = r.economy.expectedEconomy - eco;
-    economyBonus = Math.max(diff * runs * r.economy.multiplier, r.economy.maxPenalty);
+    economyBonus = Math.max(diff * overs * r.economy.multiplier, r.economy.maxPenalty);
   }
 
   // Milestone
