@@ -134,7 +134,7 @@ function calcBowlingPoints(bowler, battingInnings, rules) {
     const actualEco   = runs / overs;
     const expectedEco = r.economy.expectedEconomy;
     const ecoDiff     = expectedEco - actualEco; // positive = bowling under expected = good
-    economyPoints = ecoDiff * runs * r.economy.multiplier;
+    economyPoints = ecoDiff * overs * r.economy.multiplier;
     economyPoints = Math.max(economyPoints, r.economy.maxPenalty);
   }
 
