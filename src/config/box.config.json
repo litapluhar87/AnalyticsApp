@@ -43,7 +43,6 @@
         "maxPenalty": -7
       },
       "milestones": {
-        "15": 2,
         "30": 4,
         "50": 8,
         "100": 16
@@ -60,7 +59,7 @@
       },
       "maidenOver": 5,
       "economy": {
-        "expectedEconomy": 6.0,
+        "expectedEconomy": 5.5,
         "multiplier": 0.8,
         "maxPenalty": -7
       },
@@ -74,8 +73,8 @@
     "fielding": {
       "catch": 5,
       "stumping": 5,
-      "directRunOut": 8,
-      "comboRunOut": 4
+      "directRunOut": 6,
+      "comboRunOut": 3
     },
     "captaincy": {
       "win": 5,
