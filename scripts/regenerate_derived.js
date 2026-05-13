@@ -83,13 +83,14 @@ function calcBatMvp(batter, rules) {
   const basePts = runPts + fourPts + sixPts;
 
   // Strike rate
-  // Bonus:   0.3 x (SR - Threshold) x runs
-  // Penalty: 0.3 x (SR - Threshold) x balls  [diff negative so result negative]
+  // diff is in percentage points (e.g. 26.32), divide by 100 to normalise
+  // Bonus:   0.3 x (diff/100) x runs
+  // Penalty: 0.3 x (diff/100) x balls  [diff negative so result negative]
   let srBonus = 0;
   if (balls > 0) {
     const actualSR    = (runs / balls) * 100;
     const thresholdSR = r.strikeRate.threshold * 100;
-    const diff        = actualSR - thresholdSR;
+    const diff        = (actualSR - thresholdSR) / 100;
     if (diff > 0) {
       srBonus = diff * r.strikeRate.bonusMultiplier * runs;
     } else {
@@ -106,11 +107,17 @@ function calcBatMvp(batter, rules) {
   // Subtotal before not-out
   let bat = basePts + srBonus + milestoneBonus;
 
-  // Not-out bonus: 0.2 x runs (raw runs, not batting points)
-  // Applied only if runs >= minimumPoints threshold
+  // Not-out bonus:
+  // notOutCalc = runs x 0.2
+  // shortfall  = max(0, minimumPoints - runs)
+  // finalBonus = max(notOutCalc, shortfall)
+  // Player who is not out didnt complete innings. Minimum expected is minimumPoints (8).
+  // Bonus is whichever is higher of the two.
   let notOutBonus = 0;
-  if (notOut && runs >= r.notOutBonus.minimumPoints) {
-    notOutBonus = runs * r.notOutBonus.multiplier;
+  if (notOut) {
+    const notOutCalc = runs * r.notOutBonus.multiplier;
+    const shortfall  = Math.max(0, r.notOutBonus.minimumPoints - runs);
+    notOutBonus = Math.max(notOutCalc, shortfall);
     bat += notOutBonus;
   }
 
