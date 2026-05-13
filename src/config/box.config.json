@@ -81,7 +81,7 @@
       "win": 5,
       "loss": 0
     },
-    "momOverridePoints": 20
+    "momOverridePoints": 22
   },
   "scorecardConfig": {
     "oversPerInnings": 12,

@@ -1,0 +1,305 @@
+# .github/workflows/scorecard_pipeline.yml
+# RACL Phase 2 — Scorecard Ingestion Pipeline
+#
+# Trigger : Push any PDF to the scorecards/ folder
+# Pipeline: parse_scorecard.js → mom_engine.js → append_match.js
+#           → npm run migrate → npm run build → npm run deploy
+#
+# Secrets required (set in GitHub repo → Settings → Secrets → Actions):
+#   ANTHROPIC_API_KEY   : Your Claude API key
+#   GH_PAGES_TOKEN      : Personal Access Token with repo + pages scope
+#                         (needed so the deploy step can push to gh-pages branch)
+
+name: Scorecard Ingestion Pipeline
+
+on:
+  push:
+    paths:
+      - 'scorecards/**.pdf'
+
+# Only one pipeline run at a time — prevents race conditions on JSON files
+concurrency:
+  group: scorecard-pipeline
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: Parse → MoM → Append → Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # needed to commit JSON files back to repo
+      issues: write     # needed to file GitHub Issues on failure
+
+    steps:
+
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history needed for gh-pages deploy
+          token: ${{ secrets.GH_PAGES_TOKEN }}
+
+      # ── 2. Detect which PDF was pushed ───────────────────────────────────────
+      - name: Detect pushed scorecard PDF
+        id: detect
+        run: |
+          # Get the list of PDFs added or modified in this push
+          PDFS=$(git diff --name-only --diff-filter=AM ${{ github.event.before }} ${{ github.sha }} \
+                 | grep '^scorecards/.*\.pdf$' || true)
+
+          if [ -z "$PDFS" ]; then
+            echo "No scorecard PDFs detected in this push. Exiting."
+            echo "skip=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Count PDFs
+          PDF_COUNT=$(echo "$PDFS" | wc -l | tr -d ' ')
+          echo "Found $PDF_COUNT scorecard PDF(s):"
+          echo "$PDFS"
+
+          if [ "$PDF_COUNT" -gt 1 ]; then
+            echo "::warning::Multiple PDFs pushed at once. Processing first one only."
+            echo "Multiple PDF support: push one at a time for best results."
+          fi
+
+          # Take the first PDF
+          PDF_PATH=$(echo "$PDFS" | head -n 1)
+          PDF_NAME=$(basename "$PDF_PATH" .pdf)
+
+          echo "pdf_path=$PDF_PATH"   >> $GITHUB_OUTPUT
+          echo "pdf_name=$PDF_NAME"   >> $GITHUB_OUTPUT
+          echo "skip=false"           >> $GITHUB_OUTPUT
+
+          echo "Processing: $PDF_PATH"
+
+      # ── 3. Setup Node.js ─────────────────────────────────────────────────────
+      - name: Setup Node.js
+        if: steps.detect.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── 4. Install dependencies ───────────────────────────────────────────────
+      - name: Install dependencies
+        if: steps.detect.outputs.skip != 'true'
+        run: npm ci
+
+      # ── 5. Create output directory ────────────────────────────────────────────
+      - name: Prepare output directory
+        if: steps.detect.outputs.skip != 'true'
+        run: mkdir -p scripts/output
+
+      # ── 6. Parse scorecard via Claude API ────────────────────────────────────
+      - name: Parse scorecard
+        if: steps.detect.outputs.skip != 'true'
+        id: parse
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          PDF_PATH="${{ steps.detect.outputs.pdf_path }}"
+          PDF_NAME="${{ steps.detect.outputs.pdf_name }}"
+
+          echo "🤖 Parsing $PDF_PATH..."
+          node scripts/parse_scorecard.js "$PDF_PATH"
+
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 2 ]; then
+            echo "parse_error=validation" >> $GITHUB_OUTPUT
+            exit 2
+          elif [ $EXIT_CODE -ne 0 ]; then
+            echo "parse_error=fatal" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+          echo "parse_error=none" >> $GITHUB_OUTPUT
+          echo "output_file=scripts/output/${PDF_NAME}.json" >> $GITHUB_OUTPUT
+
+      # ── 7. Calculate MoM ──────────────────────────────────────────────────────
+      - name: Calculate Man of the Match
+        if: steps.detect.outputs.skip != 'true' && steps.parse.outputs.parse_error == 'none'
+        id: mom
+        run: |
+          OUTPUT_FILE="${{ steps.parse.outputs.output_file }}"
+          echo "🎯 Running MoM engine on $OUTPUT_FILE..."
+          node scripts/mom_engine.js "$OUTPUT_FILE"
+
+          if [ $? -ne 0 ]; then
+            echo "mom_error=true" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "mom_error=false" >> $GITHUB_OUTPUT
+
+      # ── 8. Append to JSON data files ─────────────────────────────────────────
+      - name: Append match to data
+        if: steps.detect.outputs.skip != 'true' && steps.mom.outputs.mom_error == 'false'
+        id: append
+        run: |
+          OUTPUT_FILE="${{ steps.parse.outputs.output_file }}"
+          echo "📥 Appending match data..."
+          node scripts/append_match.js "$OUTPUT_FILE"
+
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 2 ]; then
+            echo "append_error=duplicate" >> $GITHUB_OUTPUT
+            exit 2
+          elif [ $EXIT_CODE -ne 0 ]; then
+            echo "append_error=fatal" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+          echo "append_error=none" >> $GITHUB_OUTPUT
+
+      # ── 9. Run migrate to regenerate derived JSON ─────────────────────────────
+      - name: Regenerate derived data (migrate)
+        if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
+        run: |
+          echo "⚙️  Running npm run migrate..."
+          npm run migrate
+
+      # ── 10. Commit updated JSON files back to repo ────────────────────────────
+      - name: Commit updated data files
+        if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
+        run: |
+          git config user.name  "RACL Bot"
+          git config user.email "racl-bot@users.noreply.github.com"
+
+          PDF_NAME="${{ steps.detect.outputs.pdf_name }}"
+
+          # Stage only data files — not scripts/output (that's gitignored)
+          git add data/json/*.json
+
+          # Check if there's actually anything to commit
+          if git diff --staged --quiet; then
+            echo "No data changes to commit (possibly a duplicate that was caught)"
+          else
+            git commit -m "📊 Add scorecard: ${PDF_NAME}
+
+Parsed and ingested via RACL Scorecard Pipeline
+PDF: ${{ steps.detect.outputs.pdf_path }}
+Triggered by: ${{ github.actor }}"
+
+            git push origin ${{ github.ref_name }}
+            echo "✅ Data committed and pushed"
+          fi
+
+      # ── 11. Build React app ───────────────────────────────────────────────────
+      - name: Build app
+        if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
+        run: |
+          echo "🏗️  Building React app..."
+          npm run build
+
+      # ── 12. Deploy to GitHub Pages ────────────────────────────────────────────
+      - name: Deploy to GitHub Pages
+        if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
+        run: |
+          echo "🚀 Deploying to GitHub Pages..."
+          # Configure git for gh-pages deploy
+          git config user.name  "RACL Bot"
+          git config user.email "racl-bot@users.noreply.github.com"
+          npm run deploy
+          echo "✅ Deployed to https://litapluhar87.github.io/AnalyticsApp"
+
+      # ── 13. File GitHub Issue on parse failure ────────────────────────────────
+      - name: File issue on parse failure
+        if: failure() && steps.parse.outputs.parse_error != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pdfName  = '${{ steps.detect.outputs.pdf_name }}';
+            const pdfPath  = '${{ steps.detect.outputs.pdf_path }}';
+            const errType  = '${{ steps.parse.outputs.parse_error }}';
+            const runUrl   = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const body = errType === 'validation'
+              ? `## ❌ Scorecard Parse — Validation Failed
+
+**PDF:** \`${pdfPath}\`
+**Run:** [View logs](${runUrl})
+
+The scorecard was parsed but failed validation. Common causes:
+- A player name in the scorecard is not in \`src/config/players.config.json\`
+- Unexpected innings count for the format
+- Missing required fields
+
+**Action needed:**
+1. Check the run logs for the specific error
+2. If an unknown player: add them to \`players.config.json\` first
+3. Re-upload the PDF`
+              : `## ❌ Scorecard Parse — Fatal Error
+
+**PDF:** \`${pdfPath}\`
+**Run:** [View logs](${runUrl})
+
+The parser failed to process this scorecard. Could be:
+- Filename format incorrect (expected like \`B120607SG.pdf\`)
+- Ground code not in \`src/config/grounds.config.json\`
+- Claude API error or timeout
+
+**Action needed:**
+1. Check the run logs
+2. Fix the issue
+3. Re-upload the PDF`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `❌ Parse failed: ${pdfName}.pdf`,
+              body,
+              labels: ['scorecard-error', 'pipeline'],
+            });
+
+      # ── 14. File GitHub Issue on duplicate ────────────────────────────────────
+      - name: File issue on duplicate match
+        if: failure() && steps.append.outputs.append_error == 'duplicate'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pdfName = '${{ steps.detect.outputs.pdf_name }}';
+            const pdfPath = '${{ steps.detect.outputs.pdf_path }}';
+            const runUrl  = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `⚠️ Duplicate match: ${pdfName}.pdf`,
+              body: `## ⚠️ Duplicate Match Detected
+
+**PDF:** \`${pdfPath}\`
+**Run:** [View logs](${runUrl})
+
+This match (Season/Match/Type combination) already exists in the data files.
+
+**If this was a re-upload by mistake:** no action needed, data is unchanged.
+
+**If the match data needs updating:** manually remove the existing entry from the relevant \`data/json/{type}_matches.json\` file, then re-upload the PDF.`,
+              labels: ['scorecard-error', 'duplicate'],
+            });
+
+      # ── 15. File GitHub Issue on MoM / append failure ─────────────────────────
+      - name: File issue on pipeline failure
+        if: failure() && steps.parse.outputs.parse_error == 'none' && steps.append.outputs.append_error != 'duplicate'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pdfName = '${{ steps.detect.outputs.pdf_name }}';
+            const pdfPath = '${{ steps.detect.outputs.pdf_path }}';
+            const runUrl  = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `❌ Pipeline failure: ${pdfName}.pdf`,
+              body: `## ❌ Pipeline Failure (post-parse)
+
+**PDF:** \`${pdfPath}\`
+**Run:** [View logs](${runUrl})
+
+The scorecard was parsed successfully but a later stage failed (MoM engine, append, migrate, or deploy).
+
+Check the run logs to identify which step failed. Data files may be in a partially updated state — check \`data/json/\` for any \`.bak\` files which indicate a failed write that was rolled back.`,
+              labels: ['scorecard-error', 'pipeline'],
+            });
