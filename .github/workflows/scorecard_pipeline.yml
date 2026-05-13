@@ -173,11 +173,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No data changes to commit (possibly a duplicate that was caught)"
           else
-            git commit -m "📊 Add scorecard: ${PDF_NAME}
-
-Parsed and ingested via RACL Scorecard Pipeline
-PDF: ${{ steps.detect.outputs.pdf_path }}
-Triggered by: ${{ github.actor }}"
+            git commit -m "📊 Add scorecard: ${PDF_NAME} | PDF: ${{ steps.detect.outputs.pdf_path }} | by ${{ github.actor }}"
 
             git push origin ${{ github.ref_name }}
             echo "✅ Data committed and pushed"
