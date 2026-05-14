@@ -74,7 +74,7 @@ function calcBatMvp(batter, rules) {
   const balls  = batter.balls  || 0;
   const fours  = batter.fours  || 0;
   const sixes  = batter.sixes  || 0;
-  const notOut = !batter.dismissType || batter.dismissType === '';
+  const notOut = !batter.dismissType || batter.dismissType === '' || batter.dismissType === 'not out' || batter.dismissType === 'retired';
 
   // Base
   const runPts  = runs * r.runPoints;
@@ -242,32 +242,29 @@ function buildPlayerRecords(match, config) {
       // Batting MVP
       const batMvp = calcBatMvp(batter, rules);
 
-      // Bowling MVP — find this player's bowling entry in the OPPOSITE innings
-      // A player bats in innings N and bowls in the other team's innings
-      // Find their bowling entry across all innings where they appear as bowler
+      // Bowling MVP — find ALL innings where this player appears as a bowler
+      // For commons (played both teams), a player can bowl in ANY innings
+      // So search ALL innings, not just opponent innings
       let bowlMvp = { wicketPts: 0, maidenBonus: 0, wicketBonus: 0, economyBonus: 0, bowl: 0 };
       let bowlingEntry = null;
       let bowlingInnings = null;
 
-      for (const inn of match.innings) {
-        const be = (inn.bowlers || []).find(b => b.player === batter.player);
-        if (be) {
-          // A player bowls in the innings where the OTHER team bats
-          // So only count bowling from innings where this player's team is bowling
-          if (inn.team !== battingTeam) {
-            bowlingEntry   = be;
-            bowlingInnings = inn;
-            bowlMvp = calcBowlMvp(be, inn, rules);
-            break; // take first match (for T12); Test handles below
-          }
-        }
+      // Find all innings where this player bowled (any team)
+      const allBowlingInnings = match.innings.filter(
+        inn => (inn.bowlers || []).some(b => b.player === batter.player)
+      );
+
+      // For T12: take first bowling innings found
+      if (match.format !== 'Test' && allBowlingInnings.length > 0) {
+        const bi = allBowlingInnings[0];
+        bowlingEntry   = bi.bowlers.find(b => b.player === batter.player);
+        bowlingInnings = bi;
+        bowlMvp = calcBowlMvp(bowlingEntry, bi, rules);
       }
 
       // For Test: aggregate bowling across BOTH innings this player bowled in
       if (match.format === 'Test') {
-        const bowlingInningsList = match.innings.filter(
-          inn => inn.team !== battingTeam && (inn.bowlers || []).some(b => b.player === batter.player)
-        );
+        const bowlingInningsList = allBowlingInnings;
         if (bowlingInningsList.length > 0) {
           // Recalculate aggregated bowling
           let totalWicketPts = 0, totalMaiden = 0, totalWicketBonus = 0, totalEcoBonus = 0;
@@ -340,8 +337,8 @@ function buildPlayerRecords(match, config) {
           dismissalType: batter.dismissType === '' ? 'not out' : batter.dismissType,
           dismissedBy:  batter.bowler || (batter.dismissType === 'ro' ? 'run out' : ''),
           fielder:      batter.fielder || '',
-          notOut:       !batter.dismissType || batter.dismissType === '',
-          retired:      false,
+          notOut:       !batter.dismissType || batter.dismissType === '' || batter.dismissType === 'not out' || batter.dismissType === 'retired',
+          retired:      batter.dismissType === 'retired',
           dnb:          false,
         },
         bowling: {
@@ -380,10 +377,65 @@ function buildPlayerRecords(match, config) {
       records.push(record);
     });
 
-    // DNB players — add minimal records
+    // DNB players — add records with bowling looked up (DNB players often bowl)
     (innings.dnb || []).forEach(playerName => {
       if (!playerName || playerName.startsWith('__UNKNOWN__')) return;
       const won  = !isTie && battingTeam === winner;
+
+      // Look up bowling for DNB player — search ALL innings
+      let dnbBowlMvp = { wicketPts: 0, maidenBonus: 0, wicketBonus: 0, economyBonus: 0, bowl: 0 };
+      let dnbBowlEntry = null;
+      let dnbBowlOvers = 0, dnbBowlOversDcml = 0, dnbBowlMaidens = 0;
+      let dnbBowlRuns = 0, dnbBowlWickets = 0, dnbBowlEconomy = 0;
+
+      const dnbBowlingInnings = match.innings.filter(
+        inn => (inn.bowlers || []).some(b => b.player === playerName)
+      );
+
+      if (dnbBowlingInnings.length > 0) {
+        // T12: first innings found; Test: aggregate
+        if (match.format !== 'Test') {
+          const bi = dnbBowlingInnings[0];
+          dnbBowlEntry = bi.bowlers.find(b => b.player === playerName);
+          if (dnbBowlEntry) {
+            dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, bi, rules);
+            dnbBowlOvers    = dnbBowlEntry.overs;
+            dnbBowlOversDcml= r2(toDecimalOvers(dnbBowlEntry.overs));
+            dnbBowlMaidens  = dnbBowlEntry.maidens;
+            dnbBowlRuns     = dnbBowlEntry.runs;
+            dnbBowlWickets  = dnbBowlEntry.wickets;
+            dnbBowlEconomy  = dnbBowlOversDcml > 0 ? r2(dnbBowlRuns / dnbBowlOversDcml) : 0;
+          }
+        } else {
+          let tOvers=0, tRuns=0, tWickets=0, tMaidens=0;
+          for (const bi of dnbBowlingInnings) {
+            const be = bi.bowlers.find(b => b.player === playerName);
+            if (!be) continue;
+            const bm = calcBowlMvp(be, bi, rules);
+            dnbBowlMvp.wicketPts   += bm.wicketPts;
+            dnbBowlMvp.maidenBonus += bm.maidenBonus;
+            dnbBowlMvp.wicketBonus += bm.wicketBonus;
+            dnbBowlMvp.economyBonus+= bm.economyBonus;
+            dnbBowlMvp.bowl        += bm.bowl;
+            tOvers   += toDecimalOvers(be.overs);
+            tRuns    += be.runs;
+            tWickets += be.wickets;
+            tMaidens += be.maidens;
+          }
+          dnbBowlOvers    = tOvers;
+          dnbBowlOversDcml= r2(tOvers);
+          dnbBowlMaidens  = tMaidens;
+          dnbBowlRuns     = tRuns;
+          dnbBowlWickets  = tWickets;
+          dnbBowlEconomy  = tOvers > 0 ? r2(tRuns / tOvers) : 0;
+        }
+      }
+
+      // Fielding for DNB player
+      const dnbField = calcFieldMvp(playerName, match.innings, rules);
+      const dnbMom   = r2(dnbBowlMvp.bowl);
+      const dnbTotal = r2(dnbMom + dnbField.field);
+
       records.push({
         player:      playerName,
         season:      match.season,
@@ -402,12 +454,32 @@ function buildPlayerRecords(match, config) {
           sr: 0, dismissalType: '', dismissedBy: '', fielder: '', notOut: false,
           retired: false, dnb: true,
         },
-        bowling:  { overs: 0, oversDcml: 0, maidens: 0, runs: 0, wickets: 0, economy: 0 },
-        fielding: { catches: 0, stumpings: 0, directRunOuts: 0, comboRunOuts: 0 },
-        mvp:      { runs: 0, srBonus: 0, notOutBonus: 0, milestoneBonus: 0, bat: 0,
-                    wicketPts: 0, maidenBonus: 0, wicketBonus: 0, economyBonus: 0,
-                    bowl: 0, mom: 0, field: 0, total: 0 },
-        isManOfMatch: false,
+        bowling: {
+          overs:     dnbBowlOvers,
+          oversDcml: dnbBowlOversDcml,
+          maidens:   dnbBowlMaidens,
+          runs:      dnbBowlRuns,
+          wickets:   dnbBowlWickets,
+          economy:   dnbBowlEconomy,
+        },
+        fielding: {
+          catches:       dnbField.catches,
+          stumpings:     dnbField.stumpings,
+          directRunOuts: dnbField.directRunOuts,
+          comboRunOuts:  dnbField.comboRunOuts,
+        },
+        mvp: {
+          runs: 0, srBonus: 0, notOutBonus: 0, milestoneBonus: 0, bat: 0,
+          wicketPts:    r2(dnbBowlMvp.wicketPts),
+          maidenBonus:  r2(dnbBowlMvp.maidenBonus),
+          wicketBonus:  r2(dnbBowlMvp.wicketBonus),
+          economyBonus: r2(dnbBowlMvp.economyBonus),
+          bowl:         r2(dnbBowlMvp.bowl),
+          mom:          dnbMom,
+          field:        dnbField.field,
+          total:        dnbTotal,
+        },
+        isManOfMatch: playerName === momPlayer,
         seasonMatch: `${match.season}-${match.matchNum}`,
       });
     });
