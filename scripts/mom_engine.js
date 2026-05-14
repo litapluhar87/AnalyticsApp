@@ -42,7 +42,7 @@ function calcBattingPoints(batter, rules) {
   const balls  = batter.balls || 0;
   const fours  = batter.fours || 0;
   const sixes  = batter.sixes || 0;
-  const isNotOut = !batter.dismissType || batter.dismissType === '' || batter.dismissType === 'not out' || batter.dismissType === 'retired';
+  const isNotOut = !batter.dismissType || batter.dismissType === '';
 
   // Base run points
   let points = runs * r.runPoints;
@@ -52,18 +52,16 @@ function calcBattingPoints(batter, rules) {
   points += sixes * r.boundaryBonus.six;
 
   // Strike rate bonus/penalty
-  // diff is in percentage points (e.g. 26.32), divide by 100 to normalise
-  // Bonus:   0.3 x (diff/100) x runs
-  // Penalty: 0.3 x (diff/100) x balls  [diff negative so result negative]
+  // Convert SR threshold (e.g. 1.0 → 100, 0.75 → 75)
   if (balls > 0) {
     const actualSR    = (runs / balls) * 100;
     const thresholdSR = r.strikeRate.threshold * 100;
-    const srDiff      = (actualSR - thresholdSR) / 100;
+    const srDiff      = actualSR - thresholdSR;
 
     if (srDiff > 0) {
-      points += srDiff * r.strikeRate.bonusMultiplier * runs;
+      points += srDiff * r.strikeRate.bonusMultiplier;
     } else {
-      const penalty = srDiff * r.strikeRate.penaltyMultiplier * balls;
+      const penalty = srDiff * r.strikeRate.penaltyMultiplier;
       points += Math.max(penalty, r.strikeRate.maxPenalty);
     }
   }
@@ -77,14 +75,9 @@ function calcBattingPoints(batter, rules) {
     if (runs >= threshold) points += bonus;
   }
 
-  // Not-out bonus:
-  // notOutCalc = runs x 0.2
-  // shortfall  = max(0, minimumPoints - runs)
-  // finalBonus = max(notOutCalc, shortfall)
-  if (isNotOut) {
-    const notOutCalc = runs * r.notOutBonus.multiplier;
-    const shortfall  = Math.max(0, r.notOutBonus.minimumPoints - runs);
-    points += Math.max(notOutCalc, shortfall);
+  // Not out bonus: applied to batting points (before not-out) if >= minimumPoints
+  if (isNotOut && points >= r.notOutBonus.minimumPoints) {
+    points += points * r.notOutBonus.multiplier;
   }
 
   return points;
@@ -134,7 +127,7 @@ function calcBowlingPoints(bowler, battingInnings, rules) {
     const actualEco   = runs / overs;
     const expectedEco = r.economy.expectedEconomy;
     const ecoDiff     = expectedEco - actualEco; // positive = bowling under expected = good
-    economyPoints = ecoDiff * overs * r.economy.multiplier;
+    economyPoints = ecoDiff * runs * r.economy.multiplier;
     economyPoints = Math.max(economyPoints, r.economy.maxPenalty);
   }
 
