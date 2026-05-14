@@ -42,7 +42,7 @@ function calcBattingPoints(batter, rules) {
   const balls  = batter.balls || 0;
   const fours  = batter.fours || 0;
   const sixes  = batter.sixes || 0;
-  const isNotOut = !batter.dismissType || batter.dismissType === '';
+  const isNotOut = !batter.dismissType || batter.dismissType === '' || batter.dismissType === 'not out' || batter.dismissType === 'retired';
 
   // Base run points
   let points = runs * r.runPoints;
