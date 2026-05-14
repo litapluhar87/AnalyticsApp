@@ -39,7 +39,7 @@
       "catches": 1,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 24,
@@ -53,8 +53,8 @@
       "economyBonus": -3.2,
       "bowl": 8.8,
       "mom": 34.3,
-      "field": 5,
-      "total": 39.3
+      "field": 8,
+      "total": 42.3
     },
     "isManOfMatch": false,
     "seasonMatch": "6-1"
@@ -158,8 +158,8 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 1,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 6,
@@ -173,8 +173,8 @@
       "economyBonus": 0.8,
       "bowl": 12.8,
       "mom": 18.2,
-      "field": 0,
-      "total": 18.2
+      "field": 9,
+      "total": 27.2
     },
     "isManOfMatch": false,
     "seasonMatch": "6-1"
@@ -501,7 +501,7 @@
       "sixes": 0,
       "sr": 50,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul",
       "notOut": false,
       "retired": false,
@@ -921,7 +921,7 @@
       "sixes": 0,
       "sr": 60,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amar / Rahul",
       "notOut": false,
       "retired": false,
@@ -1118,8 +1118,8 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 1,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 1,
@@ -1133,8 +1133,8 @@
       "economyBonus": -0.8,
       "bowl": -0.8,
       "mom": -0.1,
-      "field": 0,
-      "total": -0.1
+      "field": 9,
+      "total": 8.9
     },
     "isManOfMatch": false,
     "seasonMatch": "6-2"
@@ -1299,7 +1299,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 6,
@@ -1313,8 +1313,8 @@
       "economyBonus": 4,
       "bowl": 19,
       "mom": 25.38,
-      "field": 0,
-      "total": 25.38
+      "field": 3,
+      "total": 28.38
     },
     "isManOfMatch": false,
     "seasonMatch": "6-2"
@@ -1401,7 +1401,7 @@
       "sixes": 1,
       "sr": 128.57,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Avinash / Amol",
       "notOut": false,
       "retired": false,
@@ -1461,7 +1461,7 @@
       "sixes": 0,
       "sr": 100,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Avinash",
       "notOut": false,
       "retired": false,
@@ -1778,7 +1778,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -1793,8 +1793,8 @@
       "economyBonus": 0.27,
       "bowl": 0.27,
       "mom": 2.37,
-      "field": 0,
-      "total": 2.37
+      "field": 6,
+      "total": 8.37
     },
     "isManOfMatch": false,
     "seasonMatch": "6-3"
@@ -2001,7 +2001,7 @@
       "sixes": 0,
       "sr": 80,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Ajinath",
       "notOut": false,
       "retired": false,
@@ -2361,7 +2361,7 @@
       "sixes": 1,
       "sr": 97.67,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol / Sandy D",
       "notOut": false,
       "retired": false,
@@ -2378,7 +2378,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -2393,8 +2393,8 @@
       "economyBonus": 0,
       "bowl": 10,
       "mom": 62.7,
-      "field": 0,
-      "total": 62.7
+      "field": 6,
+      "total": 68.7
     },
     "isManOfMatch": true,
     "seasonMatch": "6-4"
@@ -2498,7 +2498,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -2513,8 +2513,8 @@
       "economyBonus": -7,
       "bowl": -7,
       "mom": -7.3,
-      "field": 0,
-      "total": -7.3
+      "field": 6,
+      "total": -1.3
     },
     "isManOfMatch": false,
     "seasonMatch": "6-4"
@@ -2601,7 +2601,7 @@
       "sixes": 0,
       "sr": 66.67,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol",
       "notOut": false,
       "retired": false,
@@ -2781,7 +2781,7 @@
       "sixes": 0,
       "sr": 52.94,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Macchi",
       "notOut": false,
       "retired": false,
@@ -2798,8 +2798,8 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 1,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 9,
@@ -2813,8 +2813,8 @@
       "economyBonus": 0.8,
       "bowl": 12.8,
       "mom": 19.4,
-      "field": 5,
-      "total": 24.4
+      "field": 14,
+      "total": 33.4
     },
     "isManOfMatch": false,
     "seasonMatch": "6-4"
@@ -2901,7 +2901,7 @@
       "sixes": 0,
       "sr": 72.73,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Anil",
       "notOut": false,
       "retired": false,
@@ -2919,7 +2919,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 9,
@@ -2933,8 +2933,8 @@
       "economyBonus": 0,
       "bowl": 10,
       "mom": 18.1,
-      "field": 0,
-      "total": 18.1
+      "field": 3,
+      "total": 21.1
     },
     "isManOfMatch": false,
     "seasonMatch": "6-4"
@@ -3218,7 +3218,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -3233,8 +3233,8 @@
       "economyBonus": 0.4,
       "bowl": 10.4,
       "mom": 11.1,
-      "field": 0,
-      "total": 11.1
+      "field": 6,
+      "total": 17.1
     },
     "isManOfMatch": false,
     "seasonMatch": "6-5"
@@ -3278,7 +3278,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -3293,8 +3293,8 @@
       "economyBonus": 1.2,
       "bowl": 1.2,
       "mom": 15.2,
-      "field": 0,
-      "total": 15.2
+      "field": 6,
+      "total": 21.2
     },
     "isManOfMatch": false,
     "seasonMatch": "6-5"
@@ -3501,7 +3501,7 @@
       "sixes": 0,
       "sr": 77.78,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Gaurav",
       "notOut": false,
       "retired": false,
@@ -3561,7 +3561,7 @@
       "sixes": 0,
       "sr": 20,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol",
       "notOut": false,
       "retired": false,
@@ -3621,7 +3621,7 @@
       "sixes": 1,
       "sr": 100,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Anil",
       "notOut": false,
       "retired": false,
@@ -3741,19 +3741,19 @@
       "sixes": 2,
       "sr": 153.85,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Anil",
       "notOut": false,
       "retired": false,
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 6,
-      "wickets": 1,
-      "economy": 3
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -3861,7 +3861,7 @@
       "sixes": 0,
       "sr": 75,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul",
       "notOut": false,
       "retired": false,
@@ -4118,7 +4118,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -4133,8 +4133,8 @@
       "economyBonus": 2,
       "bowl": 2,
       "mom": 21.69,
-      "field": 0,
-      "total": 21.69
+      "field": 6,
+      "total": 27.69
     },
     "isManOfMatch": true,
     "seasonMatch": "6-6"
@@ -4178,7 +4178,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 2,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -4193,8 +4193,8 @@
       "economyBonus": 3.6,
       "bowl": 3.6,
       "mom": 11.3,
-      "field": 0,
-      "total": 11.3
+      "field": 12,
+      "total": 23.3
     },
     "isManOfMatch": false,
     "seasonMatch": "6-6"
@@ -4288,12 +4288,12 @@
       "dnb": true
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 11,
+      "runs": 0,
       "wickets": 0,
-      "economy": 5.5
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -4348,12 +4348,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 7,
+      "runs": 0,
       "wickets": 0,
-      "economy": 7
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -5421,7 +5421,7 @@
       "sixes": 0,
       "sr": 100,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Macchi / Mangesh",
       "notOut": false,
       "retired": false,
@@ -5488,12 +5488,12 @@
       "dnb": true
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 7,
-      "wickets": 2,
-      "economy": 3.5
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -5608,12 +5608,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 1,
+      "runs": 0,
       "wickets": 0,
-      "economy": 1
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -5679,7 +5679,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 45,
@@ -5693,8 +5693,8 @@
       "economyBonus": -7,
       "bowl": 3,
       "mom": 56.11,
-      "field": 0,
-      "total": 56.11
+      "field": 3,
+      "total": 59.11
     },
     "isManOfMatch": true,
     "seasonMatch": "5-1"
@@ -5728,12 +5728,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 10,
+      "runs": 0,
       "wickets": 0,
-      "economy": 5
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -5919,7 +5919,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 0,
@@ -5933,8 +5933,8 @@
       "economyBonus": -2,
       "bowl": -2,
       "mom": -2,
-      "field": 0,
-      "total": -2
+      "field": 3,
+      "total": 1
     },
     "isManOfMatch": false,
     "seasonMatch": "5-1"
@@ -6021,7 +6021,7 @@
       "sixes": 0,
       "sr": 0,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -6208,12 +6208,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1.1,
-      "oversDcml": 1.17,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
       "runs": 0,
-      "wickets": 12,
-      "economy": 10.26
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -6261,7 +6261,7 @@
       "sixes": 1,
       "sr": 107.69,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Mangesh / Eshwar",
       "notOut": false,
       "retired": false,
@@ -6399,7 +6399,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 22,
@@ -6413,8 +6413,8 @@
       "economyBonus": 1.6,
       "bowl": 1.6,
       "mom": 25.12,
-      "field": 0,
-      "total": 25.12
+      "field": 3,
+      "total": 28.12
     },
     "isManOfMatch": false,
     "seasonMatch": "5-2"
@@ -6458,8 +6458,8 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 1,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 33,
@@ -6473,8 +6473,8 @@
       "economyBonus": -2.4,
       "bowl": 7.6,
       "mom": 41.24,
-      "field": 5,
-      "total": 46.24
+      "field": 14,
+      "total": 55.24
     },
     "isManOfMatch": true,
     "seasonMatch": "5-2"
@@ -6765,16 +6765,16 @@
       "runs": 91,
       "srBonus": 22.51,
       "notOutBonus": 0,
-      "milestoneBonus": 12,
-      "bat": 125.51,
+      "milestoneBonus": 8,
+      "bat": 121.51,
       "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
       "economyBonus": 0.87,
       "bowl": 20.87,
-      "mom": 146.38,
+      "mom": 142.38,
       "field": 0,
-      "total": 146.38
+      "total": 142.38
     },
     "isManOfMatch": true,
     "seasonMatch": "5-3"
@@ -6878,7 +6878,7 @@
     "fielding": {
       "catches": 4,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -6893,8 +6893,8 @@
       "economyBonus": 1.2,
       "bowl": 1.2,
       "mom": 13.9,
-      "field": 20,
-      "total": 33.9
+      "field": 26,
+      "total": 39.9
     },
     "isManOfMatch": false,
     "seasonMatch": "5-3"
@@ -7281,19 +7281,19 @@
       "sixes": 2,
       "sr": 113.04,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul",
       "notOut": false,
       "retired": false,
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 14,
+      "runs": 0,
       "wickets": 0,
-      "economy": 7
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -7468,12 +7468,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 30,
+      "runs": 0,
       "wickets": 0,
-      "economy": 15
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -7528,12 +7528,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 17,
-      "wickets": 1,
-      "economy": 8.5
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -7641,7 +7641,7 @@
       "sixes": 0,
       "sr": 25,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol",
       "notOut": false,
       "retired": false,
@@ -7821,7 +7821,7 @@
       "sixes": 0,
       "sr": 54.17,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -8078,7 +8078,7 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -8093,8 +8093,8 @@
       "economyBonus": 3.2,
       "bowl": 15.2,
       "mom": 18.5,
-      "field": 5,
-      "total": 23.5
+      "field": 11,
+      "total": 29.5
     },
     "isManOfMatch": false,
     "seasonMatch": "5-4"
@@ -8258,7 +8258,7 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -8273,8 +8273,8 @@
       "economyBonus": 0.8,
       "bowl": 0.8,
       "mom": 0.8,
-      "field": 5,
-      "total": 5.8
+      "field": 11,
+      "total": 11.8
     },
     "isManOfMatch": false,
     "seasonMatch": "5-4"
@@ -9081,7 +9081,7 @@
       "sixes": 0,
       "sr": 68.42,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol",
       "notOut": false,
       "retired": false,
@@ -9141,7 +9141,7 @@
       "sixes": 0,
       "sr": 90,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Sushil",
       "notOut": false,
       "retired": false,
@@ -9261,7 +9261,7 @@
       "sixes": 0,
       "sr": 33.33,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Anil",
       "notOut": false,
       "retired": false,
@@ -9321,7 +9321,7 @@
       "sixes": 0,
       "sr": 0,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -9398,7 +9398,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9413,8 +9413,8 @@
       "economyBonus": 0,
       "bowl": 0,
       "mom": 1.7,
-      "field": 0,
-      "total": 1.7
+      "field": 6,
+      "total": 7.7
     },
     "isManOfMatch": false,
     "seasonMatch": "5-6"
@@ -9518,7 +9518,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9533,8 +9533,8 @@
       "economyBonus": -2.8,
       "bowl": -2.8,
       "mom": 29.85,
-      "field": 0,
-      "total": 29.85
+      "field": 6,
+      "total": 35.85
     },
     "isManOfMatch": false,
     "seasonMatch": "5-6"
@@ -9578,7 +9578,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9593,8 +9593,8 @@
       "economyBonus": 3.2,
       "bowl": 15.2,
       "mom": 30.9,
-      "field": 0,
-      "total": 30.9
+      "field": 6,
+      "total": 36.9
     },
     "isManOfMatch": true,
     "seasonMatch": "5-6"
@@ -9638,7 +9638,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9653,8 +9653,8 @@
       "economyBonus": 5.2,
       "bowl": 5.2,
       "mom": 12.9,
-      "field": 0,
-      "total": 12.9
+      "field": 6,
+      "total": 18.9
     },
     "isManOfMatch": false,
     "seasonMatch": "5-6"
@@ -9741,7 +9741,7 @@
       "sixes": 0,
       "sr": 53.85,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul",
       "notOut": false,
       "retired": false,
@@ -9801,7 +9801,7 @@
       "sixes": 0,
       "sr": 80,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Vallabh",
       "notOut": false,
       "retired": false,
@@ -9818,7 +9818,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9833,8 +9833,8 @@
       "economyBonus": 0,
       "bowl": 20,
       "mom": 46.2,
-      "field": 0,
-      "total": 46.2
+      "field": 6,
+      "total": 52.2
     },
     "isManOfMatch": true,
     "seasonMatch": "5-7"
@@ -9878,8 +9878,8 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 2,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 16,
@@ -9893,8 +9893,8 @@
       "economyBonus": 5.2,
       "bowl": 5.2,
       "mom": 22.9,
-      "field": 5,
-      "total": 27.9
+      "field": 20,
+      "total": 42.9
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -9921,7 +9921,7 @@
       "sixes": 0,
       "sr": 100,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Ajinath",
       "notOut": false,
       "retired": false,
@@ -9938,7 +9938,7 @@
     "fielding": {
       "catches": 4,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -9953,8 +9953,8 @@
       "economyBonus": -2,
       "bowl": -2,
       "mom": 12,
-      "field": 20,
-      "total": 32
+      "field": 26,
+      "total": 38
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -9999,7 +9999,7 @@
       "catches": 1,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 3,
@@ -10013,8 +10013,8 @@
       "economyBonus": 12,
       "bowl": 22,
       "mom": 24.4,
-      "field": 5,
-      "total": 29.4
+      "field": 8,
+      "total": 32.4
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10041,7 +10041,7 @@
       "sixes": 0,
       "sr": 107.69,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul",
       "notOut": false,
       "retired": false,
@@ -10119,7 +10119,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 14,
@@ -10133,8 +10133,8 @@
       "economyBonus": -1.27,
       "bowl": 8.73,
       "mom": 22.73,
-      "field": 0,
-      "total": 22.73
+      "field": 3,
+      "total": 25.73
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10221,7 +10221,7 @@
       "sixes": 0,
       "sr": 65.91,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -10238,7 +10238,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 2,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10253,8 +10253,8 @@
       "economyBonus": 2.8,
       "bowl": 2.8,
       "mom": 28.3,
-      "field": 0,
-      "total": 28.3
+      "field": 12,
+      "total": 40.3
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10281,7 +10281,7 @@
       "sixes": 0,
       "sr": 89.47,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Avinash",
       "notOut": false,
       "retired": false,
@@ -10298,7 +10298,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 2,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10313,8 +10313,8 @@
       "economyBonus": 7.2,
       "bowl": 7.2,
       "mom": 48,
-      "field": 0,
-      "total": 48
+      "field": 12,
+      "total": 60
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10359,7 +10359,7 @@
       "catches": 1,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 2,
@@ -10373,8 +10373,8 @@
       "economyBonus": 11.2,
       "bowl": 23.2,
       "mom": 24.6,
-      "field": 5,
-      "total": 29.6
+      "field": 8,
+      "total": 32.6
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10401,7 +10401,7 @@
       "sixes": 0,
       "sr": 20,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Macchi",
       "notOut": false,
       "retired": false,
@@ -10418,7 +10418,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10433,8 +10433,8 @@
       "economyBonus": 10.4,
       "bowl": 22.4,
       "mom": 22.2,
-      "field": 0,
-      "total": 22.2
+      "field": 6,
+      "total": 28.2
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10479,7 +10479,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 25,
@@ -10493,8 +10493,8 @@
       "economyBonus": -1.27,
       "bowl": 8.73,
       "mom": 31.33,
-      "field": 0,
-      "total": 31.33
+      "field": 3,
+      "total": 34.33
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10539,7 +10539,7 @@
       "catches": 1,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 14,
@@ -10553,8 +10553,8 @@
       "economyBonus": 11.2,
       "bowl": 23.2,
       "mom": 33.9,
-      "field": 5,
-      "total": 38.9
+      "field": 8,
+      "total": 41.9
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10598,7 +10598,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 2,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10613,8 +10613,8 @@
       "economyBonus": 7.2,
       "bowl": 7.2,
       "mom": 13,
-      "field": 0,
-      "total": 13
+      "field": 12,
+      "total": 25
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10658,7 +10658,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 2,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10673,8 +10673,8 @@
       "economyBonus": 2.8,
       "bowl": 2.8,
       "mom": 3.5,
-      "field": 0,
-      "total": 3.5
+      "field": 12,
+      "total": 15.5
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10701,7 +10701,7 @@
       "sixes": 0,
       "sr": 50,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar / Amol",
       "notOut": false,
       "retired": false,
@@ -10718,7 +10718,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10733,8 +10733,8 @@
       "economyBonus": 10.4,
       "bowl": 22.4,
       "mom": 26.6,
-      "field": 0,
-      "total": 26.6
+      "field": 6,
+      "total": 32.6
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10778,7 +10778,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10793,8 +10793,8 @@
       "economyBonus": 1.6,
       "bowl": 1.6,
       "mom": 4.4,
-      "field": 0,
-      "total": 4.4
+      "field": 6,
+      "total": 10.4
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -10821,7 +10821,7 @@
       "sixes": 0,
       "sr": 36.36,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -10881,7 +10881,7 @@
       "sixes": 0,
       "sr": 50,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Ajinath",
       "notOut": false,
       "retired": false,
@@ -10958,7 +10958,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -10973,8 +10973,8 @@
       "economyBonus": 0,
       "bowl": 20,
       "mom": 30.3,
-      "field": 0,
-      "total": 30.3
+      "field": 6,
+      "total": 36.3
     },
     "isManOfMatch": true,
     "seasonMatch": "5-7"
@@ -11001,7 +11001,7 @@
       "sixes": 0,
       "sr": 50,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amar / Sandy D",
       "notOut": false,
       "retired": false,
@@ -11061,7 +11061,7 @@
       "sixes": 0,
       "sr": 45.45,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Gaurav",
       "notOut": false,
       "retired": false,
@@ -11078,8 +11078,8 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
-      "comboRunOuts": 0
+      "directRunOuts": 2,
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 5,
@@ -11093,8 +11093,8 @@
       "economyBonus": 5.2,
       "bowl": 5.2,
       "mom": 8.4,
-      "field": 5,
-      "total": 13.4
+      "field": 20,
+      "total": 28.4
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -11139,7 +11139,7 @@
       "catches": 1,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 1
     },
     "mvp": {
       "runs": 27,
@@ -11153,8 +11153,8 @@
       "economyBonus": 12,
       "bowl": 22,
       "mom": 49.3,
-      "field": 5,
-      "total": 54.3
+      "field": 8,
+      "total": 57.3
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -11198,7 +11198,7 @@
     "fielding": {
       "catches": 4,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -11213,8 +11213,8 @@
       "economyBonus": -2,
       "bowl": -2,
       "mom": 2.4,
-      "field": 20,
-      "total": 22.4
+      "field": 26,
+      "total": 28.4
     },
     "isManOfMatch": false,
     "seasonMatch": "5-7"
@@ -11319,7 +11319,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 2
     },
     "mvp": {
       "runs": 27,
@@ -11333,8 +11333,8 @@
       "economyBonus": 4,
       "bowl": 26,
       "mom": 57.2,
-      "field": 0,
-      "total": 57.2
+      "field": 6,
+      "total": 63.2
     },
     "isManOfMatch": true,
     "seasonMatch": "4-1"
@@ -11439,7 +11439,7 @@
       "catches": 0,
       "stumpings": 0,
       "directRunOuts": 0,
-      "comboRunOuts": 0
+      "comboRunOuts": 2
     },
     "mvp": {
       "runs": 19,
@@ -11453,8 +11453,8 @@
       "economyBonus": 2.4,
       "bowl": 2.4,
       "mom": 20.2,
-      "field": 0,
-      "total": 20.2
+      "field": 6,
+      "total": 26.2
     },
     "isManOfMatch": false,
     "seasonMatch": "4-1"
@@ -11618,7 +11618,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -11633,8 +11633,8 @@
       "economyBonus": -2,
       "bowl": -2,
       "mom": -2.3,
-      "field": 0,
-      "total": -2.3
+      "field": 6,
+      "total": 3.7
     },
     "isManOfMatch": false,
     "seasonMatch": "4-1"
@@ -11901,7 +11901,7 @@
       "sixes": 0,
       "sr": 68.75,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Ajinath",
       "notOut": false,
       "retired": false,
@@ -12021,7 +12021,7 @@
       "sixes": 0,
       "sr": 87.5,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Rahul / Amar",
       "notOut": false,
       "retired": false,
@@ -12081,7 +12081,7 @@
       "sixes": 0,
       "sr": 75,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amar / Rahul",
       "notOut": false,
       "retired": false,
@@ -12261,7 +12261,7 @@
       "sixes": 0,
       "sr": 47.06,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Macchi",
       "notOut": false,
       "retired": false,
@@ -12501,7 +12501,7 @@
       "sixes": 0,
       "sr": 25,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Eshwar",
       "notOut": false,
       "retired": false,
@@ -12621,7 +12621,7 @@
       "sixes": 0,
       "sr": 0,
       "dismissalType": "run out",
-      "dismissedBy": "",
+      "dismissedBy": "run out",
       "fielder": "Amol",
       "notOut": false,
       "retired": false,
@@ -12698,7 +12698,7 @@
     "fielding": {
       "catches": 1,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -12713,8 +12713,8 @@
       "economyBonus": 4,
       "bowl": 16,
       "mom": 14.8,
-      "field": 5,
-      "total": 19.8
+      "field": 11,
+      "total": 25.8
     },
     "isManOfMatch": false,
     "seasonMatch": "3-1"
@@ -12878,7 +12878,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -12893,8 +12893,8 @@
       "economyBonus": -1.6,
       "bowl": -1.6,
       "mom": 1.8,
-      "field": 0,
-      "total": 1.8
+      "field": 6,
+      "total": 7.8
     },
     "isManOfMatch": false,
     "seasonMatch": "3-1"
@@ -12998,7 +12998,7 @@
     "fielding": {
       "catches": 0,
       "stumpings": 0,
-      "directRunOuts": 0,
+      "directRunOuts": 1,
       "comboRunOuts": 0
     },
     "mvp": {
@@ -13013,8 +13013,8 @@
       "economyBonus": 0,
       "bowl": 0,
       "mom": -0.6,
-      "field": 0,
-      "total": -0.6
+      "field": 6,
+      "total": 5.4
     },
     "isManOfMatch": false,
     "seasonMatch": "3-1"
@@ -14758,5 +14758,845 @@
     },
     "isManOfMatch": false,
     "seasonMatch": "6-9"
+  },
+  {
+    "player": "Mangesh",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 1,
+      "runs": 7,
+      "balls": 13,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 53.85,
+      "dismissalType": "c",
+      "dismissedBy": "Amar",
+      "fielder": "Rahul",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 1,
+      "oversDcml": 1,
+      "maidens": 0,
+      "runs": 7,
+      "wickets": 0,
+      "economy": 7
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 7,
+      "srBonus": -1.8,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 5.2,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": -1.2,
+      "bowl": -1.2,
+      "mom": 4,
+      "field": 0,
+      "total": 4
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Eshwar",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 2,
+      "runs": 3,
+      "balls": 5,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 60,
+      "dismissalType": "c",
+      "dismissedBy": "Anil",
+      "fielder": "Macchi",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 10,
+      "wickets": 2,
+      "economy": 5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 3,
+      "srBonus": -0.6,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 2.4,
+      "wicketPts": 22,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 0.8,
+      "bowl": 22.8,
+      "mom": 25.2,
+      "field": 0,
+      "total": 25.2
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Amol",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 3,
+      "runs": 10,
+      "balls": 12,
+      "fours": 1,
+      "sixes": 0,
+      "sr": 83.33,
+      "dismissalType": "c",
+      "dismissedBy": "Amar",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2.1,
+      "oversDcml": 2.17,
+      "maidens": 0,
+      "runs": 10,
+      "wickets": 0,
+      "economy": 4.61
+    },
+    "fielding": {
+      "catches": 1,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 11,
+      "srBonus": -0.6,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 10.4,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 1.53,
+      "bowl": 1.53,
+      "mom": 11.93,
+      "field": 5,
+      "total": 16.93
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Ranjit",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "1",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 4,
+      "runs": 5,
+      "balls": 8,
+      "fours": 1,
+      "sixes": 0,
+      "sr": 62.5,
+      "dismissalType": "b",
+      "dismissedBy": "Rahul",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 11,
+      "wickets": 0,
+      "economy": 5.5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 6,
+      "srBonus": -0.9,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 5.1,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 5.1,
+      "field": 0,
+      "total": 5.1
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Avinash",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 5,
+      "runs": 9,
+      "balls": 18,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 50,
+      "dismissalType": "c",
+      "dismissedBy": "Macchi",
+      "fielder": "Rahul",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 1,
+      "oversDcml": 1,
+      "maidens": 0,
+      "runs": 11,
+      "wickets": 0,
+      "economy": 11
+    },
+    "fielding": {
+      "catches": 1,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 9,
+      "srBonus": -2.7,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 6.3,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": -4.4,
+      "bowl": -4.4,
+      "mom": 1.9,
+      "field": 5,
+      "total": 6.9
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Sandy D",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 6,
+      "runs": 3,
+      "balls": 9,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 33.33,
+      "dismissalType": "c",
+      "dismissedBy": "Rahul",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 16,
+      "wickets": 0,
+      "economy": 8
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 3,
+      "srBonus": -1.8,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 1.2,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": -4,
+      "bowl": -4,
+      "mom": -2.8,
+      "field": 0,
+      "total": -2.8
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Gaurav",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.1,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "Storm Dragons",
+    "captain": "",
+    "won": false,
+    "tied": false,
+    "batFirst": true,
+    "batting": {
+      "innings": 1,
+      "position": 7,
+      "runs": 24,
+      "balls": 19,
+      "fours": 3,
+      "sixes": 1,
+      "sr": 126.32,
+      "dismissalType": "not out",
+      "dismissedBy": "",
+      "fielder": "",
+      "notOut": true,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 5,
+      "wickets": 2,
+      "economy": 2.5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 29,
+      "srBonus": 1.89,
+      "notOutBonus": 4.8,
+      "milestoneBonus": 0,
+      "bat": 35.69,
+      "wicketPts": 22,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 4.8,
+      "bowl": 26.8,
+      "mom": 62.49,
+      "field": 0,
+      "total": 62.49
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Ajinath",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 1,
+      "runs": 4,
+      "balls": 6,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 66.67,
+      "dismissalType": "c",
+      "dismissedBy": "Gaurav",
+      "fielder": "Amol",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 11,
+      "wickets": 0,
+      "economy": 5.5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 4,
+      "srBonus": -0.6,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 3.4,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 3.4,
+      "field": 0,
+      "total": 3.4
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Anil",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 2,
+      "runs": 4,
+      "balls": 12,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 33.33,
+      "dismissalType": "b",
+      "dismissedBy": "Gaurav",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 10,
+      "wickets": 1,
+      "economy": 5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 4,
+      "srBonus": -2.4,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 1.6,
+      "wicketPts": 10,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 0.8,
+      "bowl": 10.8,
+      "mom": 12.4,
+      "field": 0,
+      "total": 12.4
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Amar",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 3,
+      "runs": 30,
+      "balls": 30,
+      "fours": 2,
+      "sixes": 2,
+      "sr": 100,
+      "dismissalType": "b",
+      "dismissedBy": "Eshwar",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 8,
+      "wickets": 2,
+      "economy": 4
+    },
+    "fielding": {
+      "catches": 1,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 36,
+      "srBonus": 0,
+      "notOutBonus": 0,
+      "milestoneBonus": 4,
+      "bat": 40,
+      "wicketPts": 20,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 2.4,
+      "bowl": 22.4,
+      "mom": 62.4,
+      "field": 5,
+      "total": 67.4
+    },
+    "isManOfMatch": true,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Vallabh",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 4,
+      "runs": 16,
+      "balls": 15,
+      "fours": 1,
+      "sixes": 1,
+      "sr": 106.67,
+      "dismissalType": "c",
+      "dismissedBy": "Eshwar",
+      "fielder": "Avinash",
+      "notOut": false,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 13,
+      "wickets": 0,
+      "economy": 6.5
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 19,
+      "srBonus": 0.32,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 19.32,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": -1.6,
+      "bowl": -1.6,
+      "mom": 17.72,
+      "field": 0,
+      "total": 17.72
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Rahul",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 5,
+      "runs": 3,
+      "balls": 4,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 75,
+      "dismissalType": "not out",
+      "dismissedBy": "",
+      "fielder": "",
+      "notOut": true,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 3,
+      "oversDcml": 3,
+      "maidens": 0,
+      "runs": 13,
+      "wickets": 2,
+      "economy": 4.33
+    },
+    "fielding": {
+      "catches": 3,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 3,
+      "srBonus": -0.3,
+      "notOutBonus": 5,
+      "milestoneBonus": 0,
+      "bat": 7.7,
+      "wicketPts": 22,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 2.8,
+      "bowl": 24.8,
+      "mom": 32.5,
+      "field": 15,
+      "total": 47.5
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Macchi",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "1",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 6,
+      "runs": 10,
+      "balls": 7,
+      "fours": 2,
+      "sixes": 0,
+      "sr": 142.86,
+      "dismissalType": "not out",
+      "dismissedBy": "",
+      "fielder": "",
+      "notOut": true,
+      "retired": false,
+      "dnb": false
+    },
+    "bowling": {
+      "overs": 1,
+      "oversDcml": 1,
+      "maidens": 0,
+      "runs": 7,
+      "wickets": 1,
+      "economy": 7
+    },
+    "fielding": {
+      "catches": 1,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 12,
+      "srBonus": 1.29,
+      "notOutBonus": 2,
+      "milestoneBonus": 0,
+      "bat": 15.29,
+      "wicketPts": 10,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": -1.2,
+      "bowl": 8.8,
+      "mom": 24.09,
+      "field": 5,
+      "total": 29.09
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
+  },
+  {
+    "player": "Sushil",
+    "season": 6,
+    "matchNum": 10,
+    "inning": 10.2,
+    "date": "2026-04-19",
+    "ground": "Sangvi",
+    "format": "T12",
+    "team": "AjinkyaTara",
+    "captain": "",
+    "won": true,
+    "tied": false,
+    "batFirst": false,
+    "batting": {
+      "innings": 1,
+      "position": 0,
+      "runs": 0,
+      "balls": 0,
+      "fours": 0,
+      "sixes": 0,
+      "sr": 0,
+      "dismissalType": "",
+      "dismissedBy": "",
+      "fielder": "",
+      "notOut": false,
+      "retired": false,
+      "dnb": true
+    },
+    "bowling": {
+      "overs": 2,
+      "oversDcml": 2,
+      "maidens": 0,
+      "runs": 6,
+      "wickets": 0,
+      "economy": 3
+    },
+    "fielding": {
+      "catches": 0,
+      "stumpings": 0,
+      "directRunOuts": 0,
+      "comboRunOuts": 0
+    },
+    "mvp": {
+      "runs": 0,
+      "srBonus": 0,
+      "notOutBonus": 0,
+      "milestoneBonus": 0,
+      "bat": 0,
+      "wicketPts": 0,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 4,
+      "bowl": 4,
+      "mom": 4,
+      "field": 0,
+      "total": 4
+    },
+    "isManOfMatch": false,
+    "seasonMatch": "6-10"
   }
 ]

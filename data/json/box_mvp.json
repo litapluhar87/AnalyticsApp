@@ -3956,5 +3956,131 @@
         "fielding": 0
       }
     ]
+  },
+  {
+    "season": 6,
+    "matchNum": 10,
+    "type": "box",
+    "format": "T12",
+    "ground": "Sangvi",
+    "date": "2026-04-19",
+    "team1": "Storm Dragons",
+    "team2": "AjinkyaTara",
+    "winner": "AjinkyaTara",
+    "mom": "Amar",
+    "leaderboard": [
+      {
+        "player": "Amar",
+        "team": "AjinkyaTara",
+        "total": 67.4,
+        "batting": 40,
+        "bowling": 22.4,
+        "fielding": 5
+      },
+      {
+        "player": "Gaurav",
+        "team": "Storm Dragons",
+        "total": 62.49,
+        "batting": 35.69,
+        "bowling": 26.8,
+        "fielding": 0
+      },
+      {
+        "player": "Rahul",
+        "team": "AjinkyaTara",
+        "total": 47.5,
+        "batting": 7.7,
+        "bowling": 24.8,
+        "fielding": 15
+      },
+      {
+        "player": "Macchi",
+        "team": "AjinkyaTara",
+        "total": 29.09,
+        "batting": 15.29,
+        "bowling": 8.8,
+        "fielding": 5
+      },
+      {
+        "player": "Eshwar",
+        "team": "Storm Dragons",
+        "total": 25.2,
+        "batting": 2.4,
+        "bowling": 22.8,
+        "fielding": 0
+      },
+      {
+        "player": "Vallabh",
+        "team": "AjinkyaTara",
+        "total": 17.72,
+        "batting": 19.32,
+        "bowling": -1.6,
+        "fielding": 0
+      },
+      {
+        "player": "Amol",
+        "team": "Storm Dragons",
+        "total": 16.93,
+        "batting": 10.4,
+        "bowling": 1.53,
+        "fielding": 5
+      },
+      {
+        "player": "Anil",
+        "team": "AjinkyaTara",
+        "total": 12.4,
+        "batting": 1.6,
+        "bowling": 10.8,
+        "fielding": 0
+      },
+      {
+        "player": "Avinash",
+        "team": "Storm Dragons",
+        "total": 6.9,
+        "batting": 6.3,
+        "bowling": -4.4,
+        "fielding": 5
+      },
+      {
+        "player": "Ranjit",
+        "team": "Storm Dragons",
+        "total": 5.1,
+        "batting": 5.1,
+        "bowling": 0,
+        "fielding": 0
+      },
+      {
+        "player": "Mangesh",
+        "team": "Storm Dragons",
+        "total": 4,
+        "batting": 5.2,
+        "bowling": -1.2,
+        "fielding": 0
+      },
+      {
+        "player": "Sushil",
+        "team": "AjinkyaTara",
+        "total": 4,
+        "batting": 0,
+        "bowling": 4,
+        "fielding": 0
+      },
+      {
+        "player": "Ajinath",
+        "team": "AjinkyaTara",
+        "total": 3.4,
+        "batting": 3.4,
+        "bowling": 0,
+        "fielding": 0
+      },
+      {
+        "player": "Sandy D",
+        "team": "Storm Dragons",
+        "total": -2.8,
+        "batting": 1.2,
+        "bowling": -4,
+        "fielding": 0
+      }
+    ]
   }
 ]
