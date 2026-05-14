@@ -256,6 +256,12 @@ async function callClaudeAPI(pdfBase64, prompt) {
   }
 
   const data = await response.json();
+  
+  // Print token usage
+  if (data.usage) {
+    console.log(`📊 Token usage — input: ${data.usage.input_tokens}, output: ${data.usage.output_tokens}, total: ${data.usage.input_tokens + data.usage.output_tokens}`);
+  }
+
   const text = data.content
     .filter(b => b.type === 'text')
     .map(b => b.text)
@@ -386,7 +392,9 @@ async function main() {
     console.log(`✅ Claude returned valid JSON`);
   } catch (e) {
     console.error(`❌ Failed to parse Claude response as JSON`);
-    console.error(`Raw response:\n${rawText}`);
+    console.error(`Response length: ${rawText.length}`);
+    console.error(`Last 300 chars: ${rawText.slice(-300)}`);
+    console.error(`Parse error: ${e.message}`);
     process.exit(1);
   }
 
