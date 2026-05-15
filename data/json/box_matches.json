@@ -1911,6 +1911,22 @@
             "runs": 9,
             "wickets": 0,
             "economy": 4.5
+          },
+          {
+            "player": "Eshwar",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 7,
+            "wickets": 0,
+            "economy": 7
+          },
+          {
+            "player": "Vallabh",
+            "overs": 1.4,
+            "maidens": 0,
+            "runs": 11,
+            "wickets": 0,
+            "economy": 6.59
           }
         ],
         "fow": [
@@ -2256,6 +2272,14 @@
             "runs": 11,
             "wickets": 0,
             "economy": 11
+          },
+          {
+            "player": "Mangesh",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 7,
+            "wickets": 0,
+            "economy": 7
           }
         ],
         "fow": [
@@ -2410,6 +2434,22 @@
             "runs": 18,
             "wickets": 1,
             "economy": 9
+          },
+          {
+            "player": "Amol",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 10,
+            "wickets": 0,
+            "economy": 5
+          },
+          {
+            "player": "Avinash",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 1,
+            "wickets": 0,
+            "economy": 1
           }
         ],
         "fow": [
@@ -2546,6 +2586,14 @@
             "runs": 19,
             "wickets": 0,
             "economy": 9.5
+          },
+          {
+            "player": "Gaurav",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 7,
+            "wickets": 2,
+            "economy": 3.5
           }
         ],
         "fow": [
@@ -2859,6 +2907,14 @@
             "runs": 6,
             "wickets": 1,
             "economy": 3
+          },
+          {
+            "player": "Ranjit",
+            "overs": 1.1,
+            "maidens": 0,
+            "runs": 12,
+            "wickets": 0,
+            "economy": 10.26
           }
         ],
         "fow": [
@@ -2988,6 +3044,30 @@
             "runs": 19,
             "wickets": 0,
             "economy": 19
+          },
+          {
+            "player": "Avinash",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 17,
+            "wickets": 1,
+            "economy": 8.5
+          },
+          {
+            "player": "Amol",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 14,
+            "wickets": 0,
+            "economy": 7
+          },
+          {
+            "player": "Sushil",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 30,
+            "wickets": 0,
+            "economy": 15
           }
         ],
         "fow": [

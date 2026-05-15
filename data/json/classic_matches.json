@@ -2449,6 +2449,22 @@
             "runs": 5,
             "wickets": 0,
             "economy": 5
+          },
+          {
+            "player": "Ajinath",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 6,
+            "wickets": 1,
+            "economy": 6
+          },
+          {
+            "player": "Ranjit",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 5,
+            "wickets": 0,
+            "economy": 5
           }
         ],
         "fow": [
@@ -4264,6 +4280,14 @@
             "runs": 14,
             "wickets": 0,
             "economy": 7
+          },
+          {
+            "player": "Rahul",
+            "overs": 3,
+            "maidens": 1,
+            "runs": 13,
+            "wickets": 0,
+            "economy": 4.33
           }
         ],
         "fow": [
@@ -7659,6 +7683,30 @@
             "runs": 6,
             "wickets": 0,
             "economy": 6
+          },
+          {
+            "player": "Vallabh",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 7,
+            "wickets": 1,
+            "economy": 3.5
+          },
+          {
+            "player": "Ajinath",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 13,
+            "wickets": 0,
+            "economy": 6.5
+          },
+          {
+            "player": "Eshwar",
+            "overs": 0.2,
+            "maidens": 0,
+            "runs": 3,
+            "wickets": 0,
+            "economy": 9
           }
         ],
         "fow": [
@@ -11528,6 +11576,22 @@
             "runs": 2,
             "wickets": 0,
             "economy": 1
+          },
+          {
+            "player": "Gaurav",
+            "overs": 2,
+            "maidens": 0,
+            "runs": 19,
+            "wickets": 0,
+            "economy": 9.5
+          },
+          {
+            "player": "Eshwar",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 7,
+            "wickets": 0,
+            "economy": 7
           }
         ],
         "fow": [],
@@ -11759,6 +11823,22 @@
             "runs": 6,
             "wickets": 0,
             "economy": 3
+          },
+          {
+            "player": "Sandy D",
+            "overs": 1,
+            "maidens": 0,
+            "runs": 8,
+            "wickets": 0,
+            "economy": 8
+          },
+          {
+            "player": "Onkar",
+            "overs": 1.3,
+            "maidens": 0,
+            "runs": 14,
+            "wickets": 0,
+            "economy": 9.33
           }
         ],
         "fow": [],
