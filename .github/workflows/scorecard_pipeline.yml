@@ -153,13 +153,13 @@ jobs:
           fi
           echo "append_error=none" >> $GITHUB_OUTPUT
 
-      # ── 9. Regenerate derived JSON from match data ────────────────────────────
+      # ── 9. Run migrate to regenerate derived JSON ─────────────────────────────
       - name: Regenerate derived data
         if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
         run: |
           echo "⚙️  Regenerating derived JSON from match data..."
           node scripts/regenerate_derived.js
-          
+
       # ── 10. Commit updated JSON files back to repo ────────────────────────────
       - name: Commit updated data files
         if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
@@ -195,9 +195,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAGES_TOKEN }}
         run: |
-          echo "🚀 Deploying to GitHub Pages..."
-          # Configure git for gh-pages deploy
-          git config user.name  "RACL Bot"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAGES_TOKEN }}@github.com/litapluhar87/AnalyticsApp.git
+          git config user.name "RACL Bot"
           git config user.email "racl-bot@users.noreply.github.com"
           npm run deploy
           echo "✅ Deployed to https://litapluhar87.github.io/AnalyticsApp"

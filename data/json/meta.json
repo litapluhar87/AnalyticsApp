@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-04-26T13:48:00.137Z",
+  "generatedAt": "2026-05-14T17:16:58.043Z",
   "box": {
-    "totalMatches": 16,
-    "totalPlayerInnings": 218,
+    "totalMatches": 19,
+    "totalPlayerInnings": 240,
     "uniquePlayers": 19,
     "seasons": [
       3,
@@ -13,8 +13,8 @@
   },
   "classic": {
     "totalMatches": 34,
-    "totalPlayerInnings": 561,
-    "uniquePlayers": 23,
+    "totalPlayerInnings": 507,
+    "uniquePlayers": 25,
     "seasons": [
       1,
       2,

@@ -42,7 +42,7 @@ function calcBattingPoints(batter, rules) {
   const balls  = batter.balls || 0;
   const fours  = batter.fours || 0;
   const sixes  = batter.sixes || 0;
-  const isNotOut = !batter.dismissType || batter.dismissType === '';
+  const isNotOut = !batter.dismissType || batter.dismissType === '' || batter.dismissType === 'not out' || batter.dismissType === 'retired';
 
   // Base run points
   let points = runs * r.runPoints;
@@ -52,12 +52,13 @@ function calcBattingPoints(batter, rules) {
   points += sixes * r.boundaryBonus.six;
 
   // Strike rate bonus/penalty
-  // Bonus:   0.3 x (SR - Threshold) x runs
-  // Penalty: 0.3 x (SR - Threshold) x balls  [diff negative so result negative]
+  // diff is in percentage points (e.g. 26.32), divide by 100 to normalise
+  // Bonus:   0.3 x (diff/100) x runs
+  // Penalty: 0.3 x (diff/100) x balls  [diff negative so result negative]
   if (balls > 0) {
     const actualSR    = (runs / balls) * 100;
     const thresholdSR = r.strikeRate.threshold * 100;
-    const srDiff      = actualSR - thresholdSR;
+    const srDiff      = (actualSR - thresholdSR) / 100;
 
     if (srDiff > 0) {
       points += srDiff * r.strikeRate.bonusMultiplier * runs;
@@ -67,19 +68,22 @@ function calcBattingPoints(batter, rules) {
     }
   }
 
-  // Milestone bonuses (flat, additive)
-  const milestones = Object.entries(r.milestones)
+  // Milestones — absolute (highest bracket reached, not additive)
+  const batMilestones = Object.entries(r.milestones)
     .map(([threshold, bonus]) => ({ threshold: Number(threshold), bonus }))
-    .sort((a, b) => a.threshold - b.threshold);
-
-  for (const { threshold, bonus } of milestones) {
-    if (runs >= threshold) points += bonus;
+    .sort((a, b) => b.threshold - a.threshold); // descending
+  for (const { threshold, bonus } of batMilestones) {
+    if (runs >= threshold) { points += bonus; break; }
   }
 
-  // Not out bonus: 0.2 x runs (raw runs only, not batting points)
-  // Applied only if runs >= minimumPoints threshold
-  if (isNotOut && runs >= r.notOutBonus.minimumPoints) {
-    points += runs * r.notOutBonus.multiplier;
+  // Not-out bonus:
+  // notOutCalc = runs x 0.2
+  // shortfall  = max(0, minimumPoints - runs)
+  // finalBonus = max(notOutCalc, shortfall)
+  if (isNotOut) {
+    const notOutCalc = runs * r.notOutBonus.multiplier;
+    const shortfall  = Math.max(0, r.notOutBonus.minimumPoints - runs);
+    points += Math.max(notOutCalc, shortfall);
   }
 
   return points;
@@ -97,6 +101,11 @@ const DISMISS_TO_WICKET_TYPE = {
   'ro':  'runOut',
 };
 
+// Handle both "ro" (new parser) and "run out" (old Excel migration)
+function isRunOut(dt) {
+  return dt === 'ro' || dt === 'run out';
+}
+
 function calcBowlingPoints(bowler, battingInnings, rules) {
   const r = rules.bowling;
   if (!bowler) return 0;
@@ -109,7 +118,7 @@ function calcBowlingPoints(bowler, battingInnings, rules) {
   // Wicket points — need to know dismissal types for each wicket taken
   // We find the batters dismissed by this bowler in the batting innings
   const dismissedByBowler = (battingInnings?.batters || []).filter(
-    b => b.bowler === bowler.player && b.dismissType && b.dismissType !== 'ro' && b.dismissType !== ''
+    b => b.bowler === bowler.player && b.dismissType && !isRunOut(b.dismissType) && b.dismissType !== ''
   );
 
   let wicketPoints = 0;
@@ -129,18 +138,17 @@ function calcBowlingPoints(bowler, battingInnings, rules) {
     const actualEco   = runs / overs;
     const expectedEco = r.economy.expectedEconomy;
     const ecoDiff     = expectedEco - actualEco; // positive = bowling under expected = good
-    economyPoints = ecoDiff * runs * r.economy.multiplier;
+    economyPoints = ecoDiff * overs * r.economy.multiplier;
     economyPoints = Math.max(economyPoints, r.economy.maxPenalty);
   }
 
-  // Milestone bonus
+  // Milestone — absolute (highest bracket reached, not additive)
   let milestonePoints = 0;
-  const milestones = Object.entries(r.milestones)
+  const bowlMilestones = Object.entries(r.milestones)
     .map(([threshold, bonus]) => ({ threshold: Number(threshold), bonus }))
-    .sort((a, b) => a.threshold - b.threshold);
-
-  for (const { threshold, bonus } of milestones) {
-    if (wickets >= threshold) milestonePoints += bonus;
+    .sort((a, b) => b.threshold - a.threshold); // descending
+  for (const { threshold, bonus } of bowlMilestones) {
+    if (wickets >= threshold) { milestonePoints = bonus; break; }
   }
 
   return wicketPoints + maidenPoints + economyPoints + milestonePoints;
@@ -172,7 +180,7 @@ function calcFieldingPoints(playerName, allInnings, rules) {
         points += r.stumping;
       }
 
-      if (dt === 'ro') {
+      if (isRunOut(dt)) {
         // Run out: fielder string may be "Ranjit / Sandy D" (combo) or single name
         const fielderStr = batter.fielder || '';
         if (fielderStr.includes('/')) {
