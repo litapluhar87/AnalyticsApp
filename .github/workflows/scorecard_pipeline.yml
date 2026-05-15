@@ -153,13 +153,13 @@ jobs:
           fi
           echo "append_error=none" >> $GITHUB_OUTPUT
 
-      # ── 9. Run migrate to regenerate derived JSON ─────────────────────────────
-      - name: Regenerate derived data (migrate)
+      # ── 9. Regenerate derived JSON from match data ────────────────────────────
+      - name: Regenerate derived data
         if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
         run: |
-          echo "⚙️  Running npm run migrate..."
-          npm run migrate
-
+          echo "⚙️  Regenerating derived JSON from match data..."
+          node scripts/regenerate_derived.js
+          
       # ── 10. Commit updated JSON files back to repo ────────────────────────────
       - name: Commit updated data files
         if: steps.detect.outputs.skip != 'true' && steps.append.outputs.append_error == 'none'
