@@ -268,7 +268,7 @@ function Rank({ rank, i, dimmed }) {
 // ── MVP Table ─────────────────────────────────────────────────────────────────
 function MVPTable({ data }) {
   if (!data) return <Empty/>;
-  const { group1=[], group2=[], totalMatches, threshold60 } = data;
+  const { group1=[], group2=[], totalMatches, threshold60, mvpThreshold=0.6 } = data;
 
   function Row({ p, i, dimmed }) {
     const showMoM = (p.momCount||0) > 0;
@@ -307,7 +307,7 @@ function MVPTable({ data }) {
       {group2.length > 0 && (
         <>
           <div style={S.divider}>
-            Below {Math.round(mvpThreshold * 100)}% threshold ({threshold60} of {totalMatches} matches)
+            Below {Math.round((mvpThreshold || 0.6) * 100)}% threshold ({threshold60} of {totalMatches} matches)
           </div>
           {group2.map((p,i) => <Row key={p.player} p={p} i={i} dimmed={true}/>)}
         </>
