@@ -196,7 +196,7 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
     captainWins,
     average:       outs > 0
       ? Math.round((runs / outs) * 10) / 10
-      : runs,
+      : null,
     strikeRate:    balls > 0
       ? Math.round((runs / balls) * 1000) / 10
       : 0,
