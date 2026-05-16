@@ -184,10 +184,10 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
     mvpTotal:      Math.round(mvpTotal    * 10) / 10,
     mvpPerInning:  inningsParticipated > 0
       ? Math.round((mvpTotal    / inningsParticipated) * 10) / 10 : 0,
-    mvpBatPerInn:  inningsParticipated > 0
-      ? Math.round((mvpBat      / inningsParticipated) * 10) / 10 : 0,
-    mvpBowlPerInn: inningsParticipated > 0
-      ? Math.round((mvpBowl     / inningsParticipated) * 10) / 10 : 0,
+    mvpBatPerInn:  batRows.length > 0
+      ? Math.round((mvpBat      / batRows.length)      * 10) / 10 : 0,
+    mvpBowlPerInn: bowlRows.length > 0
+      ? Math.round((mvpBowl     / bowlRows.length)     * 10) / 10 : 0,
     mvpFieldPerInn:inningsParticipated > 0
       ? Math.round((mvpField    / inningsParticipated) * 10) / 10 : 0,
     mvpMomPerInn:  inningsParticipated > 0
