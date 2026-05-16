@@ -4082,5 +4082,139 @@
         "fielding": 0
       }
     ]
+  },
+  {
+    "season": 6,
+    "matchNum": 11,
+    "type": "box",
+    "format": "Test",
+    "ground": "Sangvi",
+    "date": "2025-11-16",
+    "team1": "Mighty Legends",
+    "team2": "Vajra Prahar",
+    "winner": "Mighty Legends",
+    "mom": "Avinash",
+    "leaderboard": [
+      {
+        "player": "Rahul",
+        "team": "Vajra Prahar",
+        "total": 65.8,
+        "batting": 46.6,
+        "bowling": 7.2,
+        "fielding": 12
+      },
+      {
+        "player": "Avinash",
+        "team": "Mighty Legends",
+        "total": 62.5,
+        "batting": 36.5,
+        "bowling": 20,
+        "fielding": 6
+      },
+      {
+        "player": "Amol",
+        "team": "Mighty Legends",
+        "total": 59.4,
+        "batting": 29.4,
+        "bowling": 22,
+        "fielding": 8
+      },
+      {
+        "player": "Amar",
+        "team": "Vajra Prahar",
+        "total": 48.33,
+        "batting": 36.6,
+        "bowling": 8.73,
+        "fielding": 3
+      },
+      {
+        "player": "Eshwar",
+        "team": "Mighty Legends",
+        "total": 46.1,
+        "batting": 20.9,
+        "bowling": 5.2,
+        "fielding": 20
+      },
+      {
+        "player": "Sandy D",
+        "team": "Vajra Prahar",
+        "total": 44.3,
+        "batting": 13.1,
+        "bowling": 23.2,
+        "fielding": 8
+      },
+      {
+        "player": "Macchi",
+        "team": "Mighty Legends",
+        "total": 42.4,
+        "batting": 18.4,
+        "bowling": -2,
+        "fielding": 26
+      },
+      {
+        "player": "Ajinath",
+        "team": "Vajra Prahar",
+        "total": 41,
+        "batting": 26.2,
+        "bowling": 2.8,
+        "fielding": 12
+      },
+      {
+        "player": "Anil",
+        "team": "Mighty Legends",
+        "total": 40.12,
+        "batting": 15.12,
+        "bowling": 20,
+        "fielding": 5
+      },
+      {
+        "player": "Mangesh",
+        "team": "Mighty Legends",
+        "total": 37.3,
+        "batting": 11.1,
+        "bowling": 26.2,
+        "fielding": 0
+      },
+      {
+        "player": "Vallabh",
+        "team": "Vajra Prahar",
+        "total": 32.4,
+        "batting": 4,
+        "bowling": 22.4,
+        "fielding": 6
+      },
+      {
+        "player": "Sushil",
+        "team": "Mighty Legends",
+        "total": 31.47,
+        "batting": 5.6,
+        "bowling": 25.87,
+        "fielding": 0
+      },
+      {
+        "player": "Sudhir",
+        "team": "Mighty Legends",
+        "total": 23.1,
+        "batting": 23.1,
+        "bowling": 0,
+        "fielding": 0
+      },
+      {
+        "player": "Ranjit",
+        "team": "Vajra Prahar",
+        "total": 17.5,
+        "batting": 4.3,
+        "bowling": 13.2,
+        "fielding": 0
+      },
+      {
+        "player": "Gaurav",
+        "team": "Vajra Prahar",
+        "total": 10.4,
+        "batting": 2.8,
+        "bowling": 1.6,
+        "fielding": 6
+      }
+    ]
   }
 ]
