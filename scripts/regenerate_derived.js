@@ -266,12 +266,16 @@ function buildPlayerRecords(match, config) {
         inn => (inn.bowlers || []).some(b => b.player === batter.player)
       );
 
-      // For T12: take first bowling innings found
+      // For T12: bowling should be from innings where batting team was BOWLING
+      // i.e. innings where inn.team !== battingTeam (opposite team was batting)
+      // This correctly handles commons players who appear in both innings
       if (match.format !== 'Test' && allBowlingInnings.length > 0) {
-        const bi = allBowlingInnings[0];
-        bowlingEntry   = bi.bowlers.find(b => b.player === batter.player);
-        bowlingInnings = bi;
-        bowlMvp = calcBowlMvp(bowlingEntry, bi, rules);
+        const correctBowlInnings = allBowlingInnings.find(
+          inn => inn.team !== battingTeam
+        ) || allBowlingInnings[0];
+        bowlingEntry   = correctBowlInnings.bowlers.find(b => b.player === batter.player);
+        bowlingInnings = correctBowlInnings;
+        if (bowlingEntry) bowlMvp = calcBowlMvp(bowlingEntry, correctBowlInnings, rules);
       }
 
       // For Test: use ONLY the corresponding bowling innings for this batting innings
@@ -401,12 +405,15 @@ function buildPlayerRecords(match, config) {
           }
         }
       } else {
-        // T12: find first innings where this player bowled
-        const allBowlingInnings = match.innings.filter(
+        // T12: bowling should be from innings where DNB team was BOWLING
+        // i.e. innings where inn.team !== battingTeam (opposite team was batting)
+        const allDnbBowlingInnings = match.innings.filter(
           inn => (inn.bowlers || []).some(b => b.player === playerName)
         );
-        if (allBowlingInnings.length > 0) {
-          const bi = allBowlingInnings[0];
+        if (allDnbBowlingInnings.length > 0) {
+          const bi = allDnbBowlingInnings.find(
+            inn => inn.team !== battingTeam
+          ) || allDnbBowlingInnings[0];
           dnbBowlEntry = bi.bowlers.find(b => b.player === playerName);
           if (dnbBowlEntry) {
             dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, bi, rules);
