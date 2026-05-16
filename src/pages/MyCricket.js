@@ -259,7 +259,7 @@ function buildStatFilters() {
             <Grid5 items={[
               {n:ini(stats.innings),    l:'Innings'},
               {n:ini(stats.runs),       l:'Runs',        hl:HL},
-              {n:ini(stats.average),    l:'Average'},
+              {n: stats.average ?? '-', l:'Average'},
               {n:ini(stats.strikeRate), l:'Strike rate'},
               {n:ini(stats.highScore),  l:'High score'},
               {n:ini(stats.notOuts),    l:'Not outs'},
