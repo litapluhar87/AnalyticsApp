@@ -209,8 +209,10 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
       ? Math.round((mvpBowl     / bowlRows.length)     * 10) / 10 : 0,
     mvpFieldPerInn:inningsParticipated > 0
       ? Math.round((mvpField    / inningsParticipated) * 10) / 10 : 0,
-    mvpMomPerInn:  inningsParticipated > 0
-      ? Math.round((mvpMomTotal / inningsParticipated) * 10) / 10 : 0,
+    mvpMomPerInn: Math.round((
+      (batRows.length  > 0 ? mvpBat  / batRows.length  : 0) +
+      (bowlRows.length > 0 ? mvpBowl / bowlRows.length : 0)
+    ) * 10) / 10,
     captainMatches,
     captainWins,
     average:       outs > 0
