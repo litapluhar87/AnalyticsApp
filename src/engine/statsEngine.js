@@ -121,8 +121,27 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
   ).size;
 
   // Tie detection from match-level data
+  // For Test matches, participation is fractional based on innings played
+  // T12: 2 innings total → each inning = 0.5, need both = 1.0
+  // Test: 4 innings total → each inning = 0.25, need all 4 = 1.0
   const matchKeys = new Set(rows.map(r => `${r.season}-${r.matchNum}`));
-  const matches   = matchKeys.size;
+
+  let matches = 0;
+  for (const key of matchKeys) {
+    const matchRows = rows.filter(r => `${r.season}-${r.matchNum}` === key);
+    const format = matchRows[0]?.format;
+  
+    if (format !== 'Test') {
+      // T12 or any non-Test — always 1 full match
+      matches += 1;
+    } else {
+      // Test — normal participation = 2 records (one per team batting innings)
+      // 2 records = 1.0 match, 1 record = 0.5 match
+      const inningsParticipated = matchRows.length;
+      matches += Math.min(inningsParticipated / 2, 1.0);
+    }
+  }
+  matches = Math.round(matches * 100) / 100;
 
   // Won count
   const wonMatches = new Set(
