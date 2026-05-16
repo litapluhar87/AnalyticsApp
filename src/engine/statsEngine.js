@@ -109,7 +109,7 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
   const stumpings  = rows.reduce((s, r) => s + (r.fielding?.stumpings     || 0), 0);
   const roDirects  = rows.reduce((s, r) => s + (r.fielding?.directRunOuts || 0), 0);
   const roCombos   = rows.reduce((s, r) => s + (r.fielding?.comboRunOuts  || 0), 0);
-  const momCount     = rows.filter(r => r.isManOfMatch).length;
+  const momCount = new Set(rows.filter(r => r.isManOfMatch).map(r => `${r.season}-${r.matchNum}`)).size;
 
   // Captaincy
   const captainRows  = rows.filter(r => r.captain === '1' || r.captain === 1);
