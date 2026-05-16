@@ -307,7 +307,7 @@ function MVPTable({ data }) {
       {group2.length > 0 && (
         <>
           <div style={S.divider}>
-            Below 60% threshold ({threshold60} of {totalMatches} matches)
+            Below {Math.round(mvpThreshold * 100)}% threshold ({threshold60} of {totalMatches} matches)
           </div>
           {group2.map((p,i) => <Row key={p.player} p={p} i={i} dimmed={true}/>)}
         </>
