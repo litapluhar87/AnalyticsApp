@@ -136,6 +136,7 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
   const mvpMomTotal = rows.reduce((s, r) => s + (r.mvp?.mom || 0), 0);
 
   const innings  = batRows.length;
+  const inningsParticipated = Math.max(batRows.length, bowlRows.length);
   const outs     = innings - notOuts;
 
   // Bowling SR = balls per wicket
@@ -181,17 +182,16 @@ function aggregatePlayerStats(rows, config, allMatchRows) {
 	mvpFieldPerInn: innings > 0 ? Math.round((mvpField / innings) * 10) / 10 : 0,
     mvpMom:        Math.round(mvpMomTotal * 10) / 10,
     mvpTotal:      Math.round(mvpTotal    * 10) / 10,
-    mvpPerInning:  innings > 0
-      ? Math.round((mvpTotal / innings) * 10) / 10
-      : 0,
-    mvpBatPerInn:  innings > 0
-      ? Math.round((mvpBat      / innings) * 10) / 10 : 0,
-    mvpBowlPerInn: innings > 0
-      ? Math.round((mvpBowl     / innings) * 10) / 10 : 0,
-    mvpFieldPerInn:innings > 0
-      ? Math.round((mvpField    / innings) * 10) / 10 : 0,
-    mvpMomPerInn:  innings > 0
-      ? Math.round((mvpMomTotal / innings) * 10) / 10 : 0,
+    mvpPerInning:  inningsParticipated > 0
+      ? Math.round((mvpTotal    / inningsParticipated) * 10) / 10 : 0,
+    mvpBatPerInn:  inningsParticipated > 0
+      ? Math.round((mvpBat      / inningsParticipated) * 10) / 10 : 0,
+    mvpBowlPerInn: inningsParticipated > 0
+      ? Math.round((mvpBowl     / inningsParticipated) * 10) / 10 : 0,
+    mvpFieldPerInn:inningsParticipated > 0
+      ? Math.round((mvpField    / inningsParticipated) * 10) / 10 : 0,
+    mvpMomPerInn:  inningsParticipated > 0
+      ? Math.round((mvpMomTotal / inningsParticipated) * 10) / 10 : 0,
     captainMatches,
     captainWins,
     average:       outs > 0
