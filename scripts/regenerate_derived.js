@@ -254,28 +254,44 @@ function buildPlayerRecords(match, config) {
       // Batting MVP
       const batMvp = calcBatMvp(batter, rules);
 
-      // Bowling MVP — find ALL innings where this player appears as a bowler
-      // For commons (played both teams), a player can bowl in ANY innings
-      // So search ALL innings, not just opponent innings
+      // Bowling MVP — assign bowling based on innings index
+      // Rule: check if player bowled in the SAME innings index first (commons scenario)
+      // If not, check the opposite innings (normal scenario)
+      // This ensures bowling is never double-counted for commons players
       let bowlMvp = { wicketPts: 0, maidenBonus: 0, wicketBonus: 0, economyBonus: 0, bowl: 0 };
       let bowlingEntry = null;
       let bowlingInnings = null;
 
-      // Find all innings where this player bowled (any team)
-      const allBowlingInnings = match.innings.filter(
-        inn => (inn.bowlers || []).some(b => b.player === batter.player)
-      );
+      if (match.format !== 'Test') {
+        // Check same innings index first (commons who bowl in their own batting innings)
+        const sameInn   = match.innings[inningsIdx];
+        const sameEntry = sameInn && (sameInn.bowlers || []).find(b => b.player === batter.player);
 
-      // For T12: bowling should be from innings where batting team was BOWLING
-      // i.e. innings where inn.team !== battingTeam (opposite team was batting)
-      // This correctly handles commons players who appear in both innings
-      if (match.format !== 'Test' && allBowlingInnings.length > 0) {
-        const correctBowlInnings = allBowlingInnings.find(
-          inn => inn.team !== battingTeam
-        ) || allBowlingInnings[0];
-        bowlingEntry   = correctBowlInnings.bowlers.find(b => b.player === batter.player);
-        bowlingInnings = correctBowlInnings;
-        if (bowlingEntry) bowlMvp = calcBowlMvp(bowlingEntry, correctBowlInnings, rules);
+        if (sameEntry) {
+          // Commons: bowled in same innings as batted
+          bowlingEntry   = sameEntry;
+          bowlingInnings = sameInn;
+          bowlMvp = calcBowlMvp(sameEntry, sameInn, rules);
+        } else {
+          // Normal: check if player bowled in opposite innings
+          // But only if that innings bowling hasn't been claimed by a same-innings record
+          const otherIdx   = inningsIdx === 0 ? 1 : 0;
+          const otherInn   = match.innings[otherIdx];
+          // Check if another batter record already claimed this innings bowling
+          // (i.e. a commons player batted AND bowled in otherIdx innings)
+          const otherInnHasCommons = (otherInn?.batters || []).some(b =>
+            b.player === batter.player &&
+            (otherInn?.bowlers || []).some(bowl => bowl.player === batter.player)
+          );
+          if (!otherInnHasCommons) {
+            const otherEntry = otherInn && (otherInn.bowlers || []).find(b => b.player === batter.player);
+            if (otherEntry) {
+              bowlingEntry   = otherEntry;
+              bowlingInnings = otherInn;
+              bowlMvp = calcBowlMvp(otherEntry, otherInn, rules);
+            }
+          }
+        }
       }
 
       // For Test: use ONLY the corresponding bowling innings for this batting innings
@@ -405,18 +421,33 @@ function buildPlayerRecords(match, config) {
           }
         }
       } else {
-        // T12: bowling should be from innings where DNB team was BOWLING
-        // i.e. innings where inn.team !== battingTeam (opposite team was batting)
-        const allDnbBowlingInnings = match.innings.filter(
-          inn => (inn.bowlers || []).some(b => b.player === playerName)
-        );
-        if (allDnbBowlingInnings.length > 0) {
-          const bi = allDnbBowlingInnings.find(
-            inn => inn.team !== battingTeam
-          ) || allDnbBowlingInnings[0];
-          dnbBowlEntry = bi.bowlers.find(b => b.player === playerName);
+        // T12 DNB: check same innings index first, then opposite
+        // Same logic as batters to prevent double-counting
+        const dnbSameInn   = match.innings[inningsIdx];
+        const dnbSameEntry = dnbSameInn && (dnbSameInn.bowlers||[]).find(b => b.player === playerName);
+
+        let dnbBi = null;
+        if (dnbSameEntry) {
+          // Bowled in same innings as DNB appearance
+          dnbBi = dnbSameInn;
+        } else {
+          // Check opposite innings — but only if not claimed by a batter record
+          const dnbOtherIdx = inningsIdx === 0 ? 1 : 0;
+          const dnbOtherInn = match.innings[dnbOtherIdx];
+          const dnbOtherHasCommons = (dnbOtherInn?.batters||[]).some(b =>
+            b.player === playerName &&
+            (dnbOtherInn?.bowlers||[]).some(bowl => bowl.player === playerName)
+          );
+          if (!dnbOtherHasCommons) {
+            const dnbOtherEntry = dnbOtherInn && (dnbOtherInn.bowlers||[]).find(b => b.player === playerName);
+            if (dnbOtherEntry) dnbBi = dnbOtherInn;
+          }
+        }
+
+        if (dnbBi) {
+          dnbBowlEntry = dnbBi.bowlers.find(b => b.player === playerName);
           if (dnbBowlEntry) {
-            dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, bi, rules);
+            dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, dnbBi, rules);
             dnbBowlOvers    = dnbBowlEntry.overs;
             dnbBowlOversDcml= r2(toDecimalOvers(dnbBowlEntry.overs));
             dnbBowlMaidens  = dnbBowlEntry.maidens;
