@@ -318,7 +318,37 @@ function determineMoM(leaderboard, match, momOverridePoints) {
     return null;
   }
 
-  const topper = leaderboard[0];
+  // Filter to eligible players only
+  // For Test: player must appear in at least 2 innings (their team bats twice)
+  // For T12:  player must appear in at least 1 innings
+  // Appearance = batted, bowled, or DNB in that innings
+  const isTest      = match.format === 'Test';
+  const minInnings  = isTest ? 2 : 1;
+
+  function countInningsAppeared(playerName) {
+    return match.innings.filter(inn =>
+      (inn.batters || []).some(b => b.player === playerName) ||
+      (inn.bowlers || []).some(b => b.player === playerName) ||
+      (inn.dnb     || []).includes(playerName)
+    ).length;
+  }
+
+  const eligibleLeaderboard = leaderboard.filter(p => {
+    const appeared = countInningsAppeared(p.player);
+    if (appeared < minInnings) {
+      console.log(`   ⏭️  ${p.player} ineligible for MoM — only appeared in ${appeared}/${match.innings.length} innings`);
+      return false;
+    }
+    return true;
+  });
+
+  if (eligibleLeaderboard.length === 0) {
+    console.warn('⚠️  No eligible players for MoM — falling back to full leaderboard');
+    // Fall back to full leaderboard to avoid null MoM
+  }
+
+  const activeLB = eligibleLeaderboard.length > 0 ? eligibleLeaderboard : leaderboard;
+  const topper   = activeLB[0];
 
   // Tie — topper always wins
   if (isTie) {
@@ -333,7 +363,7 @@ function determineMoM(leaderboard, match, momOverridePoints) {
   }
 
   // Topper is from losing team — find next player from winning team
-  const nextWinner = leaderboard.find(p => p.team === winner);
+  const nextWinner = activeLB.find(p => p.team === winner);
 
   if (!nextWinner) {
     // No players from winning team found — fall back to topper
