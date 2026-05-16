@@ -274,39 +274,19 @@ function buildPlayerRecords(match, config) {
         bowlMvp = calcBowlMvp(bowlingEntry, bi, rules);
       }
 
-      // For Test: aggregate bowling across BOTH innings this player bowled in
+      // For Test: use ONLY the corresponding bowling innings for this batting innings
+      // inningsIdx 0 → bowls in idx 1, idx 1 → bowls in idx 0
+      // inningsIdx 2 → bowls in idx 3, idx 3 → bowls in idx 2
       if (match.format === 'Test') {
-        const bowlingInningsList = allBowlingInnings;
-        if (bowlingInningsList.length > 0) {
-          // Recalculate aggregated bowling
-          let totalWicketPts = 0, totalMaiden = 0, totalWicketBonus = 0, totalEcoBonus = 0;
-          let totalOvers = 0, totalRuns = 0, totalWickets = 0, totalMaidens = 0;
-
-          for (const bi of bowlingInningsList) {
-            const be = bi.bowlers.find(b => b.player === batter.player);
-            if (!be) continue;
-            const bm = calcBowlMvp(be, bi, rules);
-            totalWicketPts   += bm.wicketPts;
-            totalMaiden      += bm.maidenBonus;
-            totalWicketBonus += bm.wicketBonus;
-            totalEcoBonus    += bm.economyBonus;
-            totalOvers       += toDecimalOvers(be.overs);
-            totalRuns        += be.runs;
-            totalWickets     += be.wickets;
-            totalMaidens     += be.maidens;
+        const correspondingBowlIdx = inningsIdx % 2 === 0 ? inningsIdx + 1 : inningsIdx - 1;
+        const correspondingInn     = match.innings[correspondingBowlIdx];
+        if (correspondingInn) {
+          const be = (correspondingInn.bowlers || []).find(b => b.player === batter.player);
+          if (be) {
+            bowlingEntry   = be;
+            bowlingInnings = correspondingInn;
+            bowlMvp = calcBowlMvp(be, correspondingInn, rules);
           }
-
-          bowlMvp = {
-            wicketPts:   r2(totalWicketPts),
-            maidenBonus: r2(totalMaiden),
-            wicketBonus: r2(totalWicketBonus),
-            economyBonus:r2(totalEcoBonus),
-            bowl:        r2(totalWicketPts + totalMaiden + totalWicketBonus + totalEcoBonus),
-          };
-
-          // Use first bowling innings for the entry reference
-          bowlingEntry   = bowlingInningsList[0].bowlers.find(b => b.player === batter.player);
-          bowlingInnings = bowlingInningsList[0];
         }
       }
 
@@ -382,7 +362,7 @@ function buildPlayerRecords(match, config) {
           field:         fieldData.field,
           total,
         },
-        isManOfMatch: batter.player === momPlayer,
+        isManOfMatch: batter.player === momPlayer && inningsIdx === match.innings.findIndex(inn => (inn.batters||[]).some(b => b.player === batter.player)),
         seasonMatch:  `${match.season}-${match.matchNum}`,
       };
 
