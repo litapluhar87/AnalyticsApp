@@ -277,12 +277,12 @@ function buildPlayerRecords(match, config) {
           // But only if that innings bowling hasn't been claimed by a same-innings record
           const otherIdx   = inningsIdx === 0 ? 1 : 0;
           const otherInn   = match.innings[otherIdx];
-          // Check if another batter record already claimed this innings bowling
-          // (i.e. a commons player batted AND bowled in otherIdx innings)
-          const otherInnHasCommons = (otherInn?.batters || []).some(b =>
-            b.player === batter.player &&
-            (otherInn?.bowlers || []).some(bowl => bowl.player === batter.player)
-          );
+          // Check if another record already claimed this innings bowling
+          // Covers: commons who batted+bowled in otherIdx, OR DNB+bowled in otherIdx
+          const otherInnHasCommons = (
+            (otherInn?.batters || []).some(b => b.player === batter.player) ||
+            (otherInn?.dnb     || []).includes(batter.player)
+          ) && (otherInn?.bowlers || []).some(bowl => bowl.player === batter.player);
           if (!otherInnHasCommons) {
             const otherEntry = otherInn && (otherInn.bowlers || []).find(b => b.player === batter.player);
             if (otherEntry) {
@@ -434,10 +434,10 @@ function buildPlayerRecords(match, config) {
           // Check opposite innings — but only if not claimed by a batter record
           const dnbOtherIdx = inningsIdx === 0 ? 1 : 0;
           const dnbOtherInn = match.innings[dnbOtherIdx];
-          const dnbOtherHasCommons = (dnbOtherInn?.batters||[]).some(b =>
-            b.player === playerName &&
-            (dnbOtherInn?.bowlers||[]).some(bowl => bowl.player === playerName)
-          );
+          const dnbOtherHasCommons = (
+            (dnbOtherInn?.batters||[]).some(b => b.player === playerName) ||
+            (dnbOtherInn?.dnb    ||[]).includes(playerName)
+          ) && (dnbOtherInn?.bowlers||[]).some(bowl => bowl.player === playerName);
           if (!dnbOtherHasCommons) {
             const dnbOtherEntry = dnbOtherInn && (dnbOtherInn.bowlers||[]).find(b => b.player === playerName);
             if (dnbOtherEntry) dnbBi = dnbOtherInn;
