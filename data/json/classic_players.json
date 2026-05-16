@@ -11567,14 +11567,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 6.57,
-      "wicketPts": 20,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 1.6,
-      "bowl": 21.6,
-      "mom": 28.17,
+      "economyBonus": 0.4,
+      "bowl": 10.4,
+      "mom": 16.97,
       "field": 4,
-      "total": 32.17
+      "total": 20.97
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11630,11 +11630,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.4,
-      "bowl": 0.4,
-      "mom": 1.48,
+      "economyBonus": -0.8,
+      "bowl": -0.8,
+      "mom": 0.28,
       "field": 0,
-      "total": 1.48
+      "total": 0.28
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11690,11 +11690,11 @@
       "wicketPts": 22,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7.8,
-      "bowl": 14.2,
-      "mom": 24.63,
+      "economyBonus": -0.8,
+      "bowl": 21.2,
+      "mom": 31.63,
       "field": 0,
-      "total": 24.63
+      "total": 31.63
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11747,14 +11747,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 18.27,
-      "wicketPts": 10,
-      "maidenBonus": 5,
+      "wicketPts": 0,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 6.2,
-      "bowl": 21.2,
-      "mom": 39.47,
+      "economyBonus": -0.4,
+      "bowl": -0.4,
+      "mom": 17.87,
       "field": 9,
-      "total": 48.47
+      "total": 26.87
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11810,11 +11810,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": -1.6,
-      "mom": 8.65,
+      "economyBonus": -0.8,
+      "bowl": -0.8,
+      "mom": 9.45,
       "field": 0,
-      "total": 8.65
+      "total": 9.45
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11930,11 +11930,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": -5.6,
-      "mom": -5.88,
+      "economyBonus": -4,
+      "bowl": -4,
+      "mom": -4.28,
       "field": 0,
-      "total": -5.88
+      "total": -4.28
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -11990,11 +11990,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -4.4,
-      "bowl": -4.4,
-      "mom": 2.42,
+      "economyBonus": -3.6,
+      "bowl": -3.6,
+      "mom": 3.22,
       "field": 5,
-      "total": 7.42
+      "total": 8.22
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12110,11 +12110,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.2,
-      "bowl": -3.2,
-      "mom": 7.05,
+      "economyBonus": 0.4,
+      "bowl": 0.4,
+      "mom": 10.65,
       "field": 19,
-      "total": 26.05
+      "total": 29.65
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12227,14 +12227,14 @@
       "notOutBonus": 4.6,
       "milestoneBonus": 0,
       "bat": 33.34,
-      "wicketPts": 20,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 3.2,
-      "bowl": 23.2,
-      "mom": 56.54,
+      "economyBonus": 2.8,
+      "bowl": 12.8,
+      "mom": 46.14,
       "field": 13,
-      "total": 69.54
+      "total": 59.14
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12287,14 +12287,14 @@
       "notOutBonus": 3,
       "milestoneBonus": 0,
       "bat": 22.25,
-      "wicketPts": 74,
+      "wicketPts": 32,
       "maidenBonus": 0,
-      "wicketBonus": 14,
-      "economyBonus": -2.6,
-      "bowl": 85.4,
-      "mom": 107.65,
+      "wicketBonus": 6,
+      "economyBonus": 0.2,
+      "bowl": 38.2,
+      "mom": 60.45,
       "field": 0,
-      "total": 107.65
+      "total": 60.45
     },
     "isManOfMatch": true,
     "seasonMatch": "3-12"
@@ -12388,12 +12388,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
-      "maidens": 0,
-      "runs": 14,
-      "wickets": 0,
-      "economy": 4.67
+      "overs": 3.1,
+      "oversDcml": 3.17,
+      "maidens": 1,
+      "runs": 6,
+      "wickets": 1,
+      "economy": 1.89
     },
     "fielding": {
       "catches": 1,
@@ -12410,11 +12410,11 @@
       "wicketPts": 10,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": 6.2,
-      "bowl": 21.2,
-      "mom": 23.98,
+      "economyBonus": 6.6,
+      "bowl": 21.6,
+      "mom": 24.38,
       "field": 9,
-      "total": 32.98
+      "total": 33.38
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12451,9 +12451,9 @@
       "overs": 3,
       "oversDcml": 3,
       "maidens": 0,
-      "runs": 13,
+      "runs": 12,
       "wickets": 1,
-      "economy": 4.33
+      "economy": 4
     },
     "fielding": {
       "catches": 0,
@@ -12467,14 +12467,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 4,
       "bat": 53.42,
-      "wicketPts": 20,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 1.6,
-      "bowl": 21.6,
-      "mom": 75.02,
+      "economyBonus": 1.2,
+      "bowl": 11.2,
+      "mom": 64.62,
       "field": 4,
-      "total": 79.02
+      "total": 68.62
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12530,11 +12530,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": -1.6,
-      "mom": -0.58,
+      "economyBonus": -0.8,
+      "bowl": -0.8,
+      "mom": 0.22,
       "field": 0,
-      "total": -0.58
+      "total": 0.22
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12688,12 +12688,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
       "runs": 19,
-      "wickets": 2,
-      "economy": 4.75
+      "wickets": 0,
+      "economy": 9.5
     },
     "fielding": {
       "catches": 0,
@@ -12707,14 +12707,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 0.85,
-      "wicketPts": 22,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7.8,
-      "bowl": 14.2,
-      "mom": 15.05,
+      "economyBonus": -7,
+      "bowl": -7,
+      "mom": -6.15,
       "field": 0,
-      "total": 15.05
+      "total": -6.15
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12748,12 +12748,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 1,
+      "oversDcml": 1,
       "maidens": 0,
-      "runs": 10,
+      "runs": 3,
       "wickets": 0,
-      "economy": 5
+      "economy": 3
     },
     "fielding": {
       "catches": 0,
@@ -12770,11 +12770,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.4,
-      "bowl": 0.4,
-      "mom": 6.9,
+      "economyBonus": 1.2,
+      "bowl": 1.2,
+      "mom": 7.7,
       "field": 0,
-      "total": 6.9
+      "total": 7.7
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12808,12 +12808,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
-      "runs": 23,
+      "runs": 11,
       "wickets": 0,
-      "economy": 5.75
+      "economy": 5.5
     },
     "fielding": {
       "catches": 0,
@@ -12830,11 +12830,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": -5.6,
-      "mom": 2.55,
+      "economyBonus": -1.6,
+      "bowl": -1.6,
+      "mom": 6.55,
       "field": 0,
-      "total": 2.55
+      "total": 6.55
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12928,12 +12928,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 4,
+      "runs": 0,
       "wickets": 0,
-      "economy": 4
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -12950,11 +12950,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.4,
-      "bowl": 0.4,
-      "mom": 10.55,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 10.15,
       "field": 5,
-      "total": 15.55
+      "total": 15.15
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -12991,9 +12991,9 @@
       "overs": 1,
       "oversDcml": 1,
       "maidens": 0,
-      "runs": 4,
+      "runs": 9,
       "wickets": 0,
-      "economy": 4
+      "economy": 9
     },
     "fielding": {
       "catches": 3,
@@ -13010,11 +13010,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.2,
-      "bowl": -3.2,
-      "mom": 5.98,
+      "economyBonus": -3.6,
+      "bowl": -3.6,
+      "mom": 5.58,
       "field": 19,
-      "total": 24.98
+      "total": 24.58
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -13048,12 +13048,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
-      "runs": 18,
+      "runs": 10,
       "wickets": 0,
-      "economy": 6
+      "economy": 5
     },
     "fielding": {
       "catches": 1,
@@ -13070,11 +13070,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -4.4,
-      "bowl": -4.4,
-      "mom": 19.78,
+      "economyBonus": -0.8,
+      "bowl": -0.8,
+      "mom": 23.38,
       "field": 5,
-      "total": 24.78
+      "total": 28.38
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -13108,12 +13108,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 5,
+      "oversDcml": 5,
       "maidens": 0,
-      "runs": 10,
+      "runs": 22,
       "wickets": 1,
-      "economy": 3.33
+      "economy": 4.4
     },
     "fielding": {
       "catches": 1,
@@ -13127,14 +13127,14 @@
       "notOutBonus": 5,
       "milestoneBonus": 0,
       "bat": 7.78,
-      "wicketPts": 20,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 3.2,
-      "bowl": 23.2,
-      "mom": 30.98,
+      "economyBonus": 0.4,
+      "bowl": 10.4,
+      "mom": 18.18,
       "field": 13,
-      "total": 43.98
+      "total": 31.18
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -13168,12 +13168,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 12,
-      "wickets": 1,
-      "economy": 6
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -13187,14 +13187,14 @@
       "notOutBonus": 4,
       "milestoneBonus": 0,
       "bat": 8.85,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.4,
-      "bowl": 7.6,
-      "mom": 16.45,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 8.85,
       "field": 0,
-      "total": 16.45
+      "total": 8.85
     },
     "isManOfMatch": false,
     "seasonMatch": "3-12"
@@ -13370,11 +13370,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.6,
-      "bowl": -3.6,
-      "mom": 1.95,
+      "economyBonus": 0.8,
+      "bowl": 0.8,
+      "mom": 6.35,
       "field": 10,
-      "total": 11.95
+      "total": 16.35
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -13550,11 +13550,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": -1.6,
-      "mom": -1.82,
+      "economyBonus": -2,
+      "bowl": -2,
+      "mom": -2.22,
       "field": 5,
-      "total": 3.18
+      "total": 2.78
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -13667,14 +13667,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.67,
-      "wicketPts": 52,
+      "wicketPts": 30,
       "maidenBonus": 5,
       "wicketBonus": 6,
-      "economyBonus": 11.8,
-      "bowl": 74.8,
-      "mom": 74.13,
+      "economyBonus": 2.8,
+      "bowl": 43.8,
+      "mom": 43.13,
       "field": 14,
-      "total": 88.13
+      "total": 57.13
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -13727,14 +13727,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 13.18,
-      "wicketPts": 70,
-      "maidenBonus": 10,
-      "wicketBonus": 14,
-      "economyBonus": 16.8,
-      "bowl": 110.8,
-      "mom": 123.98,
+      "wicketPts": 30,
+      "maidenBonus": 0,
+      "wicketBonus": 6,
+      "economyBonus": 4.4,
+      "bowl": 40.4,
+      "mom": 53.58,
       "field": 0,
-      "total": 123.98
+      "total": 53.58
     },
     "isManOfMatch": true,
     "seasonMatch": "3-13"
@@ -13847,14 +13847,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 12.85,
-      "wicketPts": 36,
-      "maidenBonus": 5,
+      "wicketPts": 24,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 17.6,
-      "bowl": 58.6,
-      "mom": 71.45,
+      "economyBonus": 8.4,
+      "bowl": 32.4,
+      "mom": 45.25,
       "field": 15,
-      "total": 86.45
+      "total": 60.25
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -13907,14 +13907,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 25.93,
-      "wicketPts": 54,
+      "wicketPts": 32,
       "maidenBonus": 0,
       "wicketBonus": 6,
       "economyBonus": 0.8,
-      "bowl": 60.8,
-      "mom": 86.73,
+      "bowl": 38.8,
+      "mom": 64.73,
       "field": 5,
-      "total": 91.73
+      "total": 69.73
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -13967,14 +13967,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 10.68,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.4,
-      "bowl": 7.6,
-      "mom": 18.28,
+      "economyBonus": 0.4,
+      "bowl": 0.4,
+      "mom": 11.08,
       "field": 5,
-      "total": 23.28
+      "total": 16.08
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14027,14 +14027,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 0.35,
-      "wicketPts": 30,
+      "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -6.4,
-      "bowl": 23.6,
-      "mom": 23.95,
+      "economyBonus": -7,
+      "bowl": 13,
+      "mom": 13.35,
       "field": 14,
-      "total": 37.95
+      "total": 27.35
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14207,14 +14207,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 2.28,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": 4.4,
-      "mom": 6.68,
+      "economyBonus": -3.2,
+      "bowl": -3.2,
+      "mom": -0.92,
       "field": 8,
-      "total": 14.68
+      "total": 7.08
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14308,12 +14308,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 1,
+      "oversDcml": 1,
       "maidens": 0,
-      "runs": 8,
+      "runs": 10,
       "wickets": 0,
-      "economy": 4
+      "economy": 10
     },
     "fielding": {
       "catches": 2,
@@ -14330,11 +14330,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.6,
-      "bowl": -3.6,
-      "mom": -3.43,
+      "economyBonus": -4.4,
+      "bowl": -4.4,
+      "mom": -4.23,
       "field": 10,
-      "total": 6.57
+      "total": 5.77
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14488,12 +14488,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 5,
-      "oversDcml": 5,
-      "maidens": 1,
-      "runs": 19,
-      "wickets": 3,
-      "economy": 3.8
+      "overs": 5.5,
+      "oversDcml": 5.83,
+      "maidens": 0,
+      "runs": 15,
+      "wickets": 2,
+      "economy": 2.57
     },
     "fielding": {
       "catches": 2,
@@ -14507,14 +14507,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 26.17,
-      "wicketPts": 52,
-      "maidenBonus": 5,
-      "wicketBonus": 6,
-      "economyBonus": 11.8,
-      "bowl": 74.8,
-      "mom": 100.97,
+      "wicketPts": 22,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 9,
+      "bowl": 31,
+      "mom": 57.17,
       "field": 14,
-      "total": 114.97
+      "total": 71.17
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14551,9 +14551,9 @@
       "overs": 3,
       "oversDcml": 3,
       "maidens": 0,
-      "runs": 16,
+      "runs": 13,
       "wickets": 0,
-      "economy": 5.33
+      "economy": 4.33
     },
     "fielding": {
       "catches": 1,
@@ -14570,11 +14570,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": -1.6,
-      "mom": -0.35,
+      "economyBonus": 0.4,
+      "bowl": 0.4,
+      "mom": 1.65,
       "field": 5,
-      "total": 4.65
+      "total": 6.65
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14668,12 +14668,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3.4,
-      "oversDcml": 3.67,
-      "maidens": 0,
-      "runs": 11,
-      "wickets": 3,
-      "economy": 3
+      "overs": 5,
+      "oversDcml": 5,
+      "maidens": 2,
+      "runs": 7,
+      "wickets": 4,
+      "economy": 1.4
     },
     "fielding": {
       "catches": 0,
@@ -14687,16 +14687,16 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 13.12,
-      "wicketPts": 70,
+      "wicketPts": 40,
       "maidenBonus": 10,
-      "wicketBonus": 14,
-      "economyBonus": 16.8,
-      "bowl": 110.8,
-      "mom": 123.92,
+      "wicketBonus": 8,
+      "economyBonus": 12.4,
+      "bowl": 70.4,
+      "mom": 83.52,
       "field": 0,
-      "total": 123.92
+      "total": 83.52
     },
-    "isManOfMatch": true,
+    "isManOfMatch": false,
     "seasonMatch": "3-13"
   },
   {
@@ -14728,12 +14728,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 4,
-      "wickets": 0,
-      "economy": 4
+      "runs": 17,
+      "wickets": 1,
+      "economy": 5.67
     },
     "fielding": {
       "catches": 1,
@@ -14750,11 +14750,11 @@
       "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.4,
-      "bowl": 7.6,
-      "mom": 10.95,
+      "economyBonus": -2.8,
+      "bowl": 7.2,
+      "mom": 10.55,
       "field": 5,
-      "total": 15.95
+      "total": 15.55
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14791,9 +14791,9 @@
       "overs": 4,
       "oversDcml": 4,
       "maidens": 0,
-      "runs": 17,
-      "wickets": 3,
-      "economy": 4.25
+      "runs": 18,
+      "wickets": 2,
+      "economy": 4.5
     },
     "fielding": {
       "catches": 1,
@@ -14807,14 +14807,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 11.93,
-      "wicketPts": 54,
+      "wicketPts": 22,
       "maidenBonus": 0,
-      "wicketBonus": 6,
-      "economyBonus": 0.8,
-      "bowl": 60.8,
-      "mom": 72.73,
+      "wicketBonus": 0,
+      "economyBonus": 0,
+      "bowl": 22,
+      "mom": 33.93,
       "field": 5,
-      "total": 77.73
+      "total": 38.93
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -14848,12 +14848,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4.2,
-      "oversDcml": 4.33,
-      "maidens": 0,
-      "runs": 9,
-      "wickets": 2,
-      "economy": 2.08
+      "overs": 5,
+      "oversDcml": 5,
+      "maidens": 1,
+      "runs": 11,
+      "wickets": 1,
+      "economy": 2.2
     },
     "fielding": {
       "catches": 3,
@@ -14867,14 +14867,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 24.93,
-      "wicketPts": 36,
+      "wicketPts": 12,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": 17.6,
-      "bowl": 58.6,
-      "mom": 83.53,
+      "economyBonus": 9.2,
+      "bowl": 26.2,
+      "mom": 51.13,
       "field": 15,
-      "total": 98.53
+      "total": 66.13
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -15028,12 +15028,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 0.5,
+      "oversDcml": 0.83,
       "maidens": 0,
-      "runs": 24,
-      "wickets": 2,
-      "economy": 8
+      "runs": 3,
+      "wickets": 1,
+      "economy": 3.61
     },
     "fielding": {
       "catches": 2,
@@ -15047,14 +15047,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 2.05,
-      "wicketPts": 30,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -6.4,
-      "bowl": 23.6,
-      "mom": 25.65,
+      "economyBonus": 0.6,
+      "bowl": 10.6,
+      "mom": 12.65,
       "field": 14,
-      "total": 39.65
+      "total": 26.65
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -15091,9 +15091,9 @@
       "overs": 2,
       "oversDcml": 2,
       "maidens": 0,
-      "runs": 13,
-      "wickets": 0,
-      "economy": 6.5
+      "runs": 12,
+      "wickets": 1,
+      "economy": 6
     },
     "fielding": {
       "catches": 0,
@@ -15110,11 +15110,11 @@
       "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": 4.4,
-      "mom": 4.48,
+      "economyBonus": -2.4,
+      "bowl": 7.6,
+      "mom": 7.68,
       "field": 8,
-      "total": 12.48
+      "total": 15.68
     },
     "isManOfMatch": false,
     "seasonMatch": "3-13"
@@ -21407,14 +21407,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.45,
-      "wicketPts": 12,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -0.8,
-      "bowl": 11.2,
-      "mom": 10.75,
+      "economyBonus": -1.2,
+      "bowl": -1.2,
+      "mom": -1.65,
       "field": 9,
-      "total": 19.75
+      "total": 7.35
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -21527,14 +21527,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.6,
-      "wicketPts": 42,
+      "wicketPts": 22,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 4,
-      "bowl": 46,
-      "mom": 45.4,
+      "economyBonus": 2.4,
+      "bowl": 24.4,
+      "mom": 23.8,
       "field": 9,
-      "total": 54.4
+      "total": 32.8
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -21587,14 +21587,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 4,
       "bat": 48.63,
-      "wicketPts": 30,
+      "wicketPts": 10,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": 2,
-      "bowl": 37,
-      "mom": 85.63,
+      "economyBonus": 3.2,
+      "bowl": 18.2,
+      "mom": 66.83,
       "field": 15,
-      "total": 100.63
+      "total": 81.83
     },
     "isManOfMatch": true,
     "seasonMatch": "2-8"
@@ -21707,14 +21707,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.9,
-      "wicketPts": 30,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 1.2,
-      "bowl": 31.2,
-      "mom": 30.3,
+      "economyBonus": -4,
+      "bowl": 6,
+      "mom": 5.1,
       "field": 0,
-      "total": 30.3
+      "total": 5.1
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -21770,11 +21770,11 @@
       "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -11.2,
-      "bowl": -1.2,
-      "mom": -1.03,
+      "economyBonus": -4.8,
+      "bowl": 5.2,
+      "mom": 5.37,
       "field": 5,
-      "total": 3.97
+      "total": 10.37
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -21988,12 +21988,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 2,
+      "runs": 0,
       "wickets": 0,
-      "economy": 2
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -22010,11 +22010,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 2,
-      "bowl": 2,
-      "mom": 18.82,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 16.82,
       "field": 13,
-      "total": 31.82
+      "total": 29.82
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22067,14 +22067,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 5.3,
-      "wicketPts": 20,
+      "wicketPts": 10,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": 8,
-      "bowl": 33,
-      "mom": 38.3,
+      "economyBonus": 5.6,
+      "bowl": 20.6,
+      "mom": 25.9,
       "field": 10,
-      "total": 48.3
+      "total": 35.9
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22187,14 +22187,14 @@
       "notOutBonus": 1.4,
       "milestoneBonus": 0,
       "bat": 9.03,
-      "wicketPts": 22,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.8,
-      "bowl": 19.2,
-      "mom": 28.23,
+      "economyBonus": 0,
+      "bowl": 10,
+      "mom": 19.03,
       "field": 0,
-      "total": 28.23
+      "total": 19.03
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22247,14 +22247,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 10.94,
-      "wicketPts": 64,
+      "wicketPts": 54,
       "maidenBonus": 0,
       "wicketBonus": 10,
-      "economyBonus": -2,
-      "bowl": 72,
-      "mom": 82.94,
+      "economyBonus": 5,
+      "bowl": 69,
+      "mom": 79.94,
       "field": 8,
-      "total": 90.94
+      "total": 87.94
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22288,12 +22288,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 9,
+      "runs": 0,
       "wickets": 0,
-      "economy": 9
+      "economy": 0
     },
     "fielding": {
       "catches": 3,
@@ -22310,11 +22310,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.6,
-      "bowl": -3.6,
-      "mom": 5.58,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 9.18,
       "field": 15,
-      "total": 20.58
+      "total": 24.18
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22348,12 +22348,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 14,
-      "wickets": 1,
-      "economy": 7
+      "runs": 7,
+      "wickets": 2,
+      "economy": 2.33
     },
     "fielding": {
       "catches": 0,
@@ -22367,14 +22367,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 2.1,
-      "wicketPts": 30,
+      "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 1.2,
-      "bowl": 31.2,
-      "mom": 33.3,
+      "economyBonus": 5.2,
+      "bowl": 25.2,
+      "mom": 27.3,
       "field": 0,
-      "total": 33.3
+      "total": 27.3
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22408,12 +22408,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
-      "maidens": 1,
-      "runs": 14,
-      "wickets": 1,
-      "economy": 3.5
+      "overs": 5,
+      "oversDcml": 5,
+      "maidens": 0,
+      "runs": 24,
+      "wickets": 2,
+      "economy": 4.8
     },
     "fielding": {
       "catches": 3,
@@ -22427,16 +22427,16 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 1.7,
-      "wicketPts": 30,
-      "maidenBonus": 5,
+      "wicketPts": 20,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 2,
-      "bowl": 37,
-      "mom": 38.7,
+      "economyBonus": -1.2,
+      "bowl": 18.8,
+      "mom": 20.5,
       "field": 15,
-      "total": 53.7
+      "total": 35.5
     },
-    "isManOfMatch": true,
+    "isManOfMatch": false,
     "seasonMatch": "2-8"
   },
   {
@@ -22471,9 +22471,9 @@
       "overs": 4,
       "oversDcml": 4,
       "maidens": 0,
-      "runs": 15,
+      "runs": 16,
       "wickets": 2,
-      "economy": 3.75
+      "economy": 4
     },
     "fielding": {
       "catches": 1,
@@ -22487,14 +22487,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.95,
-      "wicketPts": 42,
+      "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 4,
-      "bowl": 46,
-      "mom": 45.05,
+      "economyBonus": 1.6,
+      "bowl": 21.6,
+      "mom": 20.65,
       "field": 9,
-      "total": 54.05
+      "total": 29.65
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22531,9 +22531,9 @@
       "overs": 2,
       "oversDcml": 2,
       "maidens": 0,
-      "runs": 15,
-      "wickets": 1,
-      "economy": 7.5
+      "runs": 17,
+      "wickets": 0,
+      "economy": 8.5
     },
     "fielding": {
       "catches": 1,
@@ -22547,14 +22547,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 11.68,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -11.2,
-      "bowl": -1.2,
-      "mom": 10.48,
+      "economyBonus": -6.4,
+      "bowl": -6.4,
+      "mom": 5.28,
       "field": 5,
-      "total": 15.48
+      "total": 10.28
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22708,12 +22708,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 2.2,
+      "oversDcml": 2.33,
       "maidens": 0,
-      "runs": 15,
-      "wickets": 0,
-      "economy": 5
+      "runs": 10,
+      "wickets": 1,
+      "economy": 4.29
     },
     "fielding": {
       "catches": 1,
@@ -22730,11 +22730,11 @@
       "wicketPts": 12,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -0.8,
-      "bowl": 11.2,
-      "mom": 26.91,
+      "economyBonus": 0.4,
+      "bowl": 12.4,
+      "mom": 28.11,
       "field": 9,
-      "total": 35.91
+      "total": 37.11
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -22948,12 +22948,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 18,
+      "runs": 17,
       "wickets": 1,
-      "economy": 4.5
+      "economy": 5.67
     },
     "fielding": {
       "catches": 0,
@@ -22967,14 +22967,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 25.95,
-      "wicketPts": 22,
+      "wicketPts": 12,
       "maidenBonus": 0,
       "wicketBonus": 0,
       "economyBonus": -2.8,
-      "bowl": 19.2,
-      "mom": 45.15,
+      "bowl": 9.2,
+      "mom": 35.15,
       "field": 0,
-      "total": 45.15
+      "total": 35.15
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -23070,10 +23070,10 @@
     "bowling": {
       "overs": 4,
       "oversDcml": 4,
-      "maidens": 1,
-      "runs": 11,
+      "maidens": 0,
+      "runs": 15,
       "wickets": 1,
-      "economy": 2.75
+      "economy": 3.75
     },
     "fielding": {
       "catches": 2,
@@ -23087,14 +23087,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 6.75,
-      "wicketPts": 20,
-      "maidenBonus": 5,
+      "wicketPts": 10,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 8,
-      "bowl": 33,
-      "mom": 39.75,
+      "economyBonus": 2.4,
+      "bowl": 12.4,
+      "mom": 19.15,
       "field": 10,
-      "total": 49.75
+      "total": 29.15
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -23188,12 +23188,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3.5,
-      "oversDcml": 3.83,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 11,
-      "wickets": 5,
-      "economy": 2.87
+      "runs": 29,
+      "wickets": 1,
+      "economy": 9.67
     },
     "fielding": {
       "catches": 0,
@@ -23207,14 +23207,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -0.33,
-      "wicketPts": 64,
+      "wicketPts": 10,
       "maidenBonus": 0,
-      "wicketBonus": 10,
-      "economyBonus": -2,
-      "bowl": 72,
-      "mom": 71.67,
+      "wicketBonus": 0,
+      "economyBonus": -7,
+      "bowl": 3,
+      "mom": 2.67,
       "field": 8,
-      "total": 79.67
+      "total": 10.67
     },
     "isManOfMatch": false,
     "seasonMatch": "2-8"
@@ -23390,11 +23390,11 @@
       "wicketPts": 22,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7.2,
-      "bowl": 14.8,
-      "mom": 21.58,
+      "economyBonus": -2.4,
+      "bowl": 19.6,
+      "mom": 26.38,
       "field": 0,
-      "total": 21.58
+      "total": 26.38
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -23507,14 +23507,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 6.13,
-      "wicketPts": 40,
-      "maidenBonus": 5,
-      "wicketBonus": 6,
-      "economyBonus": 10.6,
-      "bowl": 61.6,
-      "mom": 67.73,
+      "wicketPts": 10,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 2.8,
+      "bowl": 12.8,
+      "mom": 18.93,
       "field": 8,
-      "total": 75.73
+      "total": 26.93
     },
     "isManOfMatch": true,
     "seasonMatch": "2-9"
@@ -23570,11 +23570,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.8,
-      "bowl": -2.8,
-      "mom": -2.4,
+      "economyBonus": 0.4,
+      "bowl": 0.4,
+      "mom": 0.8,
       "field": 13,
-      "total": 10.6
+      "total": 13.8
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -23627,14 +23627,14 @@
       "notOutBonus": 3.6,
       "milestoneBonus": 0,
       "bat": 24.18,
-      "wicketPts": 24,
-      "maidenBonus": 5,
+      "wicketPts": 12,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 6.8,
-      "bowl": 35.8,
-      "mom": 59.98,
+      "economyBonus": 4,
+      "bowl": 16,
+      "mom": 40.18,
       "field": 15,
-      "total": 74.98
+      "total": 55.18
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -23747,14 +23747,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 0.8,
-      "wicketPts": 22,
-      "maidenBonus": 5,
+      "wicketPts": 0,
+      "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -0.8,
-      "bowl": 26.2,
-      "mom": 27,
+      "economyBonus": -6.8,
+      "bowl": -6.8,
+      "mom": -6,
       "field": 15,
-      "total": 42
+      "total": 9
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -23867,14 +23867,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 9.95,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.8,
-      "bowl": 10.8,
-      "mom": 20.75,
+      "economyBonus": 2,
+      "bowl": 2,
+      "mom": 11.95,
       "field": 5,
-      "total": 25.75
+      "total": 16.95
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24050,11 +24050,11 @@
       "wicketPts": 22,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 4.4,
-      "bowl": 26.4,
-      "mom": 26.18,
+      "economyBonus": 1.2,
+      "bowl": 23.2,
+      "mom": 22.98,
       "field": 17,
-      "total": 43.18
+      "total": 39.98
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24107,14 +24107,14 @@
       "notOutBonus": 5.6,
       "milestoneBonus": 0,
       "bat": 34.33,
-      "wicketPts": 22,
+      "wicketPts": 12,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": 20.4,
-      "mom": 54.73,
+      "economyBonus": -1.2,
+      "bowl": 10.8,
+      "mom": 45.13,
       "field": 4,
-      "total": 58.73
+      "total": 49.13
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24148,12 +24148,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 4,
+      "runs": 0,
       "wickets": 0,
-      "economy": 4
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -24170,11 +24170,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.4,
-      "bowl": 0.4,
-      "mom": 12.58,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 12.18,
       "field": 5,
-      "total": 17.58
+      "total": 17.18
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24208,12 +24208,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
-      "runs": 21,
-      "wickets": 2,
-      "economy": 5.25
+      "runs": 15,
+      "wickets": 0,
+      "economy": 7.5
     },
     "fielding": {
       "catches": 0,
@@ -24227,14 +24227,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 5.5,
-      "wicketPts": 22,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7.2,
-      "bowl": 14.8,
-      "mom": 20.3,
+      "economyBonus": -4.8,
+      "bowl": -4.8,
+      "mom": 0.7,
       "field": 0,
-      "total": 20.3
+      "total": 0.7
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24268,12 +24268,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
-      "maidens": 0,
-      "runs": 10,
-      "wickets": 1,
-      "economy": 3.33
+      "overs": 4.1,
+      "oversDcml": 4.17,
+      "maidens": 1,
+      "runs": 9,
+      "wickets": 3,
+      "economy": 2.16
     },
     "fielding": {
       "catches": 0,
@@ -24287,16 +24287,16 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 17.93,
-      "wicketPts": 40,
+      "wicketPts": 30,
       "maidenBonus": 5,
       "wicketBonus": 6,
-      "economyBonus": 10.6,
-      "bowl": 61.6,
-      "mom": 79.53,
+      "economyBonus": 7.8,
+      "bowl": 48.8,
+      "mom": 66.73,
       "field": 8,
-      "total": 87.53
+      "total": 74.73
     },
-    "isManOfMatch": true,
+    "isManOfMatch": false,
     "seasonMatch": "2-9"
   },
   {
@@ -24328,12 +24328,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
-      "maidens": 0,
-      "runs": 4,
+      "overs": 3,
+      "oversDcml": 3,
+      "maidens": 1,
+      "runs": 10,
       "wickets": 1,
-      "economy": 2
+      "economy": 3.33
     },
     "fielding": {
       "catches": 3,
@@ -24347,14 +24347,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 3.23,
-      "wicketPts": 24,
+      "wicketPts": 12,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": 6.8,
-      "bowl": 35.8,
-      "mom": 39.03,
+      "economyBonus": 2.8,
+      "bowl": 19.8,
+      "mom": 23.03,
       "field": 15,
-      "total": 54.03
+      "total": 38.03
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24508,12 +24508,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 3,
+      "runs": 13,
       "wickets": 2,
-      "economy": 1.5
+      "economy": 4.33
     },
     "fielding": {
       "catches": 1,
@@ -24527,14 +24527,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 4.06,
-      "wicketPts": 40,
+      "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 5.2,
-      "bowl": 45.2,
-      "mom": 49.26,
+      "economyBonus": 0.4,
+      "bowl": 20.4,
+      "mom": 24.46,
       "field": 5,
-      "total": 54.26
+      "total": 29.46
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24568,12 +24568,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 13,
+      "runs": 0,
       "wickets": 0,
-      "economy": 4.33
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -24590,11 +24590,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.8,
-      "bowl": -2.8,
-      "mom": 5.23,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 8.03,
       "field": 13,
-      "total": 18.23
+      "total": 21.03
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24688,12 +24688,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 6,
+      "runs": 0,
       "wickets": 0,
-      "economy": 6
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -24710,11 +24710,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.2,
-      "bowl": -1.2,
-      "mom": -0.35,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 0.85,
       "field": 0,
-      "total": -0.35
+      "total": 0.85
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24748,12 +24748,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 13,
-      "wickets": 1,
-      "economy": 6.5
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -24767,14 +24767,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 2.15,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -3.2,
-      "bowl": 6.8,
-      "mom": 8.95,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 2.15,
       "field": 4,
-      "total": 12.95
+      "total": 6.15
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24811,9 +24811,9 @@
       "overs": 3,
       "oversDcml": 3,
       "maidens": 0,
-      "runs": 11,
-      "wickets": 0,
-      "economy": 3.67
+      "runs": 15,
+      "wickets": 1,
+      "economy": 5
     },
     "fielding": {
       "catches": 1,
@@ -24830,11 +24830,11 @@
       "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.8,
-      "bowl": 10.8,
-      "mom": 15.4,
+      "economyBonus": -1.2,
+      "bowl": 8.8,
+      "mom": 13.4,
       "field": 5,
-      "total": 20.4
+      "total": 18.4
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24928,12 +24928,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 4,
+      "oversDcml": 4,
       "maidens": 0,
-      "runs": 12,
-      "wickets": 2,
-      "economy": 4
+      "runs": 14,
+      "wickets": 0,
+      "economy": 3.5
     },
     "fielding": {
       "catches": 1,
@@ -24947,14 +24947,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 16.15,
-      "wicketPts": 22,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 4.4,
-      "bowl": 26.4,
-      "mom": 42.55,
+      "economyBonus": 3.2,
+      "bowl": 3.2,
+      "mom": 19.35,
       "field": 17,
-      "total": 59.55
+      "total": 36.35
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -24990,10 +24990,10 @@
     "bowling": {
       "overs": 3,
       "oversDcml": 3,
-      "maidens": 0,
-      "runs": 22,
-      "wickets": 0,
-      "economy": 7.33
+      "maidens": 1,
+      "runs": 6,
+      "wickets": 2,
+      "economy": 2
     },
     "fielding": {
       "catches": 3,
@@ -25010,11 +25010,11 @@
       "wicketPts": 22,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": -0.8,
-      "bowl": 26.2,
-      "mom": 31.75,
+      "economyBonus": 6,
+      "bowl": 33,
+      "mom": 38.55,
       "field": 15,
-      "total": 46.75
+      "total": 53.55
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -25051,9 +25051,9 @@
       "overs": 3,
       "oversDcml": 3,
       "maidens": 0,
-      "runs": 15,
+      "runs": 14,
       "wickets": 1,
-      "economy": 5
+      "economy": 4.67
     },
     "fielding": {
       "catches": 0,
@@ -25067,14 +25067,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 3.35,
-      "wicketPts": 22,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -1.6,
-      "bowl": 20.4,
-      "mom": 23.75,
+      "economyBonus": -0.4,
+      "bowl": 9.6,
+      "mom": 12.95,
       "field": 4,
-      "total": 27.75
+      "total": 16.95
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -25108,12 +25108,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 3,
-      "oversDcml": 3,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
       "runs": 13,
       "wickets": 0,
-      "economy": 4.33
+      "economy": 6.5
     },
     "fielding": {
       "catches": 1,
@@ -25130,11 +25130,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2.8,
-      "bowl": -2.8,
-      "mom": 8.26,
+      "economyBonus": -3.2,
+      "bowl": -3.2,
+      "mom": 7.86,
       "field": 13,
-      "total": 21.26
+      "total": 20.86
     },
     "isManOfMatch": false,
     "seasonMatch": "2-9"
@@ -32207,14 +32207,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 6.6,
-      "wicketPts": 32,
+      "wicketPts": 22,
       "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": -4.4,
-      "bowl": 32.6,
-      "mom": 39.2,
+      "economyBonus": -4,
+      "bowl": 23,
+      "mom": 29.6,
       "field": 5,
-      "total": 44.2
+      "total": 34.6
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32327,14 +32327,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 17.3,
-      "wicketPts": 34,
+      "wicketPts": 22,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -14,
-      "bowl": 20,
-      "mom": 37.3,
+      "economyBonus": -7,
+      "bowl": 15,
+      "mom": 32.3,
       "field": 10,
-      "total": 47.3
+      "total": 42.3
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32387,14 +32387,14 @@
       "notOutBonus": 1.6,
       "milestoneBonus": 0,
       "bat": 10.53,
-      "wicketPts": 20,
-      "maidenBonus": 10,
+      "wicketPts": 10,
+      "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": -13.8,
-      "bowl": 16.2,
-      "mom": 26.73,
+      "economyBonus": -6.8,
+      "bowl": 8.2,
+      "mom": 18.73,
       "field": 0,
-      "total": 26.73
+      "total": 18.73
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32507,14 +32507,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": -1.12,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": 4.4,
-      "mom": 3.28,
+      "economyBonus": -2,
+      "bowl": -2,
+      "mom": -3.12,
       "field": 0,
-      "total": 3.28
+      "total": -3.12
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32687,14 +32687,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 8,
       "bat": 109.47,
-      "wicketPts": 56,
+      "wicketPts": 34,
       "maidenBonus": 5,
       "wicketBonus": 6,
-      "economyBonus": 9.6,
-      "bowl": 76.6,
-      "mom": 186.07,
+      "economyBonus": 6.8,
+      "bowl": 51.8,
+      "mom": 161.27,
       "field": 0,
-      "total": 186.07
+      "total": 161.27
     },
     "isManOfMatch": true,
     "seasonMatch": "1-11"
@@ -32747,14 +32747,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 1.02,
-      "wicketPts": 20,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -10,
-      "bowl": 10,
-      "mom": 11.02,
+      "economyBonus": -7,
+      "bowl": -7,
+      "mom": -5.98,
       "field": 0,
-      "total": 11.02
+      "total": -5.98
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32810,11 +32810,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 3.6,
-      "bowl": 3.6,
-      "mom": 4,
+      "economyBonus": 7.2,
+      "bowl": 7.2,
+      "mom": 7.6,
       "field": 10,
-      "total": 14
+      "total": 17.6
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32908,12 +32908,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
-      "runs": 7,
-      "wickets": 0,
-      "economy": 7
+      "runs": 18,
+      "wickets": 1,
+      "economy": 6
     },
     "fielding": {
       "catches": 0,
@@ -32930,11 +32930,11 @@
       "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -5.6,
-      "bowl": 4.4,
-      "mom": 15.85,
+      "economyBonus": -3.6,
+      "bowl": 6.4,
+      "mom": 17.85,
       "field": 0,
-      "total": 15.85
+      "total": 17.85
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -32968,12 +32968,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 5,
-      "oversDcml": 5,
-      "maidens": 1,
-      "runs": 14,
-      "wickets": 3,
-      "economy": 2.8
+      "overs": 3,
+      "oversDcml": 3,
+      "maidens": 0,
+      "runs": 10,
+      "wickets": 2,
+      "economy": 3.33
     },
     "fielding": {
       "catches": 0,
@@ -32987,16 +32987,16 @@
       "notOutBonus": 7.6,
       "milestoneBonus": 4,
       "bat": 51.73,
-      "wicketPts": 56,
-      "maidenBonus": 5,
-      "wicketBonus": 6,
-      "economyBonus": 9.6,
-      "bowl": 76.6,
-      "mom": 128.33,
+      "wicketPts": 22,
+      "maidenBonus": 0,
+      "wicketBonus": 0,
+      "economyBonus": 2.8,
+      "bowl": 24.8,
+      "mom": 76.53,
       "field": 0,
-      "total": 128.33
+      "total": 76.53
     },
-    "isManOfMatch": true,
+    "isManOfMatch": false,
     "seasonMatch": "1-11"
   },
   {
@@ -33028,12 +33028,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 6,
-      "oversDcml": 6,
+      "overs": 3,
+      "oversDcml": 3,
       "maidens": 0,
       "runs": 18,
       "wickets": 0,
-      "economy": 3
+      "economy": 6
     },
     "fielding": {
       "catches": 2,
@@ -33050,11 +33050,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 3.6,
-      "bowl": 3.6,
-      "mom": 95.55,
+      "economyBonus": -3.6,
+      "bowl": -3.6,
+      "mom": 88.35,
       "field": 10,
-      "total": 105.55
+      "total": 98.35
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -33088,12 +33088,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 4,
-      "oversDcml": 4,
+      "overs": 3.1,
+      "oversDcml": 3.17,
       "maidens": 0,
-      "runs": 33,
-      "wickets": 0,
-      "economy": 8.25
+      "runs": 18,
+      "wickets": 2,
+      "economy": 5.68
     },
     "fielding": {
       "catches": 0,
@@ -33110,11 +33110,11 @@
       "wicketPts": 20,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -10,
-      "bowl": 10,
-      "mom": 16.38,
+      "economyBonus": -3,
+      "bowl": 17,
+      "mom": 23.38,
       "field": 0,
-      "total": 16.38
+      "total": 23.38
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -33271,9 +33271,9 @@
       "overs": 5,
       "oversDcml": 5,
       "maidens": 1,
-      "runs": 31,
+      "runs": 37,
       "wickets": 1,
-      "economy": 6.2
+      "economy": 7.4
     },
     "fielding": {
       "catches": 0,
@@ -33287,14 +33287,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 13.12,
-      "wicketPts": 20,
-      "maidenBonus": 10,
+      "wicketPts": 10,
+      "maidenBonus": 5,
       "wicketBonus": 0,
-      "economyBonus": -13.8,
-      "bowl": 16.2,
-      "mom": 29.32,
+      "economyBonus": -7,
+      "bowl": 8,
+      "mom": 21.12,
       "field": 0,
-      "total": 29.32
+      "total": 21.12
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
@@ -33331,9 +33331,9 @@
       "overs": 5,
       "oversDcml": 5,
       "maidens": 0,
-      "runs": 37,
-      "wickets": 2,
-      "economy": 7.4
+      "runs": 32,
+      "wickets": 1,
+      "economy": 6.4
     },
     "fielding": {
       "catches": 2,
@@ -33347,14 +33347,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 15.18,
-      "wicketPts": 34,
+      "wicketPts": 12,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -14,
-      "bowl": 20,
-      "mom": 35.18,
+      "economyBonus": -7,
+      "bowl": 5,
+      "mom": 20.18,
       "field": 10,
-      "total": 45.18
+      "total": 30.18
     },
     "isManOfMatch": false,
     "seasonMatch": "1-11"
