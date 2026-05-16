@@ -766,7 +766,7 @@ function getMVPLeaderboardEnhanced(sport, filters = {}, sortBy = 'totalPoints') 
   const hasAnyFilter = Object.keys(filters).some(k => filters[k] && filters[k] !== 'All');
   const allPlayers = Object.values(byPlayer)
     .map(rows => aggregatePlayerStats(rows, config))
-    .filter(p => p && p.matches >= (hasAnyFilter ? 1 : min));
+    .filter(p => p && p.matches >= (hasAnyFilter ? 0.25 : min));
 
   const sortFn = sortFns[sortBy] || sortFns.totalPoints;
 
