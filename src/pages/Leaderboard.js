@@ -338,7 +338,7 @@ function BatTable({ data }) {
               </div>
               <div style={S.statGroup}>
                 <StatVal label="Runs" val={p.runs}/>
-                <StatVal label="Avg"  val={p.average}/>
+                <StatVal label="Avg" val={p.average ?? '-'}/>
                 <StatVal label="SR"   val={p.strikeRate}/>
               </div>
             </div>
