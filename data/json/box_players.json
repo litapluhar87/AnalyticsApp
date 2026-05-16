@@ -5608,12 +5608,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 1,
+      "runs": 0,
       "wickets": 0,
-      "economy": 1
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -5630,11 +5630,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 3.6,
-      "bowl": 3.6,
-      "mom": 23.7,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 20.1,
       "field": 0,
-      "total": 23.7
+      "total": 20.1
     },
     "isManOfMatch": false,
     "seasonMatch": "5-1"
