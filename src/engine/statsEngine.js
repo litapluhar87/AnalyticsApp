@@ -771,11 +771,16 @@ function getMVPLeaderboardEnhanced(sport, filters = {}, sortBy = 'totalPoints') 
   const sortFn = sortFns[sortBy] || sortFns.totalPoints;
 
   if (hasThresholdExemptFilter || totalMatches <= 1) {
-    // No grouping — just show everyone sorted
-    const sorted = allPlayers
+    // For single match, still separate partial Test participants
+    const full    = allPlayers.filter(p => p.matches >= 1);
+    const partial = allPlayers.filter(p => p.matches < 1);
+    const sorted  = full
       .sort(sortFn)
       .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
-    return { group1: sorted, group2: [], totalMatches, threshold60 };
+    const sortedPartial = partial
+      .sort(sortFn)
+      .map((p, i) => ({ ...p, rank: sorted.length + i + 1, qualified: false }));
+    return { group1: sorted, group2: sortedPartial, totalMatches, threshold60 };
   }
 
   // Split into two groups based on 60% threshold
