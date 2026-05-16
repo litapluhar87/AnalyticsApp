@@ -568,12 +568,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 7,
+      "runs": 0,
       "wickets": 0,
-      "economy": 7
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -590,11 +590,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -2,
-      "bowl": -2,
-      "mom": 1.85,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 3.85,
       "field": 0,
-      "total": 1.85
+      "total": 3.85
     },
     "isManOfMatch": false,
     "seasonMatch": "6-1"
@@ -3088,12 +3088,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 2,
+      "oversDcml": 2,
       "maidens": 0,
-      "runs": 12,
-      "wickets": 0,
-      "economy": 12
+      "runs": 33,
+      "wickets": 1,
+      "economy": 16.5
     },
     "fielding": {
       "catches": 0,
@@ -3107,14 +3107,14 @@
       "notOutBonus": 0,
       "milestoneBonus": 0,
       "bat": 9.1,
-      "wicketPts": 0,
+      "wicketPts": 10,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -6,
-      "bowl": -6,
-      "mom": 3.1,
+      "economyBonus": -7,
+      "bowl": 3,
+      "mom": 12.1,
       "field": 0,
-      "total": 3.1
+      "total": 12.1
     },
     "isManOfMatch": false,
     "seasonMatch": "3-3"
@@ -3568,12 +3568,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 1,
+      "oversDcml": 1,
       "maidens": 0,
-      "runs": 33,
-      "wickets": 1,
-      "economy": 16.5
+      "runs": 12,
+      "wickets": 0,
+      "economy": 12
     },
     "fielding": {
       "catches": 0,
@@ -3587,14 +3587,14 @@
       "notOutBonus": 6,
       "milestoneBonus": 0,
       "bat": 7.93,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7,
-      "bowl": 3,
-      "mom": 10.93,
+      "economyBonus": -6,
+      "bowl": -6,
+      "mom": 1.93,
       "field": 0,
-      "total": 10.93
+      "total": 1.93
     },
     "isManOfMatch": false,
     "seasonMatch": "3-3"
@@ -20488,12 +20488,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 4,
+      "runs": 0,
       "wickets": 0,
-      "economy": 4
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -20510,11 +20510,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 0.4,
-      "bowl": 0.4,
-      "mom": 13.46,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 13.06,
       "field": 9,
-      "total": 22.46
+      "total": 22.06
     },
     "isManOfMatch": false,
     "seasonMatch": "2-6"
@@ -27868,12 +27868,12 @@
       "dnb": true
     },
     "bowling": {
-      "overs": 1,
-      "oversDcml": 1,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 18,
+      "runs": 0,
       "wickets": 0,
-      "economy": 18
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -27890,11 +27890,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -7,
-      "bowl": -7,
-      "mom": -7,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 0,
       "field": 0,
-      "total": -7
+      "total": 0
     },
     "isManOfMatch": false,
     "seasonMatch": "1-4"
@@ -29908,12 +29908,12 @@
       "dnb": true
     },
     "bowling": {
-      "overs": 2,
-      "oversDcml": 2,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 7,
+      "runs": 0,
       "wickets": 0,
-      "economy": 3.5
+      "economy": 0
     },
     "fielding": {
       "catches": 1,
@@ -29930,11 +29930,11 @@
       "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": 1.6,
-      "bowl": 1.6,
-      "mom": 1.6,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 0,
       "field": 5,
-      "total": 6.6
+      "total": 5
     },
     "isManOfMatch": false,
     "seasonMatch": "1-7"
