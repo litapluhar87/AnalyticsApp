@@ -794,7 +794,7 @@ function getMVPLeaderboardEnhanced(sport, filters = {}, sortBy = 'totalPoints') 
     .sort(sortFn)
     .map((p, i) => ({ ...p, rank: group1.length + i + 1, qualified: false }));
 
-  return { group1, group2, totalMatches, threshold60 };
+  return { group1, group2, totalMatches, threshold60, mvpThreshold };
 }
 
 function getAllTeams(sport) {
