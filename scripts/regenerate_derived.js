@@ -374,20 +374,39 @@ function buildPlayerRecords(match, config) {
       if (!playerName || playerName.startsWith('__UNKNOWN__')) return;
       const won  = !isTie && battingTeam === winner;
 
-      // Look up bowling for DNB player — search ALL innings
+      // Look up bowling for DNB player
+      // For Test: use ONLY the corresponding bowling innings (same logic as batters)
+      // inningsIdx 0 → bowls in idx 1, idx 1 → bowls in idx 0
+      // inningsIdx 2 → bowls in idx 3, idx 3 → bowls in idx 2
+      // For T12: use first bowling innings found
       let dnbBowlMvp = { wicketPts: 0, maidenBonus: 0, wicketBonus: 0, economyBonus: 0, bowl: 0 };
       let dnbBowlEntry = null;
       let dnbBowlOvers = 0, dnbBowlOversDcml = 0, dnbBowlMaidens = 0;
       let dnbBowlRuns = 0, dnbBowlWickets = 0, dnbBowlEconomy = 0;
 
-      const dnbBowlingInnings = match.innings.filter(
-        inn => (inn.bowlers || []).some(b => b.player === playerName)
-      );
-
-      if (dnbBowlingInnings.length > 0) {
-        // T12: first innings found; Test: aggregate
-        if (match.format !== 'Test') {
-          const bi = dnbBowlingInnings[0];
+      if (match.format === 'Test') {
+        // Corresponding bowling innings for this DNB innings
+        const correspondingBowlIdx = inningsIdx % 2 === 0 ? inningsIdx + 1 : inningsIdx - 1;
+        const correspondingInn     = match.innings[correspondingBowlIdx];
+        if (correspondingInn) {
+          dnbBowlEntry = (correspondingInn.bowlers || []).find(b => b.player === playerName);
+          if (dnbBowlEntry) {
+            dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, correspondingInn, rules);
+            dnbBowlOvers    = dnbBowlEntry.overs;
+            dnbBowlOversDcml= r2(toDecimalOvers(dnbBowlEntry.overs));
+            dnbBowlMaidens  = dnbBowlEntry.maidens;
+            dnbBowlRuns     = dnbBowlEntry.runs;
+            dnbBowlWickets  = dnbBowlEntry.wickets;
+            dnbBowlEconomy  = dnbBowlOversDcml > 0 ? r2(dnbBowlRuns / dnbBowlOversDcml) : 0;
+          }
+        }
+      } else {
+        // T12: find first innings where this player bowled
+        const allBowlingInnings = match.innings.filter(
+          inn => (inn.bowlers || []).some(b => b.player === playerName)
+        );
+        if (allBowlingInnings.length > 0) {
+          const bi = allBowlingInnings[0];
           dnbBowlEntry = bi.bowlers.find(b => b.player === playerName);
           if (dnbBowlEntry) {
             dnbBowlMvp      = calcBowlMvp(dnbBowlEntry, bi, rules);
@@ -398,28 +417,6 @@ function buildPlayerRecords(match, config) {
             dnbBowlWickets  = dnbBowlEntry.wickets;
             dnbBowlEconomy  = dnbBowlOversDcml > 0 ? r2(dnbBowlRuns / dnbBowlOversDcml) : 0;
           }
-        } else {
-          let tOvers=0, tRuns=0, tWickets=0, tMaidens=0;
-          for (const bi of dnbBowlingInnings) {
-            const be = bi.bowlers.find(b => b.player === playerName);
-            if (!be) continue;
-            const bm = calcBowlMvp(be, bi, rules);
-            dnbBowlMvp.wicketPts   += bm.wicketPts;
-            dnbBowlMvp.maidenBonus += bm.maidenBonus;
-            dnbBowlMvp.wicketBonus += bm.wicketBonus;
-            dnbBowlMvp.economyBonus+= bm.economyBonus;
-            dnbBowlMvp.bowl        += bm.bowl;
-            tOvers   += toDecimalOvers(be.overs);
-            tRuns    += be.runs;
-            tWickets += be.wickets;
-            tMaidens += be.maidens;
-          }
-          dnbBowlOvers    = tOvers;
-          dnbBowlOversDcml= r2(tOvers);
-          dnbBowlMaidens  = tMaidens;
-          dnbBowlRuns     = tRuns;
-          dnbBowlWickets  = tWickets;
-          dnbBowlEconomy  = tOvers > 0 ? r2(tRuns / tOvers) : 0;
         }
       }
 
