@@ -33,8 +33,8 @@ export default function App() {
     setLoggedInPlayer(session ? session.playerName : '');
   }, []);
 
-  const handleLogin  = (playerName) => setLoggedInPlayer(playerName);
-  const handleLogout = () => { logout(); setLoggedInPlayer(''); };
+  const handleLogin  = (playerName) => { setLoggedInPlayer(playerName); setActiveTab('home'); setShowSettings(false); };
+  const handleLogout = () => { logout(); setLoggedInPlayer(''); setActiveTab('home'); setShowSettings(false); };
 
   // ── App state ────────────────────────────────────────────────
   const [activeTab,    setActiveTab]    = useState('home');
