@@ -5,6 +5,9 @@ import MyCricket from './pages/MyCricket';
 import Leaderboard from './pages/Leaderboard';
 import Charts from './pages/Charts';
 import Settings from './pages/Settings';
+import { useState, useEffect } from 'react';
+import { getSession, logout } from './auth/authUtils';
+import LoginPage from './auth/LoginPage';
 
 export const AppContext = createContext();
 export function useApp() { return useContext(AppContext); }
@@ -21,6 +24,40 @@ const SPORT_TYPES = ['Classic','Box','Pair'];
 const SEASONS_PAIR = ['All','6'];
 const FORMATS          = ['All','T12','Test'];
 
+function App() {
+  const [loggedInPlayer, setLoggedInPlayer] = useState(null); // null = not yet checked
+
+  // On mount, check if there's already a session (persistent login)
+  useEffect(() => {
+    const session = getSession();
+    setLoggedInPlayer(session ? session.playerName : '');
+    // '' = checked, no session; string = logged in
+  }, []);
+
+  const handleLogin = (playerName) => setLoggedInPlayer(playerName);
+  const handleLogout = () => { logout(); setLoggedInPlayer(''); };
+
+  // Still checking localStorage
+  if (loggedInPlayer === null) return null;
+
+  // Not logged in
+  if (loggedInPlayer === '') return <LoginPage onLogin={handleLogin} />;
+
+  // Logged in — render your existing app, pass loggedInPlayer down
+  return (
+    <div className="App">
+      {/*
+        Pass loggedInPlayer and handleLogout to your existing components.
+        You'll use loggedInPlayer as the default in MyCricket.
+        Add a logout button somewhere in your header/nav.
+      */}
+      <YourExistingAppContent
+        loggedInPlayer={loggedInPlayer}
+        onLogout={handleLogout}
+      />
+    </div>
+  );
+}
 export default function App() {
   const [activeTab,    setActiveTab]    = useState('home');
   const [sportType,    setSportType]    = useState('Box');
