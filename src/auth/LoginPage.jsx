@@ -6,7 +6,7 @@ import playersConfig from '../config/players.config.json';
 // Extract player names — second value in each row
 // Adjust this line if your JSON structure is different
 // e.g. if rows look like: [["RCL001", "Rahul"], ["RCL002", "Aman"], ...]
-const PLAYER_NAMES = playersConfig.map(row => row[1]).sort();
+const PLAYER_NAMES = Object.values(playersConfig).sort();
 
 export default function LoginPage({ onLogin }) {
   const [selectedPlayer, setSelectedPlayer] = useState('');
