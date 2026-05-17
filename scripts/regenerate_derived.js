@@ -247,6 +247,10 @@ function buildPlayerRecords(match, config) {
     const won  = !isTie && battingTeam === winner;
     const tied = isTie;
 
+    // Track players who already received bowling credit in this innings
+    // Prevents double-counting when a player bats twice in the same innings
+    const bowlingCreditedPlayers = new Set();
+
     // Process each batter
     innings.batters.forEach((batter, pos) => {
       if (!batter.player || batter.player.startsWith('__UNKNOWN__')) return;
@@ -263,32 +267,40 @@ function buildPlayerRecords(match, config) {
       let bowlingInnings = null;
 
       if (match.format !== 'Test') {
-        // Check same innings index first (commons who bowl in their own batting innings)
-        const sameInn   = match.innings[inningsIdx];
-        const sameEntry = sameInn && (sameInn.bowlers || []).find(b => b.player === batter.player);
-
-        if (sameEntry) {
-          // Commons: bowled in same innings as batted
-          bowlingEntry   = sameEntry;
-          bowlingInnings = sameInn;
-          bowlMvp = calcBowlMvp(sameEntry, sameInn, rules);
+        // Skip if player already received bowling credit in this innings
+        // (handles player batting twice in same innings)
+        if (bowlingCreditedPlayers.has(batter.player)) {
+          // Second batting record — bowl stays 0
         } else {
-          // Normal: check if player bowled in opposite innings
-          // But only if that innings bowling hasn't been claimed by a same-innings record
-          const otherIdx   = inningsIdx === 0 ? 1 : 0;
-          const otherInn   = match.innings[otherIdx];
-          // Check if another record already claimed this innings bowling
-          // Covers: commons who batted+bowled in otherIdx, OR DNB+bowled in otherIdx
-          const otherInnHasCommons = (
-            (otherInn?.batters || []).some(b => b.player === batter.player) ||
-            (otherInn?.dnb     || []).includes(batter.player)
-          ) && (otherInn?.bowlers || []).some(bowl => bowl.player === batter.player);
-          if (!otherInnHasCommons) {
-            const otherEntry = otherInn && (otherInn.bowlers || []).find(b => b.player === batter.player);
-            if (otherEntry) {
-              bowlingEntry   = otherEntry;
-              bowlingInnings = otherInn;
-              bowlMvp = calcBowlMvp(otherEntry, otherInn, rules);
+          // Check same innings index first (commons who bowl in their own batting innings)
+          const sameInn   = match.innings[inningsIdx];
+          const sameEntry = sameInn && (sameInn.bowlers || []).find(b => b.player === batter.player);
+
+          if (sameEntry) {
+            // Commons: bowled in same innings as batted
+            bowlingEntry   = sameEntry;
+            bowlingInnings = sameInn;
+            bowlMvp = calcBowlMvp(sameEntry, sameInn, rules);
+            bowlingCreditedPlayers.add(batter.player);
+          } else {
+            // Normal: check if player bowled in opposite innings
+            // But only if that innings bowling hasn't been claimed by a same-innings record
+            const otherIdx   = inningsIdx === 0 ? 1 : 0;
+            const otherInn   = match.innings[otherIdx];
+            // Check if another record already claimed this innings bowling
+            // Covers: commons who batted+bowled in otherIdx, OR DNB+bowled in otherIdx
+            const otherInnHasCommons = (
+              (otherInn?.batters || []).some(b => b.player === batter.player) ||
+              (otherInn?.dnb     || []).includes(batter.player)
+            ) && (otherInn?.bowlers || []).some(bowl => bowl.player === batter.player);
+            if (!otherInnHasCommons) {
+              const otherEntry = otherInn && (otherInn.bowlers || []).find(b => b.player === batter.player);
+              if (otherEntry) {
+                bowlingEntry   = otherEntry;
+                bowlingInnings = otherInn;
+                bowlMvp = calcBowlMvp(otherEntry, otherInn, rules);
+                bowlingCreditedPlayers.add(batter.player);
+              }
             }
           }
         }
