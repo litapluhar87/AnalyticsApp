@@ -7,6 +7,7 @@ import Charts from './pages/Charts';
 import Settings from './pages/Settings';
 import { getSession, logout } from './auth/authUtils';
 import LoginPage from './auth/LoginPage';
+import { getDefaultSport } from './auth/getDefaultSport';
 
 export const AppContext = createContext();
 export function useApp() { return useContext(AppContext); }
@@ -33,12 +34,17 @@ export default function App() {
     setLoggedInPlayer(session ? session.playerName : '');
   }, []);
 
-  const handleLogin  = (playerName) => { setLoggedInPlayer(playerName); setActiveTab('home'); setShowSettings(false); };
+  const handleLogin = (playerName) => {
+    setLoggedInPlayer(playerName);
+    setSportType(getDefaultSport(playerName));
+    setActiveTab('home');
+    setShowSettings(false);
+  };
   const handleLogout = () => { logout(); setLoggedInPlayer(''); setActiveTab('home'); setShowSettings(false); };
 
   // ── App state ────────────────────────────────────────────────
   const [activeTab,    setActiveTab]    = useState('home');
-  const [sportType,    setSportType]    = useState('Box');
+  const [sportType, setSportType] = useState(() => getDefaultSport(loggedInPlayer));
   const [season,       setSeason]       = useState('All');
   const [format,       setFormat]       = useState('All');
   const [showSettings, setShowSettings] = useState(false);
