@@ -92,7 +92,7 @@ export default function LoginPage({ onLogin }) {
               type="password"
               value={password}
               onChange={e => { setPassword(e.target.value); setError(''); }}
-              placeholder="default: racl"
+              placeholder="Password"
               autoComplete="current-password"
               style={{
                 width: '100%', padding: '10px 12px', border: '1.5px solid #ddd',
