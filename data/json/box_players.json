@@ -1648,12 +1648,12 @@
       "dnb": false
     },
     "bowling": {
-      "overs": 1.1,
-      "oversDcml": 1.17,
+      "overs": 0,
+      "oversDcml": 0,
       "maidens": 0,
-      "runs": 7,
-      "wickets": 1,
-      "economy": 5.98
+      "runs": 0,
+      "wickets": 0,
+      "economy": 0
     },
     "fielding": {
       "catches": 0,
@@ -1667,14 +1667,14 @@
       "notOutBonus": 2,
       "milestoneBonus": 0,
       "bat": 11.5,
-      "wicketPts": 10,
+      "wicketPts": 0,
       "maidenBonus": 0,
       "wicketBonus": 0,
-      "economyBonus": -0.47,
-      "bowl": 9.53,
-      "mom": 21.03,
+      "economyBonus": 0,
+      "bowl": 0,
+      "mom": 11.5,
       "field": 0,
-      "total": 21.03
+      "total": 11.5
     },
     "isManOfMatch": false,
     "seasonMatch": "6-2"
