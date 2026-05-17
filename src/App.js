@@ -64,7 +64,7 @@ export default function App() {
   const [season,       setSeason]       = useState('All');
   const [format,       setFormat]       = useState('All');
   const [showSettings, setShowSettings] = useState(false);
-  const [currentUser,  setCurrentUser]  = useState('Rahul');
+  const [currentUser,  setCurrentUser]  = useState(loggedInPlayer || 'Rahul');
   const [isAdmin,      setIsAdmin]      = useState(true);
 
   const activeColor = TABS.find(t => t.id === activeTab)?.color || '#0C447C';
