@@ -180,7 +180,7 @@ function SectionContent({ id, config, rules, sport, onLogout }) {
           )}
         </div>
       );
-
+    }
     case 'mvprules':
       return (
         <>
