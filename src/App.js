@@ -82,7 +82,7 @@ export default function App() {
     if (showSettings) return (
       <Settings
         onClose={() => setShowSettings(false)}
-        onLogout={handleLogout}              {/* ← the line you were looking for */}
+        onLogout={handleLogout}
       />
     );
     switch (activeTab) {
