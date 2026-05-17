@@ -29,7 +29,7 @@ export default function Settings({ onClose, onLogout }) {
     { id:'mvprules', label:'MVP Rules', icon:'⭐' },
     { id:'awards',   label:'Awards',    icon:'🏆' },
     { id:'other',    label:'Other',     icon:'⚙️'  },
-    { id: 'account', label: 'Account', icon: '🔐' },
+    { id: 'account', label: 'Sign Out', icon: '🔐' },
   ];
 
   return (
