@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useApp } from '../App';
+import { logout } from '../auth/authUtils';
 
 const engine       = require('../engine/statsEngine');
 const awardsEngine = require('../engine/awardsEngine');
 const appConfig    = require('../config/app.config.json');
 
 const ACCENT = '#0C447C';
-
-export default function Settings({ onClose }) {
+export default function Settings({ onClose, onLogout }) {
+//export default function Settings({ onClose }) {
   const { sportType, isAdmin, currentUser } = useApp();
   const sport  = sportType.toLowerCase();
   const config = engine.loadConfig(sport);
@@ -28,6 +29,7 @@ export default function Settings({ onClose }) {
     { id:'mvprules', label:'MVP Rules', icon:'⭐' },
     { id:'awards',   label:'Awards',    icon:'🏆' },
     { id:'other',    label:'Other',     icon:'⚙️'  },
+    { id: 'account', label: 'Account', icon: '🔐' },
   ];
 
   return (
@@ -51,7 +53,7 @@ export default function Settings({ onClose }) {
             </button>
             {openSection === sec.id && (
               <div style={S.sectionBody}>
-                <SectionContent id={sec.id} config={config} rules={rules} sport={sport}/>
+                <SectionContent id={sec.id} config={config} rules={rules} sport={sport} onLogout={onLogout} />
               </div>
             )}
           </div>
@@ -62,7 +64,7 @@ export default function Settings({ onClose }) {
   );
 }
 
-function SectionContent({ id, config, rules, sport }) {
+function SectionContent({ id, config, rules, sport, onLogout }) {
   switch(id) {
 
     case 'players':
@@ -117,6 +119,65 @@ function SectionContent({ id, config, rules, sport }) {
           {(config.formats || []).map(f => (
             <span key={f} style={S.tag}>{f}</span>
           ))}
+        </div>
+      );
+
+    case 'account': {
+      const { currentUser } = useApp();
+      const [confirmLogout, setConfirmLogout] = useState(false);
+
+      const handleLogout = () => {
+        logout();
+        onLogout(); // tells App.js to clear loggedInPlayer → shows LoginPage
+      };
+
+      return (
+        <div style={{ padding: '12px 14px' }}>
+          <div style={{ fontSize: 13, color: '#555', marginBottom: 12 }}>
+            Signed in as <strong>{currentUser}</strong>
+          </div>
+
+          {!confirmLogout ? (
+            <button
+              onClick={() => setConfirmLogout(true)}
+              style={{
+                width: '100%', padding: '10px',
+                background: '#fff', border: '1.5px solid #e74c3c',
+                color: '#e74c3c', borderRadius: 8,
+                fontSize: 13, fontWeight: 500, cursor: 'pointer'
+              }}
+            >
+              Sign out
+            </button>
+          ) : (
+            <div style={{ background: '#fdf0ee', borderRadius: 8, padding: 12 }}>
+              <p style={{ fontSize: 12, color: '#555', margin: '0 0 10px' }}>
+                Sign out as <strong>{currentUser}</strong>?
+              </p>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    flex: 1, padding: '8px', background: '#e74c3c',
+                    color: '#fff', border: 'none', borderRadius: 6,
+                    fontSize: 13, cursor: 'pointer'
+                  }}
+                >
+                  Yes, sign out
+                </button>
+                <button
+                  onClick={() => setConfirmLogout(false)}
+                  style={{
+                    flex: 1, padding: '8px', background: '#ddd',
+                    color: '#333', border: 'none', borderRadius: 6,
+                    fontSize: 13, cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       );
 
@@ -201,8 +262,69 @@ function SectionContent({ id, config, rules, sport }) {
         </>
       );
 
+    case 'account':
+      return <AccountSection onLogout={onLogout} />;
     default: return null;
   }
+}
+
+function AccountSection({ onLogout }) {
+  const { currentUser } = useApp();
+  const [confirmLogout, setConfirmLogout] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    onLogout();
+  };
+
+  return (
+    <div style={{ padding: '12px 14px' }}>
+      <div style={{ fontSize: 13, color: '#555', marginBottom: 12 }}>
+        Signed in as <strong>{currentUser}</strong>
+      </div>
+      {!confirmLogout ? (
+        <button
+          onClick={() => setConfirmLogout(true)}
+          style={{
+            width: '100%', padding: '10px',
+            background: '#fff', border: '1.5px solid #e74c3c',
+            color: '#e74c3c', borderRadius: 8,
+            fontSize: 13, fontWeight: 500, cursor: 'pointer'
+          }}
+        >
+          Sign out
+        </button>
+      ) : (
+        <div style={{ background: '#fdf0ee', borderRadius: 8, padding: 12 }}>
+          <p style={{ fontSize: 12, color: '#555', margin: '0 0 10px' }}>
+            Sign out as <strong>{currentUser}</strong>?
+          </p>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={handleLogout}
+              style={{
+                flex: 1, padding: '8px', background: '#e74c3c',
+                color: '#fff', border: 'none', borderRadius: 6,
+                fontSize: 13, cursor: 'pointer'
+              }}
+            >
+              Yes, sign out
+            </button>
+            <button
+              onClick={() => setConfirmLogout(false)}
+              style={{
+                flex: 1, padding: '8px', background: '#ddd',
+                color: '#333', border: 'none', borderRadius: 6,
+                fontSize: 13, cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 function Row({ label, val }) {
