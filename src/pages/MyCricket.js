@@ -284,40 +284,50 @@ function buildStatFilters() {
                l:'RunOut+St'},
             ]}/>
 
-            {(hasCaptaincy || hasAwards) && (() => {
-              const captItems = hasCaptaincy ? [
+            {hasCaptaincy && (() => {
+              const captItems = [
                 {n:ini(stats.captainMatches), l:'Matches led'},
                 {n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
                 {n:stats.captainMatches > 0
                   ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
                   : '-',                      l:'Win %'},
-              ] : [];
-              const awardItems = hasAwards ? [
-                {n:ini(stats.momCount),        l:'MoM',    hl:(stats.momCount||0)>0        ? HL : null},
-                {n:ini(stats.mosCount||0),     l:'MoS',    hl:(stats.mosCount||0)>0        ? HL : null},
-                //{n:ini(stats.orangeCapCount||0),l:'🟠 Cap', hl:(stats.orangeCapCount||0)>0 ? HL : null},
-                //{n:ini(stats.purpleCapCount||0),l:'🟣 Cap', hl:(stats.purpleCapCount||0)>0 ? HL : null},
-              ] : [];
-              const allItems = [...captItems, ...awardItems];
-              const captFlex  = captItems.length;
-              const awardFlex = awardItems.length;
+              ];
               return (
                 <>
                   <div style={S.dualSecRow}>
-                    {hasCaptaincy && <div style={{...S.secLabel, flex:captFlex}}>Captaincy</div>}
-                    {hasAwards && <div style={{...S.secLabel, flex:awardFlex, marginLeft:hasCaptaincy?4:0}}>Awards</div>}
+                    <div style={S.secLabel}>Captaincy</div>
                   </div>
-                  <div style={{display:'grid', gridTemplateColumns:'repeat(5,minmax(0,1fr))', gap:5, marginBottom:4}}>
-                    {Array.from({length:5}).map((_,i) => {
-                      const item = allItems[i];
-                      if (!item) return <div key={i}/>;
-                      return (
-                        <div key={i} style={{...S.statCard, background:item.hl?item.hl.bg:'#fff', borderColor:item.hl?item.hl.border:'#eee'}}>
-                          <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
-                          <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
-                        </div>
-                      );
-                    })}
+                  <div style={{display:'grid', gridTemplateColumns:'repeat(3,minmax(0,1fr))', gap:5, marginBottom:4}}>
+                    {captItems.map((item,i) => (
+                      <div key={i} style={{...S.statCard, background:item.hl?item.hl.bg:'#fff', borderColor:item.hl?item.hl.border:'#eee'}}>
+                        <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
+                        <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
+
+            {hasAwards && (() => {
+              const achievements = [
+                (stats.mosCount||0)       > 0 && `⭐ ${stats.mosCount} MoS`,
+                (stats.momCount||0)       > 0 && `🏆 ${stats.momCount} MoM`,
+                (stats.orangeCapCount||0) > 0 && `🟠 ${stats.orangeCapCount} Orange Cap`,
+                (stats.purpleCapCount||0) > 0 && `🟣 ${stats.purpleCapCount} Purple Cap`,
+              ].filter(Boolean);
+              if (!achievements.length) return null;
+              return (
+                <>
+                  <div style={S.dualSecRow}>
+                    <div style={S.secLabel}>Awards</div>
+                  </div>
+                  <div style={{display:'flex', flexWrap:'wrap', gap:8, marginBottom:8, padding:'10px 12px', background:'#fff', borderRadius:10, border:'0.5px solid #eee'}}>
+                    {achievements.map((a,i) => (
+                      <span key={i} style={{fontSize:13, color:'#222', background:'#F0F6FF', border:'0.5px solid #B5D4F4', borderRadius:20, padding:'4px 12px', fontWeight:500}}>
+                        {a}
+                      </span>
+                    ))}
                   </div>
                 </>
               );
