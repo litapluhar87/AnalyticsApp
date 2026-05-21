@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../App';
 
 const engine = require('../engine/statsEngine');
-const ACCENT = '#27500A';
+const ACCENT = '#7A2948';
 
 const MVP_SORTS = [
   {v:'totalPoints', l:'Total MVP'},
@@ -48,25 +48,16 @@ const INDIVIDUAL_TABS = [
 const PODIUM = {
   1: {
     row: {
-      background:'#F5F3FF',
-      borderLeft:'3px solid #7B6DFF',
+	  background:'#F3F0FF',
+      borderLeft:'3px solid #6C4DFF',
       boxSizing:'border-box',
       paddingLeft:9,
     },
-    rank:'#534AB7', primary:'#1F1B3D', secondary:'#6D668A',
-    label:'#7D7599', badgeBg:'rgba(123,109,255,0.12)', badgeText:'#534AB7',
+    rank:'#4B32C3', primary:'#24165A', secondary:'#6C63A3',
+    label:'#7C74B2', badgeBg:'rgba(108,77,255,0.14)', badgeText:'#4B32C3',
   },
+    
   2: {
-    row: {
-      background:'#F5F7FA',
-      borderLeft:'3px solid #6A7BA2',
-      boxSizing:'border-box',
-      paddingLeft:9,
-    },
-    rank:'#3F4C6B', primary:'#243047', secondary:'#657085',
-    label:'#748094', badgeBg:'rgba(106,123,162,0.12)', badgeText:'#3F4C6B',
-  },
-  3: {
     row: {
       background:'#FFF5F2',
       borderLeft:'3px solid #A56A5F',
@@ -75,6 +66,16 @@ const PODIUM = {
     },
     rank:'#8A4E44', primary:'#432521', secondary:'#7B5A53',
     label:'#8A6A63', badgeBg:'rgba(165,106,95,0.12)', badgeText:'#7A463D',
+  },	
+  3: {
+    row: {
+      background:'#FFF1F5',
+      borderLeft:'3px solid #B0446B',
+      boxSizing:'border-box',
+      paddingLeft:9,
+    },
+    rank:'#7A2948', primary:'#1F1B3D', secondary:'#6D668A',
+    label:'#7D7599', badgeBg:'rgba(176,68,107,0.12)', badgeText:'#7A2948',
   },
 };
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../App';
 
 const engine = require('../engine/statsEngine');
-const ACCENT = '#27500A';
+const ACCENT = '#3B63D1';
 
 const PLAYER_COLORS = [
   '#185FA5','#993C1D','#534AB7','#0F6E56','#BA7517',
@@ -649,7 +649,7 @@ function RotateHint({ prominent }) {
       <div style={prominent ? S.rotateBanner : S.rotatePill}>
         <span style={prominent ? S.rotateIconLarge : S.rotateIconSmall}>🔄</span>
         <span>
-          {prominent ? 'Rotate your phone for full chart view' : 'Rotate mobile for full chart view'}
+          {prominent ? 'Rotate mobile for full chart view' : 'Rotate mobile for full chart view'}
         </span>
       </div>
     </div>
@@ -726,7 +726,7 @@ const S = {
     fontSize:13,
     fontWeight:700,
     textAlign:'center',
-    background:'linear-gradient(135deg, #534AB7 0%, #7B6DFF 52%, #A56DFF 100%)',
+    background:'linear-gradient(135deg, #3B63D1 0%, #5B84F5 52%, #7CA3FF 100%)',
     boxShadow:'0 8px 22px rgba(83,74,183,0.28), 0 0 0 1px rgba(255,255,255,0.18) inset',
     transform:'translateY(0)',
     opacity:1,
@@ -740,11 +740,11 @@ const S = {
     gap:5,
     padding:'6px 13px',
     borderRadius:16,
-    color:'#534AB7',
+    color:'#3B63D1',
     fontSize:11,
     fontWeight:600,
-    background:'#F2F0FF',
-    border:'0.5px solid rgba(83,74,183,0.22)',
+    background:'#EEF3FF',
+    border:'0.5px solid rgba(59,99,209,0.22)',
     boxShadow:'0 2px 8px rgba(83,74,183,0.10)',
     transform:'translateY(-2px)',
     opacity:0.95,

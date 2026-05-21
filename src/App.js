@@ -16,8 +16,8 @@ const TABS = [
   { id:'home',        label:'Home',        icon:'⌂',  color:'#0C447C' },
   { id:'matches',     label:'Matches',     icon:'🏏', color:'#993C1D' },
   { id:'mycricket',   label:'My Cricket',  icon:'👤', color:'#534AB7' },
-  { id:'leaderboard', label:'Leaderboard', icon:'🏆', color:'#27500A' },
-  { id:'charts',      label:'Charts',      icon:'📈', color:'#27500A' },
+  { id:'leaderboard', label:'Leaderboard', icon:'🏆', color:'#7A2948' },
+  { id:'charts',      label:'Charts',      icon:'📈', color:'#3B63D1' },
 ];
 
 const SPORT_TYPES  = ['Classic','Box','Pair'];
