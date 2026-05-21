@@ -49,7 +49,6 @@ export default function MyCricket() {
   const [pshipWicket, setPshipWicket] = useState('All');
 
   // Compare
-  const [comparePlayer1, setComparePlayer1] = useState('');
   const [comparePlayer2, setComparePlayer2] = useState('');
   const [cmpCriteria1, setCmpCriteria1] = useState('All');
   const [cmpValue1,    setCmpValue1]    = useState('All');
@@ -151,11 +150,11 @@ function buildStatFilters() {
 
   // Auto-compare whenever players or filter changes
   useEffect(() => {
-    const p1 = comparePlayer1 || selectedPlayer;
+    const p1 = selectedPlayer;
     const p2 = comparePlayer2 || selectedPlayer;
     try { setCmpStats1(engine.getPlayerStats(sport, p1, buildCmpFilter1())); } catch(_) { setCmpStats1(null); }
     try { setCmpStats2(engine.getPlayerStats(sport, p2, buildCmpFilter2())); } catch(_) { setCmpStats2(null); }
-  }, [sport, comparePlayer1, comparePlayer2, selectedPlayer, cmpCriteria1, cmpValue1, cmpCriteria2, cmpValue2]);
+  }, [sport, comparePlayer2, selectedPlayer, cmpCriteria1, cmpValue1, cmpCriteria2, cmpValue2]);
 
   const ini = (v, suffix='') => (v != null && v !== undefined) ? `${v}${suffix}` : '-';
   const hasCaptaincy = stats && stats.captainMatches > 0;
@@ -184,7 +183,10 @@ function buildStatFilters() {
     <div style={S.page}>
 
       {/* Player selector */}
-      <div style={S.selectorBar}>
+      <div style={{
+        ...S.selectorBar,
+        ...(activeTab === 'compare' ? S.compareSelectorBar : null),
+      }}>
         <select
           value={selectedPlayer}
           onChange={e => setSelectedPlayer(e.target.value)}
@@ -193,6 +195,19 @@ function buildStatFilters() {
             <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
           ))}
         </select>
+        {activeTab === 'compare' && (
+          <>
+            <div style={S.topCmpVs}>vs</div>
+            <select
+              value={comparePlayer2 || selectedPlayer}
+              onChange={e => setComparePlayer2(e.target.value)}
+              style={S.selectBlue}>
+              {playerList.map(p => (
+                <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
+              ))}
+            </select>
+          </>
+        )}
       </div>
 
       {/* Tab bar */}
@@ -443,33 +458,6 @@ function buildStatFilters() {
       {activeTab==='compare' && (
         <div style={S.body}>
 
-          {/* Player selectors */}
-          <div style={S.cmpPlayerRow}>
-            <div style={{flex:1}}>
-              <div style={S.filterLabel}>Player 1</div>
-              <select
-                value={comparePlayer1 || selectedPlayer}
-                onChange={e => setComparePlayer1(e.target.value)}
-                style={S.select}>
-                {playerList.map(p=>(
-                  <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
-                ))}
-              </select>
-            </div>
-            <div style={S.cmpVs}>vs</div>
-            <div style={{flex:1}}>
-              <div style={S.filterLabel}>Player 2</div>
-              <select
-                value={comparePlayer2 || selectedPlayer}
-                onChange={e => setComparePlayer2(e.target.value)}
-                style={S.select}>
-                {playerList.map(p=>(
-                  <option key={p} value={p}>{p}{p===currentUser?' (me)':''}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
 		  {/* Compare by — single criteria, individual values */}
           <div style={{marginBottom:10, textAlign:'center'}}>
             <div style={{...S.filterLabel, textAlign:'center', marginBottom:4}}>Compare by</div>
@@ -509,7 +497,7 @@ function buildStatFilters() {
             {/* Header row */}
             <div style={S.cmpHeader}>
               <span style={{color:ACCENT, fontWeight:500, fontSize:12}}>
-                {comparePlayer1 || selectedPlayer}
+                {selectedPlayer}
               </span>
               <span style={{color:'#ccc', fontSize:10}}>vs</span>
               <span style={{color:'#185FA5', fontWeight:500, fontSize:12}}>
@@ -592,6 +580,7 @@ function Empty() {
 const S = {
   page:        { paddingBottom:16 },
   selectorBar: { padding:'10px 12px 6px', background:'#fff', borderBottom:'0.5px solid #eee' },
+  compareSelectorBar: { display:'flex', alignItems:'center', justifyContent:'space-between', gap:8 },
   select: {
     width:'100%', padding:'7px 8px', borderRadius:8,
     border:'0.5px solid #ddd', fontSize:12, color:'#222', background:'#fafafa',
@@ -695,6 +684,10 @@ const S = {
   cmpPlayerRow: { display:'flex', gap:8, alignItems:'flex-end', marginBottom:10 },
   cmpVs: {
     fontSize:11, color:'#aaa', paddingBottom:8,
+    flexShrink:0, width:16, textAlign:'center',
+  },
+  topCmpVs: {
+    fontSize:11, color:'#aaa',
     flexShrink:0, width:16, textAlign:'center',
   },
   cmpHeader: {

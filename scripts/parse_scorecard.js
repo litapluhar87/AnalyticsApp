@@ -307,6 +307,7 @@ function validateOutput(parsed) {
       const prefix = `innings[${i}]`;
       if (!inn.team)        errors.push(`${prefix}: missing team`);
       if (!inn.bowlingTeam) errors.push(`${prefix}: missing bowlingTeam`);
+      if (!inn.captain)     errors.push(`${prefix}: missing captain`);
       if (!Array.isArray(inn.batters))  errors.push(`${prefix}: batters must be array`);
       if (!Array.isArray(inn.bowlers))  errors.push(`${prefix}: bowlers must be array`);
       if (!Array.isArray(inn.fow))      errors.push(`${prefix}: fow must be array`);

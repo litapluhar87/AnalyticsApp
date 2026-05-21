@@ -52,6 +52,33 @@ function filterPlayers(players, filters = {}) {
 
 // ─── Aggregation ──────────────────────────────────────────────────────────────
 
+function isCaptainFlag(value) {
+  return value === '1' || value === 1 || value === true;
+}
+
+function getInningsCaptain(inn, matchPlayers = [], inningsIdx = 0, format = '') {
+  if (typeof inn?.captain === 'string' && inn.captain.trim() && inn.captain.trim() !== '1') {
+    return inn.captain.trim();
+  }
+
+  const batterCaptain = (inn?.batters || []).find(b => isCaptainFlag(b.captain));
+  if (batterCaptain?.player) return batterCaptain.player;
+
+  const teamCaptainRows = matchPlayers.filter(p =>
+    p.team === inn?.team && isCaptainFlag(p.captain)
+  );
+
+  if (format === 'Test') {
+    const battingInnings = inningsIdx <= 1 ? 1 : 2;
+    const row = teamCaptainRows.find(p =>
+      Number(p.batting?.innings) === battingInnings
+    );
+    if (row?.player) return row.player;
+  }
+
+  return teamCaptainRows[0]?.player || '';
+}
+
 function aggregatePlayerStats(rows, config, allMatchRows) {
   if (!rows.length) return null;
   const name = rows[0].player;
@@ -581,6 +608,8 @@ function getScorecard(sport, season, matchNum) {
     );
 
     const innings = match.innings.map((inn, innIdx) => {
+      const captain = getInningsCaptain(inn, matchPlayers, innIdx, match.format);
+
       // Use bowlers from scorecard innings data if available
       const bowlers = inn.bowlers?.length > 0
         ? inn.bowlers.map(b => ({
@@ -636,6 +665,7 @@ function getScorecard(sport, season, matchNum) {
 
       return {
         team:    inn.team,
+        captain,
         score:   inn.score,
         overs:   inn.overs,
         batters,
@@ -659,6 +689,8 @@ function getScorecard(sport, season, matchNum) {
   const team2Rows = matchRows.filter(p => p.team === match.team2);
 
   function buildInnings(rows, battingTeam, bowlingTeamRows) {
+    const captain = rows.find(r => isCaptainFlag(r.captain))?.player || '';
+
     const batters = rows
       .filter(r => r.batting && !r.batting.dnb)
       .sort((a, b) => (a.batting.position || 99) - (b.batting.position || 99))
@@ -703,7 +735,7 @@ function getScorecard(sport, season, matchNum) {
         comboRunOut:  r.fielding.comboRunOuts  || 0,
       }));
 
-    return { team: battingTeam, batters, bowlers, fielding, fow: [] };
+    return { team: battingTeam, captain, batters, bowlers, fielding, fow: [] };
   }
 
   const team1BatFirst = match.batFirst === match.team1;

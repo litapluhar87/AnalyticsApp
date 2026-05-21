@@ -45,6 +45,54 @@ const INDIVIDUAL_TABS = [
   {id:'fielding',label:'Fielding'},
 ];
 
+const PODIUM = {
+  1: {
+    row: {
+      background:'#F5F3FF',
+      borderLeft:'3px solid #7B6DFF',
+      boxSizing:'border-box',
+      paddingLeft:9,
+    },
+    rank:'#534AB7', primary:'#1F1B3D', secondary:'#6D668A',
+    label:'#7D7599', badgeBg:'rgba(123,109,255,0.12)', badgeText:'#534AB7',
+  },
+  2: {
+    row: {
+      background:'#F5F7FA',
+      borderLeft:'3px solid #6A7BA2',
+      boxSizing:'border-box',
+      paddingLeft:9,
+    },
+    rank:'#3F4C6B', primary:'#243047', secondary:'#657085',
+    label:'#748094', badgeBg:'rgba(106,123,162,0.12)', badgeText:'#3F4C6B',
+  },
+  3: {
+    row: {
+      background:'#FFF5F2',
+      borderLeft:'3px solid #A56A5F',
+      boxSizing:'border-box',
+      paddingLeft:9,
+    },
+    rank:'#8A4E44', primary:'#432521', secondary:'#7B5A53',
+    label:'#8A6A63', badgeBg:'rgba(165,106,95,0.12)', badgeText:'#7A463D',
+  },
+};
+
+function podiumFor(rank, dimmed=false) {
+  if (dimmed) return null;
+  return PODIUM[Number(rank)] || null;
+}
+
+function playerRowStyle(i, rank, dimmed=false) {
+  const podium = podiumFor(rank, dimmed);
+  return {
+    ...S.playerRow,
+    opacity: dimmed ? 0.55 : 1,
+    background: i%2===0 ? '#fafafa' : '#fff',
+    ...(podium ? podium.row : null),
+  };
+}
+
 export default function Leaderboard() {
   const { sportType, season, format } = useApp();
   const sport = sportType.toLowerCase();
@@ -253,13 +301,15 @@ function FilterCell({ label, value, set, opts }) {
 
 // ── Rank badge ────────────────────────────────────────────────────────────────
 function Rank({ rank, i, dimmed }) {
+  const podium = podiumFor(rank, dimmed);
   const color = dimmed ? '#ccc'
+    : podium ? podium.rank
     : i===0 ? '#BA7517'
     : i===1 ? '#5F5E5A'
     : i===2 ? '#854F0B'
     : '#bbb';
   return (
-    <span style={{...S.rankCol, color, fontWeight: i<3&&!dimmed ? 600 : 400}}>
+    <span style={{...S.rankCol, color, fontWeight: podium || (i<3&&!dimmed) ? 600 : 400}}>
       {rank}
     </span>
   );
@@ -273,24 +323,24 @@ function MVPTable({ data }) {
   function Row({ p, i, dimmed }) {
     const showMoM = (p.momCount||0) > 0;
     const showMoS = (p.mosCount||0) > 0;
+    const podium = podiumFor(p.rank, dimmed);
     return (
-      <div style={{...S.playerRow, opacity:dimmed?0.55:1,
-        background:i%2===0?'#fafafa':'#fff'}}>
+      <div style={playerRowStyle(i, p.rank, dimmed)}>
         <div style={S.rowMain}>
           <Rank rank={p.rank} i={i} dimmed={dimmed}/>
           <div style={{flex:1, minWidth:0}}>
-            <div style={S.playerName}>{p.player}</div>
+            <div style={{...S.playerName, color:podium?.primary || S.playerName.color}}>{p.player}</div>
           </div>
           <div style={S.statGroup}>
-            <StatVal label="Total" val={p.mvpMomPerInn}/>
-            <StatVal label="Bat"   val={p.mvpBatPerInn}/>
-            <StatVal label="Bowl"  val={p.mvpBowlPerInn}/>
+            <StatVal label="Total" val={p.mvpMomPerInn} podium={podium}/>
+            <StatVal label="Bat"   val={p.mvpBatPerInn} podium={podium}/>
+            <StatVal label="Bowl"  val={p.mvpBowlPerInn} podium={podium}/>
           </div>
         </div>
         <div style={S.rowSub}>
-          <span style={S.subItem}>{p.matches} matches</span>
-          {showMoM && <span style={S.subBadge}>MoM:{p.momCount}</span>}
-          {showMoS && <span style={S.subBadge}>MoS:{p.mosCount}</span>}
+          <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>{p.matches} matches</span>
+          {showMoM && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>MoM:{p.momCount}</span>}
+          {showMoS && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>MoS:{p.mosCount}</span>}
         </div>
       </div>
     );
@@ -329,23 +379,24 @@ function BatTable({ data }) {
       {data.map((p,i) => {
         const show4s = (p.fours||0) > 0;
         const show6s = (p.sixes||0) > 0;
+        const podium = podiumFor(p.rank);
         return (
-          <div key={i} style={{...S.playerRow, background:i%2===0?'#fafafa':'#fff'}}>
+          <div key={i} style={playerRowStyle(i, p.rank)}>
             <div style={S.rowMain}>
               <Rank rank={p.rank} i={i}/>
               <div style={{flex:1, minWidth:0}}>
-                <div style={S.playerName}>{p.player}</div>
+                <div style={{...S.playerName, color:podium?.primary || S.playerName.color}}>{p.player}</div>
               </div>
               <div style={S.statGroup}>
-                <StatVal label="Runs" val={p.runs}/>
-                <StatVal label="Avg" val={p.average ?? '-'}/>
-                <StatVal label="SR"   val={p.strikeRate}/>
+                <StatVal label="Runs" val={p.runs} podium={podium}/>
+                <StatVal label="Avg" val={p.average ?? '-'} podium={podium}/>
+                <StatVal label="SR"   val={p.strikeRate} podium={podium}/>
               </div>
             </div>
             <div style={S.rowSub}>
-              <span style={S.subItem}>{p.innings} inn · HS {p.highScore}</span>
-              {show4s && <span style={S.subBadge}>4s:{p.fours}</span>}
-              {show6s && <span style={S.subBadge}>6s:{p.sixes}</span>}
+              <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>{p.innings} inn · HS {p.highScore}</span>
+              {show4s && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>4s:{p.fours}</span>}
+              {show6s && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>6s:{p.sixes}</span>}
             </div>
           </div>
         );
@@ -367,23 +418,24 @@ function BowlTable({ data }) {
       {data.map((p,i) => {
         const showSR  = (p.bowlingSR||0) > 0;
         const showMdn = (p.maidens||0)   > 0;
+        const podium = podiumFor(p.rank);
         return (
-          <div key={i} style={{...S.playerRow, background:i%2===0?'#fafafa':'#fff'}}>
+          <div key={i} style={playerRowStyle(i, p.rank)}>
             <div style={S.rowMain}>
               <Rank rank={p.rank} i={i}/>
               <div style={{flex:1, minWidth:0}}>
-                <div style={S.playerName}>{p.player}</div>
+                <div style={{...S.playerName, color:podium?.primary || S.playerName.color}}>{p.player}</div>
               </div>
               <div style={S.statGroup}>
-                <StatVal label="Wkts" val={p.wickets}/>
-                <StatVal label="Avg"  val={p.bowlingAvg??'-'}/>
-                <StatVal label="Eco"  val={p.economy}/>
+                <StatVal label="Wkts" val={p.wickets} podium={podium}/>
+                <StatVal label="Avg"  val={p.bowlingAvg??'-'} podium={podium}/>
+                <StatVal label="Eco"  val={p.economy} podium={podium}/>
               </div>
             </div>
             <div style={S.rowSub}>
-              <span style={S.subItem}>{p.oversBowled} ov · Best {p.bestFigures}</span>
-              {showSR  && <span style={S.subBadge}>SR:{p.bowlingSR}</span>}
-              {showMdn && <span style={S.subBadge}>Mdn:{p.maidens}</span>}
+              <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>{p.oversBowled} ov · Best {p.bestFigures}</span>
+              {showSR  && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>SR:{p.bowlingSR}</span>}
+              {showMdn && <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>Mdn:{p.maidens}</span>}
             </div>
           </div>
         );
@@ -404,21 +456,22 @@ function FieldTable({ data }) {
       </div>
       {data.map((p,i) => {
         const roSt = (p.runOutsDirect||0)+(p.runOutsCombo||0)+(p.stumpings||0);
+        const podium = podiumFor(p.rank);
         return (
-          <div key={i} style={{...S.playerRow, background:i%2===0?'#fafafa':'#fff'}}>
+          <div key={i} style={playerRowStyle(i, p.rank)}>
             <div style={S.rowMain}>
               <Rank rank={p.rank} i={i}/>
               <div style={{flex:1, minWidth:0}}>
-                <div style={S.playerName}>{p.player}</div>
+                <div style={{...S.playerName, color:podium?.primary || S.playerName.color}}>{p.player}</div>
               </div>
               <div style={S.statGroup}>
-                <StatVal label="Catch" val={p.catches}/>
-                <StatVal label="RO+St" val={roSt}/>
+                <StatVal label="Catch" val={p.catches} podium={podium}/>
+                <StatVal label="RO+St" val={roSt} podium={podium}/>
               </div>
             </div>
             <div style={S.rowSub}>
-              <span style={S.subItem}>Total: {p.totalFielding}</span>
-              <span style={S.subBadge}>MVP: {p.mvpFieldPerInn??'-'}/inn</span>
+              <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>Total: {p.totalFielding}</span>
+              <span style={{...S.subBadge, color:podium?.badgeText || S.subBadge.color, background:podium?.badgeBg || S.subBadge.background}}>MVP: {p.mvpFieldPerInn??'-'}/inn</span>
             </div>
           </div>
         );
@@ -442,17 +495,18 @@ function PshipTable({ data, highlightPlayer }) {
         const p1hl = highlightPlayer!=='All' && p.player1===highlightPlayer;
         const p2hl = highlightPlayer!=='All' && p.player2===highlightPlayer;
         const barW = Math.round((p.runs/maxRuns)*100);
+        const podium = podiumFor(i+1);
         return (
-          <div key={i} style={{...S.playerRow, background:i%2===0?'#fafafa':'#fff'}}>
+          <div key={i} style={playerRowStyle(i, i+1)}>
             <div style={S.rowMain}>
               <Rank rank={i+1} i={i}/>
               <div style={{flex:1, minWidth:0}}>
                 <div style={S.pshipPair}>
-                  <span style={{...S.pshipName, color:p1hl?ACCENT:'#222', fontWeight:p1hl?600:500}}>
+                  <span style={{...S.pshipName, color:podium?.primary || (p1hl?ACCENT:S.pshipName.color), fontWeight:p1hl?600:500}}>
                     {p.player1}
                   </span>
-                  <span style={S.pshipAmp}>&amp;</span>
-                  <span style={{...S.pshipName, color:p2hl?ACCENT:'#222', fontWeight:p2hl?600:500}}>
+                  <span style={{...S.pshipAmp, color:podium?.secondary || S.pshipAmp.color}}>&amp;</span>
+                  <span style={{...S.pshipName, color:podium?.primary || (p2hl?ACCENT:S.pshipName.color), fontWeight:p2hl?600:500}}>
                     {p.player2}
                   </span>
                 </div>
@@ -461,12 +515,12 @@ function PshipTable({ data, highlightPlayer }) {
                 </div>
               </div>
               <div style={S.statGroup}>
-                <StatVal label="Runs" val={p.runs}/>
-                <StatVal label="SR"   val={p.strikeRate}/>
+                <StatVal label="Runs" val={p.runs} podium={podium}/>
+                <StatVal label="SR"   val={p.strikeRate} podium={podium}/>
               </div>
             </div>
             <div style={S.rowSub}>
-              <span style={S.subItem}>{p.count} stand{p.count!==1?'s':''}</span>
+              <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>{p.count} stand{p.count!==1?'s':''}</span>
             </div>
           </div>
         );
@@ -476,11 +530,11 @@ function PshipTable({ data, highlightPlayer }) {
 }
 
 // ── Stat value display ────────────────────────────────────────────────────────
-function StatVal({ label, val }) {
+function StatVal({ label, val, podium }) {
   return (
     <div style={S.statVal}>
-      <div style={S.statNum}>{val??'-'}</div>
-      <div style={S.statLbl}>{label}</div>
+      <div style={{...S.statNum, color:podium?.primary || S.statNum.color}}>{val??'-'}</div>
+      <div style={{...S.statLbl, color:podium?.label || S.statLbl.color}}>{label}</div>
     </div>
   );
 }

@@ -5,6 +5,11 @@ const engine = require('../engine/statsEngine');
 
 const ACCENT  = '#993C1D';
 
+function playerNameWithCaptain(playerName, captain) {
+  if (!playerName) return '';
+  return playerName === captain ? `${playerName} (c)` : playerName;
+}
+
 export default function Matches() {
   const { sportType, season, format } = useApp();
   const sport = sportType.toLowerCase();
@@ -199,6 +204,7 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
                 rows={currentInning.batters}
                 dnb={currentInning.dnb}
                 extras={currentInning.extras}
+                captain={currentInning.captain}
               />
               <BowlingTable rows={currentInning.bowlers} />
               <FieldingSection data={currentInning.fielding} />
@@ -211,7 +217,7 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
   );
 }
 
-function BattingTable({ rows, dnb, extras }) {
+function BattingTable({ rows, dnb, extras, captain }) {
   if (!rows?.length) return null;
   return (
     <div style={S.tableWrap}>
@@ -231,7 +237,7 @@ function BattingTable({ rows, dnb, extras }) {
         }}>
           <div style={S.tblPlayer}>
             <div style={S.tblPlayerName}>
-              {b.player}{b.notOut ? '*' : ''}
+              {playerNameWithCaptain(b.player, captain)}{b.notOut ? '*' : ''}
             </div>
             <div style={S.dismissal}>{b.dismissal || 'not out'}</div>
           </div>
@@ -259,7 +265,9 @@ function BattingTable({ rows, dnb, extras }) {
       {dnb?.length > 0 && (
         <div style={S.dnbRow}>
           <span style={S.dnbLabel}>Did not bat: </span>
-          <span style={S.dnbNames}>{dnb.join(', ')}</span>
+          <span style={S.dnbNames}>
+            {dnb.map(name => playerNameWithCaptain(name, captain)).join(', ')}
+          </span>
         </div>
       )}
     </div>
