@@ -597,9 +597,9 @@ const S = {
     border:'0.5px solid #ddd', fontSize:12, color:'#222', background:'#fafafa',
   },
   selectBlue: {
-    width:'100%', padding:'7px 8px', borderRadius:8,
-    border:'1.5px solid #534AB7', fontSize:13, color:'#534AB7',
-    background:'#EEEDFE', fontWeight:500,
+    width:'40%', padding:'7px 8px', borderRadius:8,
+    border:'1.5px solid #534AB7', fontSize:13, color:'#fff',
+    background:'#534AB7', fontWeight:500, outline:'none', cursor:'pointer',
   },
   tabBar: { display:'flex', background:'#fff', borderBottom:'0.5px solid #eee' },
   tab: {
