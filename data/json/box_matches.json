@@ -5766,18 +5766,6 @@
             "dismissType": "b",
             "fielder": "",
             "bowler": "Ajinath"
-          },
-          {
-            "player": "Gaurav",
-            "captain": "",
-            "runs": 0,
-            "balls": 0,
-            "fours": 0,
-            "sixes": 0,
-            "dismissal": "not out",
-            "dismissType": "",
-            "fielder": "",
-            "bowler": ""
           }
         ],
         "bowlers": [
@@ -5961,18 +5949,6 @@
             "dismissType": "b",
             "fielder": "",
             "bowler": "Eshwar"
-          },
-          {
-            "player": "Sushil",
-            "captain": "",
-            "runs": 0,
-            "balls": 0,
-            "fours": 0,
-            "sixes": 0,
-            "dismissal": "not out",
-            "dismissType": "",
-            "fielder": "",
-            "bowler": ""
           }
         ],
         "bowlers": [
@@ -6071,6 +6047,151 @@
         ],
         "dnb": [],
 		"captain": "Macchi"
+      },
+	    {
+        "team": "AjinkyaTara",
+        "score": "126/3",
+        "overs": "18.0",
+        "bowlingTeam": "Storm Dragons",
+        "extras": 8,
+        "batters": [
+          {
+            "player": "Amar",
+            "captain": "",
+            "runs": 59,
+            "balls": 56,
+            "fours": 4,
+            "sixes": 4,
+            "dismissal": "retired",
+            "dismissType": "",
+            "fielder": "",
+            "bowler": ""
+          },
+          {
+            "player": "Rahul",
+            "captain": "",
+            "runs": 32,
+            "balls": 21,
+            "fours": 2,
+            "sixes": 2,
+            "dismissal": "c Sandy D b Mangesh",
+            "dismissType": "c",
+            "fielder": "Sandy D",
+            "bowler": "Mangesh"
+          },
+          {
+            "player": "Anil",
+            "captain": "",
+            "runs": 17,
+            "balls": 17,
+            "fours": 1,
+            "sixes": 1,
+            "dismissal": "c Amol b Eshwar",
+            "dismissType": "c",
+            "fielder": "Amol",
+            "bowler": "Eshwar"
+          },
+          {
+            "player": "Ajinath",
+            "captain": "",
+            "runs": 7,
+            "balls": 10,
+            "fours": 0,
+            "sixes": 0,
+            "dismissal": "not out",
+            "dismissType": "",
+            "fielder": "",
+            "bowler": ""
+          },
+          {
+            "player": "Sushil",
+            "captain": "",
+            "runs": 3,
+            "balls": 5,
+            "fours": 0,
+            "sixes": 0,
+            "dismissal": "run out Amol / Mangesh",
+            "dismissType": "ro",
+            "fielder": "Amol / Mangesh",
+            "bowler": ""
+          },
+          {
+            "player": "Tushar",
+            "captain": "",
+            "runs": 0,
+            "balls": 0,
+            "fours": 0,
+            "sixes": 0,
+            "dismissal": "not out",
+            "dismissType": "",
+            "fielder": "",
+            "bowler": ""
+          }
+        ],
+        "bowlers": [
+          {
+            "player": "Amol",
+            "overs": 4,
+            "maidens": 0,
+            "runs": 28,
+            "wickets": 0,
+            "economy": 7
+          },
+          {
+            "player": "Sandy D",
+            "overs": 4,
+            "maidens": 0,
+            "runs": 31,
+            "wickets": 0,
+            "economy": 7.75
+          },
+          {
+            "player": "Eshwar",
+            "overs": 4,
+            "maidens": 0,
+            "runs": 18,
+            "wickets": 1,
+            "economy": 4.5
+          },
+          {
+            "player": "Gaurav",
+            "overs": 3,
+            "maidens": 0,
+            "runs": 27,
+            "wickets": 0,
+            "economy": 9
+          },
+          {
+            "player": "Mangesh",
+            "overs": 3,
+            "maidens": 1,
+            "runs": 22,
+            "wickets": 1,
+            "economy": 7.33
+          }
+        ],
+        "fow": [
+          {
+            "wicket": 1,
+            "player": "Rahul",
+            "runs": 65,
+            "overs": "8.0"
+          },
+          {
+            "wicket": 2,
+            "player": "Anil",
+            "runs": 114,
+            "overs": "14.5"
+          },
+          {
+            "wicket": 3,
+            "player": "Sushil",
+            "runs": 125,
+            "overs": "17.5"
+          }
+        ],
+        "dnb": [],
+		"captain": "Anil"
       },
       {
         "team": "Storm Dragons",
@@ -6220,159 +6341,8 @@
             "overs": "11.0"
           }
         ],
-        "dnb": [
-          "Ranjit",
-          "Avinash"
-        ],
+        "dnb": [],
 		"captain": "Eshwar"
-      },
-      {
-        "team": "AjinkyaTara",
-        "score": "126/3",
-        "overs": "18.0",
-        "bowlingTeam": "Storm Dragons",
-        "extras": 8,
-        "batters": [
-          {
-            "player": "Amar",
-            "captain": "",
-            "runs": 59,
-            "balls": 56,
-            "fours": 4,
-            "sixes": 4,
-            "dismissal": "retired",
-            "dismissType": "",
-            "fielder": "",
-            "bowler": ""
-          },
-          {
-            "player": "Rahul",
-            "captain": "",
-            "runs": 32,
-            "balls": 21,
-            "fours": 2,
-            "sixes": 2,
-            "dismissal": "c Sandy D b Mangesh",
-            "dismissType": "c",
-            "fielder": "Sandy D",
-            "bowler": "Mangesh"
-          },
-          {
-            "player": "Anil",
-            "captain": "",
-            "runs": 17,
-            "balls": 17,
-            "fours": 1,
-            "sixes": 1,
-            "dismissal": "c Amol b Eshwar",
-            "dismissType": "c",
-            "fielder": "Amol",
-            "bowler": "Eshwar"
-          },
-          {
-            "player": "Ajinath",
-            "captain": "",
-            "runs": 7,
-            "balls": 10,
-            "fours": 0,
-            "sixes": 0,
-            "dismissal": "not out",
-            "dismissType": "",
-            "fielder": "",
-            "bowler": ""
-          },
-          {
-            "player": "Sushil",
-            "captain": "",
-            "runs": 3,
-            "balls": 5,
-            "fours": 0,
-            "sixes": 0,
-            "dismissal": "run out Amol / Mangesh",
-            "dismissType": "ro",
-            "fielder": "Amol / Mangesh",
-            "bowler": ""
-          },
-          {
-            "player": "Tushar",
-            "captain": "",
-            "runs": 0,
-            "balls": 0,
-            "fours": 0,
-            "sixes": 0,
-            "dismissal": "not out",
-            "dismissType": "",
-            "fielder": "",
-            "bowler": ""
-          }
-        ],
-        "bowlers": [
-          {
-            "player": "Amol",
-            "overs": 4,
-            "maidens": 0,
-            "runs": 28,
-            "wickets": 0,
-            "economy": 7
-          },
-          {
-            "player": "Sandy D",
-            "overs": 4,
-            "maidens": 0,
-            "runs": 31,
-            "wickets": 0,
-            "economy": 7.75
-          },
-          {
-            "player": "Eshwar",
-            "overs": 4,
-            "maidens": 0,
-            "runs": 18,
-            "wickets": 1,
-            "economy": 4.5
-          },
-          {
-            "player": "Gaurav",
-            "overs": 3,
-            "maidens": 0,
-            "runs": 27,
-            "wickets": 0,
-            "economy": 9
-          },
-          {
-            "player": "Mangesh",
-            "overs": 3,
-            "maidens": 1,
-            "runs": 22,
-            "wickets": 1,
-            "economy": 7.33
-          }
-        ],
-        "fow": [
-          {
-            "wicket": 1,
-            "player": "Rahul",
-            "runs": 65,
-            "overs": "8.0"
-          },
-          {
-            "wicket": 2,
-            "player": "Anil",
-            "runs": 114,
-            "overs": "14.5"
-          },
-          {
-            "wicket": 3,
-            "player": "Sushil",
-            "runs": 125,
-            "overs": "17.5"
-          }
-        ],
-        "dnb": [
-          "Vallabh",
-          "Macchi"
-        ],
-		"captain": "Anil"
       }
     ],
     "mom": "Amar"
