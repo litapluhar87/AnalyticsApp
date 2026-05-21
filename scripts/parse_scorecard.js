@@ -114,6 +114,8 @@ Each innings object:
   "overs":       "X.Y" as string,
   "bowlingTeam": full team name (bowling team),
   "extras":      integer total extras (wides + no-balls + byes etc),
+  "captain":     canonical name of the captain of the BATTING team for this innings,
+                 identified by (c) or (C) next to their name in the batting list,
   "batters": [ ... ],
   "bowlers": [ ... ],
   "fow":     [ ... ],
@@ -123,7 +125,6 @@ Each innings object:
 ━━━ BATTER OBJECT ━━━
 {
   "player":      canonical name from player map (see below),
-  "captain":     "1" if this player has (c) or (C) next to their name in the scorecard, else "",
   "runs":        integer,
   "balls":       integer,
   "fours":       integer,
@@ -134,8 +135,7 @@ Each innings object:
   "bowler":      canonical name of bowler, or "" if run out / not out
 }
 
-NOTE on captain: The captain marker (c) appears next to the player name in the batting list.
-Each team has exactly one captain. Set "captain": "1" for that player, "" for all others.
+
 
 DISMISSAL RULES:
 - bowled          → dismissType "b",  fielder ""
@@ -201,7 +201,8 @@ ${playerMap}
       "overs":       "<X.Y>",
       "bowlingTeam": "<bowling team>",
       "extras":      0,
-      "batters":     [{ "player": "", "captain": "", "runs": 0, "balls": 0, "fours": 0, "sixes": 0, "dismissal": "", "dismissType": "", "fielder": "", "bowler": "" }],
+      "captain":     "<canonical captain name>",
+      "batters":     [{ "player": "", "runs": 0, "balls": 0, "fours": 0, "sixes": 0, "dismissal": "", "dismissType": "", "fielder": "", "bowler": "" }],
       "bowlers":     [],
       "fow":         [],
       "dnb":         []
@@ -226,7 +227,7 @@ async function callClaudeAPI(pdfBase64, prompt) {
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model:      'claude-sonnet-4-6',
+      model:      'claude-sonnet-4-20250514',
       max_tokens: 8000,
       messages: [
         {
@@ -256,12 +257,6 @@ async function callClaudeAPI(pdfBase64, prompt) {
   }
 
   const data = await response.json();
-  
-  // Print token usage
-  if (data.usage) {
-    console.log(`📊 Token usage — input: ${data.usage.input_tokens}, output: ${data.usage.output_tokens}, total: ${data.usage.input_tokens + data.usage.output_tokens}`);
-  }
-
   const text = data.content
     .filter(b => b.type === 'text')
     .map(b => b.text)
@@ -392,9 +387,7 @@ async function main() {
     console.log(`✅ Claude returned valid JSON`);
   } catch (e) {
     console.error(`❌ Failed to parse Claude response as JSON`);
-    console.error(`Response length: ${rawText.length}`);
-    console.error(`Last 300 chars: ${rawText.slice(-300)}`);
-    console.error(`Parse error: ${e.message}`);
+    console.error(`Raw response:\n${rawText}`);
     process.exit(1);
   }
 
