@@ -191,7 +191,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Storm Dragons",
@@ -351,7 +352,8 @@
         "extras": 9,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Amol"
       }
     ]
   },
@@ -545,7 +547,8 @@
         "extras": 5,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -700,7 +703,8 @@
         "dnb": [
           "Anil",
           "Ranjit"
-        ]
+        ],
+        "captain": "Amol"
       }
     ]
   },
@@ -913,7 +917,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Golden Phoenix",
@@ -1076,7 +1081,8 @@
         "extras": 6,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Gaurav"
       }
     ]
   },
@@ -1262,7 +1268,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -1437,7 +1444,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       }
     ]
   },
@@ -1654,7 +1662,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -1801,7 +1810,8 @@
         "dnb": [
           "Eshwar",
           "Avinash"
-        ]
+        ],
+        "captain": "Amol"
       }
     ]
   },
@@ -1909,7 +1919,8 @@
           "Ravindra",
           "Ajinath",
           "Ranjit"
-        ]
+        ],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -2109,7 +2120,8 @@
           }
         ],
         "extras": 8,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sushil"
       }
     ]
   },
@@ -2326,7 +2338,8 @@
           }
         ],
         "extras": 9,
-        "dnb": []
+        "dnb": [],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -2497,7 +2510,8 @@
         "dnb": [
           "Sushil",
           "Avinash"
-        ]
+        ],
+        "captain": "Sushil"
       }
     ]
   },
@@ -2724,7 +2738,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy D"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -2916,7 +2931,8 @@
           }
         ],
         "extras": 14,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sushil"
       }
     ]
   },
@@ -3141,7 +3157,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Anil"
       },
       {
         "team": "Golden Phoenix",
@@ -3339,7 +3356,8 @@
           }
         ],
         "extras": 14,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy D"
       }
     ]
   },
@@ -3523,7 +3541,8 @@
           "Ravindra",
           "Ranjit",
           "Gaurav"
-        ]
+        ],
+        "captain": "Amar"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -3734,7 +3753,8 @@
         "extras": 14,
         "dnb": [
           "Mangesh"
-        ]
+        ],
+        "captain": "Mangesh"
       }
     ]
   },
@@ -3951,7 +3971,8 @@
           }
         ],
         "extras": 16,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amar"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -4157,7 +4178,8 @@
           }
         ],
         "extras": 11,
-        "dnb": []
+        "dnb": [],
+        "captain": "Mangesh"
       }
     ]
   },
@@ -4321,7 +4343,8 @@
           "Macchi",
           "Mangesh",
           "Avinash"
-        ]
+        ],
+        "captain": "Macchi"
       },
       {
         "team": "Golden Phoenix",
@@ -4490,7 +4513,8 @@
         "extras": 6,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Amar"
       }
     ]
   },
@@ -4698,7 +4722,8 @@
           }
         ],
         "extras": 13,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -4873,7 +4898,8 @@
           }
         ],
         "extras": 13,
-        "dnb": []
+        "dnb": [],
+        "captain": "Anil"
       },
       {
         "team": "Golden Phoenix",
@@ -5065,7 +5091,8 @@
           }
         ],
         "extras": 11,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -5244,7 +5271,8 @@
         "extras": 10,
         "dnb": [
           "Eshwar"
-        ]
+        ],
+        "captain": "Anil"
       }
     ]
   },
@@ -5461,7 +5489,8 @@
           }
         ],
         "extras": 13,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy N"
       },
       {
         "team": "Golden Phoenix",
@@ -5659,7 +5688,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -5840,7 +5870,8 @@
           }
         ],
         "extras": 11,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy N"
       },
       {
         "team": "Golden Phoenix",
@@ -6013,7 +6044,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       }
     ]
   },
@@ -6218,7 +6250,8 @@
           }
         ],
         "extras": 13,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -6397,7 +6430,8 @@
         "extras": 4,
         "dnb": [
           "Mangesh"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -6616,7 +6650,8 @@
           }
         ],
         "extras": 9,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -6747,7 +6782,8 @@
           "Mangesh",
           "Sudhir",
           "Sandy N"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -6960,7 +6996,8 @@
           }
         ],
         "extras": 13,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Energetic Avengers",
@@ -7127,7 +7164,8 @@
         "extras": 5,
         "dnb": [
           "Gaurav"
-        ]
+        ],
+        "captain": "Vallabh"
       }
     ]
   },
@@ -7311,7 +7349,8 @@
           }
         ],
         "extras": 9,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amar"
       },
       {
         "team": "Resolute Titans",
@@ -7417,7 +7456,8 @@
           "Mangesh",
           "Gaurav",
           "Ajinath"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -7617,7 +7657,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -7723,7 +7764,8 @@
           "Sudhir",
           "Macchi",
           "Avinash"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -7917,7 +7959,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -8078,7 +8121,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       }
     ]
   },
@@ -8270,7 +8314,8 @@
           }
         ],
         "extras": 0,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy N"
       },
       {
         "team": "Energetic Avengers",
@@ -8451,7 +8496,8 @@
           }
         ],
         "extras": 11,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       }
     ]
   },
@@ -8652,7 +8698,8 @@
           }
         ],
         "extras": 4,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Energetic Avengers",
@@ -8841,7 +8888,8 @@
           }
         ],
         "extras": 9,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -9050,7 +9098,8 @@
           }
         ],
         "extras": 15,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Energetic Avengers",
@@ -9240,7 +9289,8 @@
           }
         ],
         "extras": 17,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amar"
       }
     ]
   },
@@ -9419,7 +9469,8 @@
         "extras": 9,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -9594,7 +9645,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sudhir"
       },
       {
         "team": "Energetic Avengers",
@@ -9789,7 +9841,8 @@
           }
         ],
         "extras": 8,
-        "dnb": []
+        "dnb": [],
+        "captain": "Vallabh"
       },
       {
         "team": "Resolute Titans",
@@ -9971,7 +10024,8 @@
           }
         ],
         "extras": 3,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sudhir"
       }
     ]
   },
@@ -10146,7 +10200,8 @@
           }
         ],
         "extras": 11,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       },
       {
         "team": "Resolute Titans",
@@ -10251,7 +10306,8 @@
         "dnb": [
           "Rahul",
           "Anil"
-        ]
+        ],
+        "captain": "Rahul"
       }
     ]
   },
@@ -10401,7 +10457,8 @@
           }
         ],
         "extras": 1,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       },
       {
         "team": "Resolute Titans",
@@ -10526,7 +10583,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       }
     ]
   },
@@ -10701,7 +10759,8 @@
           }
         ],
         "extras": 3,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Energetic Avengers",
@@ -10849,7 +10908,8 @@
           }
         ],
         "extras": 3,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -11020,7 +11080,8 @@
           }
         ],
         "extras": 4,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Energetic Avengers",
@@ -11149,7 +11210,8 @@
         "extras": 3,
         "dnb": [
           "Macchi"
-        ]
+        ],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -11299,7 +11361,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Rahul"
       },
       {
         "team": "Energetic Avengers",
@@ -11354,7 +11417,8 @@
           "Eshwar",
           "Gaurav",
           "Macchi"
-        ]
+        ],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -11529,7 +11593,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       },
       {
         "team": "Resolute Titans",
@@ -11601,7 +11666,8 @@
           "Sandy D",
           "Mangesh",
           "Ravindra"
-        ]
+        ],
+        "captain": "Amol"
       }
     ]
   },
@@ -11776,7 +11842,8 @@
           }
         ],
         "extras": 8,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Energetic Avengers",
@@ -11848,7 +11915,8 @@
           "Macchi",
           "Sandy N",
           "Sushil"
-        ]
+        ],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -12036,7 +12104,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Energetic Avengers",
@@ -12209,7 +12278,8 @@
           }
         ],
         "extras": 12,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -12370,7 +12440,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Energetic Avengers",
@@ -12518,7 +12589,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -12670,7 +12742,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Energetic Avengers",
@@ -12801,7 +12874,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -12964,7 +13038,8 @@
           }
         ],
         "extras": 14,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       },
       {
         "team": "Resolute Titans",
@@ -13112,7 +13187,8 @@
           }
         ],
         "extras": 15,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Resolute Titans",
@@ -13245,7 +13321,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "Energetic Avengers",
@@ -13376,7 +13453,8 @@
           }
         ],
         "extras": 8,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   }

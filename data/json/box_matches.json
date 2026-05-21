@@ -228,7 +228,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Storm Dragons",
@@ -434,7 +435,8 @@
           }
         ],
         "extras": 2,
-        "dnb": []
+        "dnb": [],
+        "captain": "Gaurav"
       }
     ]
   },
@@ -609,7 +611,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "AjinkyaTara",
@@ -761,7 +764,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       }
     ]
   },
@@ -907,7 +911,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Anil"
       },
       {
         "team": "Storm Dragons",
@@ -1046,7 +1051,8 @@
           }
         ],
         "extras": 4,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       }
     ]
   },
@@ -1223,7 +1229,8 @@
           }
         ],
         "extras": 10,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       },
       {
         "team": "Storm Dragons",
@@ -1381,7 +1388,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       }
     ]
   },
@@ -1539,7 +1547,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "AjinkyaTara",
@@ -1672,7 +1681,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       }
     ]
   },
@@ -1826,7 +1836,8 @@
         "extras": 1,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Ranjit"
       },
       {
         "team": "AjinkyaTara",
@@ -1947,7 +1958,8 @@
         "dnb": [
           "Ajinath",
           "Macchi"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -2149,7 +2161,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amol"
       },
       {
         "team": "AjinkyaTara",
@@ -2311,7 +2324,8 @@
         "extras": 3,
         "dnb": [
           "Sushil"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -2482,7 +2496,8 @@
         "dnb": [
           "Gaurav",
           "Avinash"
-        ]
+        ],
+        "captain": "Amar"
       },
       {
         "team": "Mighty Legends",
@@ -2620,7 +2635,8 @@
         "dnb": [
           "Macchi",
           "Sushil"
-        ]
+        ],
+        "captain": "Macchi"
       }
     ]
   },
@@ -2803,7 +2819,8 @@
           }
         ],
         "extras": 6,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amar"
       },
       {
         "team": "Mighty Legends",
@@ -2940,7 +2957,8 @@
         "extras": 8,
         "dnb": [
           "Avinash"
-        ]
+        ],
+        "captain": "Anil"
       }
     ]
   },
@@ -3089,7 +3107,8 @@
           "Vallabh",
           "Ranjit",
           "Sudhir"
-        ]
+        ],
+        "captain": "Amar"
       },
       {
         "team": "Mighty Legends",
@@ -3278,7 +3297,8 @@
           }
         ],
         "extras": 8,
-        "dnb": []
+        "dnb": [],
+        "captain": "Macchi"
       }
     ]
   },
@@ -3461,7 +3481,8 @@
           }
         ],
         "extras": 4,
-        "dnb": []
+        "dnb": [],
+        "captain": "Amar"
       },
       {
         "team": "Mighty Legends",
@@ -3590,7 +3611,8 @@
         "extras": 1,
         "dnb": [
           "Eshwar"
-        ]
+        ],
+        "captain": "Amol"
       }
     ]
   },
@@ -3738,7 +3760,8 @@
         "extras": 5,
         "dnb": [
           "Ranjit"
-        ]
+        ],
+        "captain": "Sandy D"
       },
       {
         "team": "Mighty Legends",
@@ -3867,7 +3890,8 @@
         "extras": 2,
         "dnb": [
           "Anil"
-        ]
+        ],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -4036,7 +4060,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy D"
       },
       {
         "team": "Mighty Legends",
@@ -4165,7 +4190,8 @@
         "extras": 2,
         "dnb": [
           "Ajinath"
-        ]
+        ],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -4324,7 +4350,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Mangesh"
       },
       {
         "team": "Vajra Prahar",
@@ -4488,7 +4515,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy D"
       },
       {
         "team": "Vajra Prahar",
@@ -4677,7 +4705,8 @@
           }
         ],
         "extras": 7,
-        "dnb": []
+        "dnb": [],
+        "captain": "Sandy D"
       },
       {
         "team": "Mighty Legends",
@@ -4866,7 +4895,8 @@
           }
         ],
         "extras": 4,
-        "dnb": []
+        "dnb": [],
+        "captain": "Mangesh"
       }
     ]
   },
@@ -5064,7 +5094,8 @@
         "extras": 3,
         "dnb": [
           "Gaurav"
-        ]
+        ],
+        "captain": "Amar"
       },
       {
         "team": "Cricket Mavericks",
@@ -5264,7 +5295,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
@@ -5456,7 +5488,8 @@
           }
         ],
         "extras": 9,
-        "dnb": []
+        "dnb": [],
+        "captain": "Gaurav"
       },
       {
         "team": "Rising Abhyuday Warriors",
@@ -5621,7 +5654,8 @@
           }
         ],
         "extras": 5,
-        "dnb": []
+        "dnb": [],
+        "captain": "Eshwar"
       }
     ]
   },
