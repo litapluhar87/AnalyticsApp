@@ -306,12 +306,24 @@ function buildPlayerRecords(match, config) {
         }
       }
 
-      // For Test: use ONLY the corresponding bowling innings for this batting innings
-      // inningsIdx 0 → bowls in idx 1, idx 1 → bowls in idx 0
-      // inningsIdx 2 → bowls in idx 3, idx 3 → bowls in idx 2
+      // For Test: find corresponding bowling innings by team matching
+      // Works for both normal order AND follow-on scenarios
+      // The bowling innings for this batting innings is where bowlingTeam === this innings team
+      // i.e. the innings where the OTHER team bats and this team bowls
       if (match.format === 'Test') {
-        const correspondingBowlIdx = inningsIdx % 2 === 0 ? inningsIdx + 1 : inningsIdx - 1;
-        const correspondingInn     = match.innings[correspondingBowlIdx];
+        // Find which innings this team bowled in (they bowl when opponent bats)
+        // Each team bats twice — find the bowling innings AFTER this batting innings
+        // by looking at remaining innings where inn.bowlingTeam === batting team
+        const battingTeamBowlingInnings = match.innings.filter((inn, idx) =>
+          idx !== inningsIdx && inn.bowlingTeam === battingTeam
+        );
+        // Match to correct bowling stint — first or second based on position
+        // Count how many times this team has batted up to and including this innings
+        const priorBattingCount = match.innings
+          .slice(0, inningsIdx + 1)
+          .filter(inn => inn.team === battingTeam).length;
+        // Take the nth bowling innings where n = priorBattingCount
+        const correspondingInn = battingTeamBowlingInnings[priorBattingCount - 1];
         if (correspondingInn) {
           const be = (correspondingInn.bowlers || []).find(b => b.player === batter.player);
           if (be) {
@@ -417,9 +429,14 @@ function buildPlayerRecords(match, config) {
       let dnbBowlRuns = 0, dnbBowlWickets = 0, dnbBowlEconomy = 0;
 
       if (match.format === 'Test') {
-        // Corresponding bowling innings for this DNB innings
-        const correspondingBowlIdx = inningsIdx % 2 === 0 ? inningsIdx + 1 : inningsIdx - 1;
-        const correspondingInn     = match.innings[correspondingBowlIdx];
+        // Find corresponding bowling innings by team matching (handles follow-on)
+        const dnbBowlingInnings = match.innings.filter((inn, idx) =>
+          idx !== inningsIdx && inn.bowlingTeam === battingTeam
+        );
+        const dnbPriorBatCount = match.innings
+          .slice(0, inningsIdx + 1)
+          .filter(inn => inn.team === battingTeam).length;
+        const correspondingInn = dnbBowlingInnings[dnbPriorBatCount - 1];
         if (correspondingInn) {
           dnbBowlEntry = (correspondingInn.bowlers || []).find(b => b.player === playerName);
           if (dnbBowlEntry) {

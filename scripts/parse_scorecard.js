@@ -105,7 +105,8 @@ Return ONLY valid JSON. No explanation, no markdown, no code fences. Just the ra
 ━━━ INNINGS ARRAY ━━━
 
 This match has exactly ${inningsCount} innings.
-${isTest ? 'Order: team1 1st inn → team2 1st inn → team1 2nd inn → team2 2nd inn.' : 'Order: team that batted first → team that batted second.'}
+${isTest ? 'Order: ACTUAL PLAY SEQUENCE. Normally: team1 1st inn → team2 1st inn → team1 2nd inn → team2 2nd inn. But if follow-on was enforced, the team that followed on bats again immediately. Always reflect the actual sequence innings were played.' : 'Order: team that batted first → team that batted second.'}
+
 
 Each innings object:
 {
