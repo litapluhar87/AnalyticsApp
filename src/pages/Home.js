@@ -490,7 +490,7 @@ const S = {
   page:     { paddingBottom:16 },
   carousel: {
     position:'relative',
-    background:'linear-gradient(160deg, #0B1F33 0%, #0C447C 100%)',
+    background:'#0C447C',
     userSelect:'none',
   },
   arrowL: {

@@ -229,19 +229,6 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* Sort by dropdown */}
-      <div style={S.sortBar}>
-        <span style={S.sortLabel}>Sort by</span>
-        <select
-          value={sortBy}
-          onChange={e => setSortBy(e.target.value)}
-          style={S.sortSelect}>
-          {currentSorts.map(s => (
-            <option key={s.v} value={s.v}>{s.l}</option>
-          ))}
-        </select>
-      </div>
-
       {/* Filters — Individual */}
       {mode==='individual' && (
         <div style={S.filterBar}>
@@ -269,6 +256,19 @@ export default function Leaderboard() {
           </div>
         </div>
       )}
+
+      {/* Sort by dropdown */}
+      <div style={S.sortBar}>
+        <span style={S.sortLabel}>Sort by</span>
+        <select
+          value={sortBy}
+          onChange={e => setSortBy(e.target.value)}
+          style={S.sortSelect}>
+          {currentSorts.map(s => (
+            <option key={s.v} value={s.v}>{s.l}</option>
+          ))}
+        </select>
+      </div>
 
       {/* Content */}
       <div style={S.body}>
@@ -575,15 +575,23 @@ const S = {
     borderBottom:`2px solid ${ACCENT}`, cursor:'pointer',
   },
   sortBar: {
-    display:'flex', alignItems:'center', gap:8,
-    padding:'7px 12px', background:'#fff',
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'flex-end',
+    gap:8,
+    padding:'7px 12px',
+    background:'#fff',
     borderBottom:'0.5px solid #eee',
   },
-  sortLabel:  { fontSize:11, color:'#aaa', flexShrink:0 },
+  sortLabel:  { fontSize:12, color:'#aaa', flexShrink:0 },
   sortSelect: {
-    flex:1, padding:'5px 6px', borderRadius:6,
-    border:'0.5px solid #ddd', fontSize:12,
-    color:'#333', background:'#fafafa',
+    width:'40%',
+    padding:'5px 6px',
+    borderRadius:6,
+    border:'0.5px solid #ddd',
+    fontSize:12,
+    color:'#333',
+    background:'#fafafa',
   },
   filterBar: {
     padding:'8px 12px', background:'#f8f8f8',
