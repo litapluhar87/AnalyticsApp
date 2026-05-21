@@ -363,7 +363,7 @@ function buildStatFilters() {
             </div>
             <div style={S.card}>
               <div style={S.formDots}>
-                {recentForm.map((r,i) => (
+                {recentForm.filter(r => r.showResultIndicator !== false).map((r,i) => (
                   <div key={i} style={{
                     ...S.dot,
                     background: r.tied?'#888': r.won?'#3B6D11':'#993C1D',

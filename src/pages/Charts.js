@@ -51,6 +51,12 @@ export default function Charts() {
   const [isLandscape, setIsLandscape] = useState(false);
   const [chartData,   setChartData]   = useState(null);
   const [inningsSeasonRequired, setInningsSeasonRequired] = useState(false);
+  const [showRotateBanner, setShowRotateBanner] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowRotateBanner(false), 2600);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     function checkOrientation() {
@@ -320,10 +326,8 @@ export default function Charts() {
         </div>
       </div>
 	  
-	  {/* Rotate hint */}
-      <div style={S.rotateHint}>
-        <span style={S.rotateText}>🔄Rotate phone for full view</span>
-      </div>
+      {/* Rotate hint */}
+      <RotateHint prominent={showRotateBanner} />
 
       {/* Chart */}
       <div style={S.chartArea}>
@@ -333,11 +337,6 @@ export default function Charts() {
             ? <div style={S.empty}>No data available</div>
             : <ChartRenderer data={chartData} isLandscape={false}/>
         }
-      </div>
-
-      {/* Rotate hint */}
-      <div style={S.rotateHint}>
-        <span style={S.rotateText}>🔄Rotate phone for full view</span>
       </div>
 
       {/* Player selector */}
@@ -644,6 +643,19 @@ function FilterCell({ label, value, set, opts }) {
   );
 }
 
+function RotateHint({ prominent }) {
+  return (
+    <div style={S.rotateHintWrap}>
+      <div style={prominent ? S.rotateBanner : S.rotatePill}>
+        <span style={prominent ? S.rotateIconLarge : S.rotateIconSmall}>🔄</span>
+        <span>
+          {prominent ? 'Rotate your phone for full chart view' : 'Rotate mobile for full chart view'}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 const S = {
   page:        { paddingBottom:16 },
   chartTabRow: {
@@ -694,15 +706,58 @@ const S = {
     color:'#333', background:'#fff', width:'100%',
   },
   chartArea:   { padding:'12px 12px 0' },
-  rotateHint: {
-    display:'flex', justifyContent:'center',
+  rotateHintWrap: {
+    display:'flex',
+    justifyContent:'center',
+    alignItems:'center',
+    minHeight:58,
     padding:'8px 12px 4px',
   },
-  rotateText: {
-    display:'flex', alignItems:'center', gap:5,
-    fontSize:11, color:'#555', fontWeight:500,
-    background:'#f8f8f8', border:'0.5px solid #e0e0e0',
-    borderRadius:16, padding:'5px 14px',
+  rotateBanner: {
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    gap:8,
+    width:'100%',
+    maxWidth:360,
+    padding:'12px 16px',
+    borderRadius:18,
+    color:'#fff',
+    fontSize:13,
+    fontWeight:700,
+    textAlign:'center',
+    background:'linear-gradient(135deg, #534AB7 0%, #7B6DFF 52%, #A56DFF 100%)',
+    boxShadow:'0 8px 22px rgba(83,74,183,0.28), 0 0 0 1px rgba(255,255,255,0.18) inset',
+    transform:'translateY(0)',
+    opacity:1,
+    transition:'all 360ms ease',
+    willChange:'transform, opacity',
+  },
+  rotatePill: {
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    gap:5,
+    padding:'6px 13px',
+    borderRadius:16,
+    color:'#534AB7',
+    fontSize:11,
+    fontWeight:600,
+    background:'#F2F0FF',
+    border:'0.5px solid rgba(83,74,183,0.22)',
+    boxShadow:'0 2px 8px rgba(83,74,183,0.10)',
+    transform:'translateY(-2px)',
+    opacity:0.95,
+    transition:'all 360ms ease',
+    willChange:'transform, opacity',
+  },
+  rotateIconLarge: {
+    fontSize:17,
+    lineHeight:1,
+  },
+  rotateIconSmall: {
+    fontSize:12,
+    lineHeight:1,
   },
   playerFilter: {
     padding:'10px 12px 12px',

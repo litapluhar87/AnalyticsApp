@@ -15,7 +15,7 @@ export default function Matches() {
   const sport = sportType.toLowerCase();
 
   const [showPT,      setShowPT]      = useState(false);
-  const [ptFilters,   setPtFilters]   = useState({});
+  const [ptFilters,   setPtFilters]   = useState(null);
   const [matches, setMatches]         = useState([]);
   const [pointsTable, setPT]          = useState([]);
   const [expandedKey, setExpandedKey] = useState(null);
@@ -38,13 +38,24 @@ export default function Matches() {
         const pf = { season: String(recent.season) };
         if (recent.format && recent.format !== 'All') pf.format = recent.format;
         setPtFilters(pf);
+      } else {
+        setPtFilters(null);
+        setPT([]);
       }
-    } catch (_) { setMatches([]); }
+    } catch (_) {
+      setMatches([]);
+      setPtFilters(null);
+      setPT([]);
+    }
     setExpandedKey(null);
     setDetail(null);
   }, [sport, seasonArg, formatArg]);
 
   useEffect(() => {
+    if (!ptFilters?.season) {
+      setPT([]);
+      return;
+    }
     try {
       setPT(engine.getPointsTable(sport, ptFilters) || []);
     } catch (_) { setPT([]); }
@@ -73,7 +84,7 @@ export default function Matches() {
           style={showPT ? S.pillOn : S.pillOff}>
           {showPT ? '✖ Close' : '📊 Points Table'}
         </button>
-        {ptFilters.season && (
+        {ptFilters?.season && (
           <span style={S.ptFilterLabel}>
             S{ptFilters.season}{ptFilters.format ? ` · ${ptFilters.format}` : ''}
           </span>
@@ -207,7 +218,6 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
                 captain={currentInning.captain}
               />
               <BowlingTable rows={currentInning.bowlers} />
-              <FieldingSection data={currentInning.fielding} />
 			  <FOWSection fow={currentInning.fow} />
             </>
           )}
@@ -304,42 +314,6 @@ function BowlingTable({ rows }) {
   );
 }
 
-function FieldingSection({ data }) {
-  if (!data) return null;
-
-  const lines = [];
-
-  if (Array.isArray(data)) {
-    // [{player, catches, stumpings, runouts}, ...]
-    data.forEach(f => {
-      const n = f.player || f.name || '';
-      if ((f.catches    || 0) > 0) lines.push(`${n}: ${f.catches} catch${f.catches > 1 ? 'es' : ''}`);
-      if ((f.stumpings  || 0) > 0) lines.push(`${n}: ${f.stumpings} stumping${f.stumpings > 1 ? 's' : ''}`);
-      const ro = (f.runouts || f.directRunOuts || 0) + (f.comboRunOuts || 0);
-      if (ro > 0) lines.push(`${n}: ${ro} run out${ro > 1 ? 's' : ''}`);
-    });
-  } else if (typeof data === 'object') {
-    // { catches: [...names], stumpings: [...], runouts: [...] }
-    const cats = data.catches   || [];
-    const sts  = data.stumpings || [];
-    const ros  = data.runouts   || data.runOuts || [];
-    if (cats.length) lines.push(`Catches: ${cats.join(', ')}`);
-    if (sts.length)  lines.push(`Stumpings: ${sts.join(', ')}`);
-    if (ros.length)  lines.push(`Run Outs: ${ros.join(', ')}`);
-  }
-
-  if (!lines.length) return null;
-
-  return (
-    <div style={S.tableWrap}>
-      <div style={S.tableTitle}>Fielding</div>
-      {lines.map((line, i) => (
-        <div key={i} style={S.fieldItem}>{line}</div>
-      ))}
-    </div>
-  );
-}
-
 function FOWSection({ fow }) {
   if (!fow?.length) return null;
   return (
@@ -361,7 +335,7 @@ function FOWSection({ fow }) {
 function PointsTableView({ data, onBack }) {
   return (
     <div style={{ padding: '0 12px 16px' }}>
-      {data.length === 0 ? <Empty /> : (
+      {data.length === 0 ? <Empty message="Data not available" /> : (
         <div style={S.ptCard}>
           <div style={S.ptHead}>
             <span style={S.ptTeam}>Team</span>
@@ -390,8 +364,8 @@ function PointsTableView({ data, onBack }) {
   );
 }
 
-function Empty() {
-  return <div style={S.empty}>No data available</div>;
+function Empty({ message = 'No data available' }) {
+  return <div style={S.empty}>{message}</div>;
 }
 
 const S = {

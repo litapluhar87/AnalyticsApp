@@ -337,13 +337,28 @@ function getPlayerStats(sport, playerName, filters = {}) {
 
 function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.recentFormMatches || 10)) {
   const { players, matches } = loadData(sport);
-  const rows = players
+  const sortedRows = players
     .filter(p => p.player === playerName)
     .sort((a, b) => {
       if (Number(b.season) !== Number(a.season)) return Number(b.season) - Number(a.season);
       return Number(b.matchNum) - Number(a.matchNum);
-    })
-    .slice(0, n);
+    });
+
+  const recentMatchKeys = [];
+  const seenMatches = new Set();
+  for (const row of sortedRows) {
+    const key = `${row.season}-${row.matchNum}`;
+    if (seenMatches.has(key)) continue;
+    seenMatches.add(key);
+    recentMatchKeys.push(key);
+    if (recentMatchKeys.length >= n) break;
+  }
+  const recentMatchKeySet = new Set(recentMatchKeys);
+  const rows = sortedRows.filter(row =>
+    recentMatchKeySet.has(`${row.season}-${row.matchNum}`)
+  );
+
+  const seenTestResults = new Set();
 
   return rows.map(r => {
     const match = matches.find(m =>
@@ -355,6 +370,11 @@ function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.rece
     const isTie = match?.result === 'Tie' ||
                   match?.winner === 'Tie' ||
                   match?.result?.toLowerCase().includes('tie');
+
+    const resultKey = `${r.season}-${r.matchNum}`;
+    const isTest = r.format === 'Test';
+    const showResultIndicator = !isTest || !seenTestResults.has(resultKey);
+    if (isTest) seenTestResults.add(resultKey);
 
     return {
       season:    r.season,
@@ -369,6 +389,7 @@ function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.rece
       mom:       r.isManOfMatch     || false,
       won:       r.won              || false,
       tied:      isTie              || false,
+      showResultIndicator,
       mvpTotal:  r.mvp?.total       || 0,
       mvpMom:    r.mvp?.mom         || 0,
       opponent:  match
