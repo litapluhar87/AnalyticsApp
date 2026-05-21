@@ -180,8 +180,8 @@ export default function Home() {
           <div key={i} style={S.matchTile} onClick={() => navigateTo('matches')}>
             <div style={S.matchTop}>
               <div style={S.matchBadge}>
-                S{m.season} · M{m.matchNum} · {m.ground}
-              </div>
+			    S{m.season} · M{m.matchNum} · {m.format} · {m.ground}
+			  </div>
               <div style={S.matchDate}>
                 {m.date
                   ? new Date(m.date).toLocaleDateString('en-IN',
@@ -190,27 +190,49 @@ export default function Home() {
               </div>
             </div>
             <div style={S.matchTeams}>
-              <div style={S.matchTeam}>
-                <div style={{...S.matchTeamName, fontWeight: m.winner===m.team1?600:400}}>
-                  {m.team1}
-                </div>
-                <div style={{...S.matchScore, color: m.winner===m.team1?'#0C447C':'#555'}}>
-                  {m.score1}
-                </div>
-              </div>
-              <div style={S.matchVs}>vs</div>
-              <div style={{...S.matchTeam, alignItems:'flex-end'}}>
-                <div style={{...S.matchTeamName, fontWeight: m.winner===m.team2?600:400}}>
-                  {m.team2}
-                </div>
-                <div style={{...S.matchScore, color: m.winner===m.team2?'#0C447C':'#555'}}>
-                  {m.score2}
-                </div>
-              </div>
-            </div>
-            <div style={S.matchFoot}>
-              {m.result} · Man of the Match: <strong>{m.mom}</strong>
-            </div>
+			  <div style={S.matchTeam}>
+			    <div style={{...S.matchTeamName, fontWeight: m.winner===m.team1?600:400}}>
+				  {m.team1}
+				</div>
+				{m.format === 'Test' && m.innings?.length === 4 ? (
+				  <>
+				    <div style={{...S.matchScore, color: m.winner===m.team1?'#0C447C':'#555'}}>
+					  {m.innings[0]?.score || '-'}
+					</div>
+					<div style={{...S.matchScore, fontSize:14, color: m.winner===m.team1?'#0C447C':'#777'}}>
+					  {m.innings[2]?.score || '-'}
+					</div>
+				  </>
+				) : (
+				  <div style={{...S.matchScore, color: m.winner===m.team1?'#0C447C':'#555'}}>
+				    {m.score1}
+				  </div>
+				)}
+			  </div>
+			  <div style={S.matchVs}>vs</div>
+			  <div style={{...S.matchTeam, alignItems:'flex-end'}}>
+			    <div style={{...S.matchTeamName, fontWeight: m.winner===m.team2?600:400}}>
+				  {m.team2}
+				</div>
+				{m.format === 'Test' && m.innings?.length === 4 ? (
+				  <>
+				    <div style={{...S.matchScore, color: m.winner===m.team2?'#0C447C':'#555'}}>
+					  {m.innings[1]?.score || '-'}
+					</div>
+					<div style={{...S.matchScore, fontSize:14, color: m.winner===m.team2?'#0C447C':'#777'}}>
+					  {m.innings[3]?.score || '-'}
+					</div>
+				  </>
+				) : (
+				  <div style={{...S.matchScore, color: m.winner===m.team2?'#0C447C':'#555'}}>
+				    {m.score2}
+				  </div>
+				)}
+			  </div>
+			</div>
+			<div style={S.matchFoot}>
+			  {m.result} · Man of the Match: <strong>{m.mom}</strong>
+			</div>
           </div>
         ))}
 
@@ -310,53 +332,71 @@ function PlayerCard({ item }) {
 
 // ── League Standing ───────────────────────────────────────────────────────────
 function LeagueStanding({ sport, filters }) {
-  const [leader, setLeader] = useState(null);
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
     try {
-      const matches = engine.getMatches(sport, filters);
-      if (!matches.length) { setLeader(null); return; }
+      // Ignore format filter — show all formats separately
+      const filtersNoFormat = { ...filters, format: undefined };
 
-      const recentMatch = matches[0];
-      const activeFilters = { ...filters };
-      if (!activeFilters.season) activeFilters.season = recentMatch.season;
+      const matches = engine.getMatches(sport, filtersNoFormat);
+      if (!matches.length) { setRows([]); return; }
 
-      const table = engine.getPointsTable(sport, activeFilters);
-      if (table.length < 2) { setLeader(null); return; }
+      // Determine active season
+      const recentMatch  = matches[0];
+      const activeSeason = filters.season || recentMatch.season;
 
-      const top    = table[0];
-      const second = table[1];
-
-      // Build season-format label
-      const sn  = activeFilters.season || recentMatch.season;
-      const fmt = activeFilters.format || recentMatch.format || '';
-      const seasonLabel = `Season${sn}${fmt ? `-${fmt}` : ''}`;
-
-      setLeader({ team1:top.team, wins1:top.won, team2:second.team, wins2:second.won, seasonLabel });
-    } catch(_) { setLeader(null); }
+      // Get all formats played in this season
+      const seasonMatches = matches.filter(m => String(m.season) === String(activeSeason));
+      const formats = [...new Set(seasonMatches.map(m => m.format))].filter(Boolean);
+	  
+      const result = [];
+      for (const fmt of formats) {
+        const table = engine.getPointsTable(sport, {
+          ...filtersNoFormat,
+          season: activeSeason,
+          format: fmt,
+        });
+        if (table.length < 2) continue;
+        const top    = table[0];
+        const second = table[1];
+        result.push({
+          format: fmt,
+          team1:  top.team,    wins1: top.won,
+          team2:  second.team, wins2: second.won,
+          season: activeSeason,
+        });
+      }	  
+      setRows(result);
+    } catch(_) { setRows([]); }
   }, [sport, JSON.stringify(filters)]);
-
-  if (!leader) return null;
-
-  const tied = leader.wins1 === leader.wins2;
+  
+  if (!rows.length) return null;
 
   return (
     <div style={LS.box}>
-      <div style={LS.title}>League Standing</div>
-      <div style={LS.row}>
-        <div style={LS.teamLeft}>
-          <div style={LS.tname}>{leader.team1}</div>
-          <div style={LS.score}>{leader.wins1}</div>
-        </div>
-        <div style={LS.middle}>
-          <div style={LS.seasonLabel}>{leader.seasonLabel}</div>
-          <div style={LS.vs}>{tied ? 'Tied' : 'vs'}</div>
-        </div>
-        <div style={LS.teamRight}>
-          <div style={LS.tname}>{leader.team2}</div>
-          <div style={LS.score}>{leader.wins2}</div>
-        </div>
-      </div>
+      <div style={LS.title}>League Standing · Season {rows[0].season}</div>
+      {rows.map((r, i) => {
+        const tied = r.wins1 === r.wins2;
+        return (
+          <div key={r.format}>
+            {i > 0 && <div style={LS.divider}/>}
+            <div style={LS.row}>
+              <div style={LS.teamLeft}>
+                <div style={LS.tname}>{r.team1}</div>
+                <div style={LS.score}>{r.wins1}</div>
+              </div>
+              <div style={LS.middle}>
+                <div style={LS.formatLabel}>{r.format}</div>
+              </div>
+              <div style={LS.teamRight}>
+                <div style={LS.tname}>{r.team2}</div>
+                <div style={LS.score}>{r.wins2}</div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -415,7 +455,7 @@ const C = {
 // ── League Standing styles ────────────────────────────────────────────────────
 const LS = {
   box: {
-    background:'#1D64AC', borderRadius:10,
+    background:'linear-gradient(160deg, #0B1F33 0%, #0C447C 100%)', borderRadius:10,
     border:'none', padding:'10px 14px',
     marginBottom:10,
   },
@@ -424,19 +464,23 @@ const LS = {
     letterSpacing:0.7, textTransform:'uppercase',
     textAlign:'center', marginBottom:8,
   },
-  row: { display:'flex', alignItems:'center' },
+  formatLabel: {
+    fontSize:11, fontWeight:600, color:'rgba(255,255,255,0.6)',
+    textTransform:'uppercase', letterSpacing:0.5,
+    textAlign:'center', marginBottom:4,
+  },
+  divider: {
+    height:1, background:'rgba(255,255,255,0.15)',
+    margin:'8px 0',
+  },
+  row:       { display:'flex', alignItems:'center' },
   teamLeft:  { flex:1 },
   teamRight: { flex:1, textAlign:'right' },
-  tname: { fontSize:16, fontWeight:600, color:'rgba(255,255,255,0.85)' },
-  score: { fontSize:24, fontWeight:700, color:'#fff', marginTop:2 },
+  tname:     { fontSize:14, fontWeight:600, color:'rgba(255,255,255,0.85)' },
+  score:     { fontSize:14, fontWeight:600, color:'#fff', marginTop:2 },
   middle: {
     display:'flex', flexDirection:'column',
     alignItems:'center', padding:'0 10px', flexShrink:0,
-  },
-  seasonLabel: {
-    fontSize:11, fontWeight:500, color:'#fff',
-    background:'rgba(255,255,255,0.2)', padding:'2px 8px',
-    borderRadius:8, marginBottom:4,
   },
   vs: { fontSize:11, color:'rgba(255,255,255,0.6)' },
 };
@@ -446,7 +490,7 @@ const S = {
   page:     { paddingBottom:16 },
   carousel: {
     position:'relative',
-    background:'linear-gradient(160deg, #0C447C 0%, #185FA5 100%)',
+    background:'linear-gradient(160deg, #0B1F33 0%, #0C447C 100%)',
     userSelect:'none',
   },
   arrowL: {
@@ -499,7 +543,7 @@ const S = {
   matchTeams:   { display:'flex', alignItems:'flex-start', gap:6 },
   matchTeam:    { flex:1, display:'flex', flexDirection:'column' },
   matchTeamName:{ fontSize:12, color:'#222' },
-  matchScore:   { fontSize:16, fontWeight:600, marginTop:2 },
+  matchScore:   { fontSize:14, fontWeight:600, marginTop:2 },
   matchVs:      { fontSize:11, color:'#ccc', paddingTop:14, flexShrink:0 },
   matchFoot: {
     fontSize:11, color:'#aaa', marginTop:8,
@@ -508,7 +552,7 @@ const S = {
   viewAll: {
     display:'block', width:'100%', padding:'9px',
     borderRadius:10, border:'0.5px solid #B5D4F4',
-    background:'#E6F1FB', color:'#0C447C',
+    background:'#0C447C', color:'rgba(255,255,255,0.85)',
     fontSize:12, fontWeight:500, cursor:'pointer',
     marginBottom:16, textAlign:'center',
   },

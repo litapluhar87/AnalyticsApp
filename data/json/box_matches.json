@@ -5868,7 +5868,8 @@
             "overs": "16.5"
           }
         ],
-        "dnb": []
+        "dnb": [],
+		"captain": "Eshwar"
       },
       {
         "team": "AjinkyaTara",
@@ -6068,7 +6069,8 @@
             "overs": "13.4"
           }
         ],
-        "dnb": []
+        "dnb": [],
+		"captain": "Macchi"
       },
       {
         "team": "Storm Dragons",
@@ -6221,7 +6223,8 @@
         "dnb": [
           "Ranjit",
           "Avinash"
-        ]
+        ],
+		"captain": "Eshwar"
       },
       {
         "team": "AjinkyaTara",
@@ -6368,7 +6371,8 @@
         "dnb": [
           "Vallabh",
           "Macchi"
-        ]
+        ],
+		"captain": "Anil"
       }
     ],
     "mom": "Amar"

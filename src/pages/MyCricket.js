@@ -286,25 +286,33 @@ function buildStatFilters() {
 
             {hasCaptaincy && (() => {
               const captItems = [
-                {n:ini(stats.captainMatches), l:'Matches led'},
-                {n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
-                {n:stats.captainMatches > 0
-                  ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
-                  : '-',                      l:'Win %'},
-              ];
+			    {n:ini(stats.captainMatches), l:'Matches led'},
+				{n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
+				{n:stats.captainMatches > 0
+				  ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
+				  : '-',                      l:'Win %'},
+				{n:'', l:'', hidden:true},
+				{n:'', l:'', hidden:true},
+			  ];
               return (
                 <>
                   <div style={S.dualSecRow}>
                     <div style={S.secLabel}>Captaincy</div>
                   </div>
-                  <div style={{display:'grid', gridTemplateColumns:'repeat(3,minmax(0,1fr))', gap:5, marginBottom:4}}>
-                    {captItems.map((item,i) => (
-                      <div key={i} style={{...S.statCard, background:item.hl?item.hl.bg:'#fff', borderColor:item.hl?item.hl.border:'#eee'}}>
-                        <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
-                        <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
-                      </div>
-                    ))}
-                  </div>
+                  <div style={{display:'grid', gridTemplateColumns:'repeat(5,minmax(0,1fr))', gap:5, marginBottom:4}}>
+				    {captItems.map((item,i) => (
+					<div key={i} style={{
+					  ...S.statCard,
+					  background:   item.hidden ? 'transparent' : item.hl ? item.hl.bg   : '#fff',
+					  borderColor:  item.hidden ? 'transparent' : item.hl ? item.hl.border: '#eee',
+					  boxShadow:    item.hidden ? 'none' : undefined,
+					  visibility:   item.hidden ? 'hidden' : 'visible',
+					}}>
+					  <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
+					  <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
+					</div>
+				))}
+                </div>
                 </>
               );
             })()}
