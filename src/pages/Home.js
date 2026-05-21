@@ -490,7 +490,7 @@ const S = {
   page:     { paddingBottom:16 },
   carousel: {
     position:'relative',
-    background:'#0C447C',
+    background:'#1E5DA3',
     userSelect:'none',
   },
   arrowL: {
