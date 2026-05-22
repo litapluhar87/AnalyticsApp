@@ -139,13 +139,16 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
               {m.team1}
             </div>
             {m.format === 'Test' && m.innings?.length === 4 ? (
-              <>
-                <div style={S.score}>{m.innings[0]?.score || '-'} {m.innings[0]?.overs ? <span style={S.overs}>({m.innings[0]?.overs} ov)</span> : null}</div>
-                <div style={{...S.score, fontSize:16, color:'#222'}}>{m.innings[2]?.score || '-'} {m.innings[2]?.overs ? <span style={S.overs}>({m.innings[2]?.overs} ov)</span> : null}</div>
-              </>
-            ) : (
-              <div style={S.score}>{m.score1 || '-'} {m.overs1 ? <span style={S.overs}>({m.overs1} ov)</span> : null}</div>
-            )}
+			  <>
+				{m.innings.filter(inn => inn.team === m.team1).map((inn, i) => (
+				  <div key={i} style={i === 0 ? S.score : {...S.score, fontSize:16, color:'#222'}}>
+					{inn.score || '-'} {inn.overs ? <span style={S.overs}>({inn.overs} ov)</span> : null}
+				  </div>
+				))}
+			  </>
+			) : (
+			  <div style={S.score}>{m.score1 || '-'} {m.overs1 ? <span style={S.overs}>({m.overs1} ov)</span> : null}</div>
+			)}
           </div>
           <div style={S.vsBlock}>
             <span style={S.vs}>vs</span>
@@ -156,13 +159,16 @@ function MatchCard({ match: m, expanded, detail, inningTab, onTap, onTabChange }
               {m.team2}
             </div>
             {m.format === 'Test' && m.innings?.length === 4 ? (
-              <>
-                <div style={S.score}>{m.innings[1]?.score || '-'} {m.innings[1]?.overs ? <span style={S.overs}>({m.innings[1]?.overs} ov)</span> : null}</div>
-                <div style={{...S.score, fontSize:16, color:'#222'}}>{m.innings[3]?.score || '-'} {m.innings[3]?.overs ? <span style={S.overs}>({m.innings[3]?.overs} ov)</span> : null}</div>
-              </>
-            ) : (
-              <div style={S.score}>{m.score2 || '-'} {m.overs2 ? <span style={S.overs}>({m.overs2} ov)</span> : null}</div>
-            )}
+			  <>
+				{m.innings.filter(inn => inn.team === m.team2).map((inn, i) => (
+				  <div key={i} style={i === 0 ? S.score : {...S.score, fontSize:16, color:'#222'}}>
+					{inn.score || '-'} {inn.overs ? <span style={S.overs}>({inn.overs} ov)</span> : null}
+				  </div>
+				))}
+			  </>
+			) : (
+			  <div style={S.score}>{m.score2 || '-'} {m.overs2 ? <span style={S.overs}>({m.overs2} ov)</span> : null}</div>
+			)}
           </div>
         </div>
 		<div style={S.metaArea}>

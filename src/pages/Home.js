@@ -196,16 +196,17 @@ export default function Home() {
 				</div>
 				{m.format === 'Test' && m.innings?.length === 4 ? (
 				  <>
-				    <div style={{...S.matchScore, color: m.winner===m.team1?'#0C447C':'#555'}}>
-					  {m.innings[0]?.score || '-'}
-					</div>
-					<div style={{...S.matchScore, fontSize:14, color: m.winner===m.team1?'#0C447C':'#777'}}>
-					  {m.innings[2]?.score || '-'}
-					</div>
+					{m.innings.filter(inn => inn.team === m.team1).map((inn, i) => (
+					  <div key={i} style={{...S.matchScore, 
+						fontSize: i===0 ? undefined : 14,
+						color: m.winner===m.team1 ? (i===0?'#0C447C':'#0C447C') : (i===0?'#555':'#777')}}>
+						{inn.score || '-'}
+					  </div>
+					))}
 				  </>
 				) : (
 				  <div style={{...S.matchScore, color: m.winner===m.team1?'#0C447C':'#555'}}>
-				    {m.score1}
+					{m.score1}
 				  </div>
 				)}
 			  </div>
@@ -216,16 +217,17 @@ export default function Home() {
 				</div>
 				{m.format === 'Test' && m.innings?.length === 4 ? (
 				  <>
-				    <div style={{...S.matchScore, color: m.winner===m.team2?'#0C447C':'#555'}}>
-					  {m.innings[1]?.score || '-'}
-					</div>
-					<div style={{...S.matchScore, fontSize:14, color: m.winner===m.team2?'#0C447C':'#777'}}>
-					  {m.innings[3]?.score || '-'}
-					</div>
+					{m.innings.filter(inn => inn.team === m.team2).map((inn, i) => (
+					  <div key={i} style={{...S.matchScore,
+						fontSize: i===0 ? undefined : 14,
+						color: m.winner===m.team2 ? (i===0?'#0C447C':'#0C447C') : (i===0?'#555':'#777')}}>
+						{inn.score || '-'}
+					  </div>
+					))}
 				  </>
 				) : (
 				  <div style={{...S.matchScore, color: m.winner===m.team2?'#0C447C':'#555'}}>
-				    {m.score2}
+					{m.score2}
 				  </div>
 				)}
 			  </div>
