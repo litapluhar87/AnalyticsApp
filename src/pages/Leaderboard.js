@@ -33,6 +33,11 @@ const FIELD_SORTS = [
   {v:'runOuts',    l:'Run outs'},
   {v:'fieldPoints',l:'MVP Field'},
 ];
+const WINS_SORTS = [
+  {v:'won',    l:'Wins'},
+  {v:'lost',   l:'Losses'},
+  {v:'winPct', l:'Win %'},
+];
 const PSHIP_SORTS = [
   {v:'runs',       l:'Runs'},
   {v:'strikeRate', l:'Strike rate'},
@@ -40,6 +45,7 @@ const PSHIP_SORTS = [
 
 const INDIVIDUAL_TABS = [
   {id:'mvp',     label:'MVP'},
+  {id:'wins',    label:'Wins'},
   {id:'batting', label:'Batting'},
   {id:'bowling', label:'Bowling'},
   {id:'fielding',label:'Fielding'},
@@ -109,6 +115,7 @@ export default function Leaderboard() {
   const [batInning, setBatInning] = useState('All');
   const [batPos,    setBatPos]    = useState('All');
   const [winLoss,   setWinLoss]   = useState('All');
+  const [captainOnly, setCaptainOnly] = useState(false);
 
   const [pshipBatInning, setPshipBatInning] = useState('All');
   const [pshipWicket,    setPshipWicket]    = useState('All');
@@ -125,6 +132,7 @@ export default function Leaderboard() {
     const cfg = engine.loadConfig(sport);
     setGrounds(['All', ...(cfg.grounds || [])]);
     setPlayerList(engine.getPlayerList(sport));
+    setCaptainOnly(false);
     try { setTeams(engine.getAllTeams(sport)); } catch(_) { setTeams(['All']); }
     try {
       const matches = engine.getMatches(sport, season !== 'All' ? {season} : {});
@@ -141,11 +149,12 @@ export default function Leaderboard() {
   useEffect(() => {
     loadLeaderboard();
   }, [sport, season, format, mode, indTab, sortBy,
-      ground, team, matchNum, batInning, batPos, winLoss,
+      ground, team, matchNum, batInning, batPos, winLoss, captainOnly,
       pshipBatInning, pshipWicket, pshipMatchNum, pshipTeam, pshipPlayer]);
 
   function defaultSort(tab) {
     if (tab==='mvp')      return 'totalPoints';
+    if (tab==='wins')     return 'won';
     if (tab==='batting')  return 'runs';
     if (tab==='bowling')  return 'wickets';
     if (tab==='fielding') return 'total';
@@ -162,6 +171,7 @@ export default function Leaderboard() {
     if (batInning !== 'All') f.batInning       = batInning;
     if (batPos    !== 'All') f.battingPosition = batPos;
     if (winLoss   !== 'All') f.winLoss         = winLoss;
+    if (captainOnly)         f.captainOnly     = true;
     return f;
   }
 
@@ -181,6 +191,8 @@ export default function Leaderboard() {
       if (mode === 'individual') {
         if (indTab==='mvp') {
           setData(engine.getMVPLeaderboardEnhanced(sport, buildFilters(), sortBy));
+        } else if (indTab==='wins') {
+          setData(engine.getWinsLeaderboard(sport, buildFilters(), sortBy));
         } else if (indTab==='batting') {
           setData(engine.getBattingLeaderboard(sport, buildFilters(), sortBy));
         } else if (indTab==='bowling') {
@@ -200,6 +212,7 @@ export default function Leaderboard() {
 
   const currentSorts = mode==='partnership' ? PSHIP_SORTS
     : indTab==='mvp'      ? MVP_SORTS
+    : indTab==='wins'     ? WINS_SORTS
     : indTab==='batting'  ? BAT_SORTS
     : indTab==='bowling'  ? BOWL_SORTS
     : FIELD_SORTS;
@@ -259,6 +272,17 @@ export default function Leaderboard() {
 
       {/* Sort by dropdown */}
       <div style={S.sortBar}>
+        {mode==='individual' && (
+          <label style={S.captainLabel}>
+            <input
+              type="checkbox"
+              checked={captainOnly}
+              onChange={e => setCaptainOnly(e.target.checked)}
+              style={S.captainCheck}
+            />
+            Captain
+          </label>
+        )}
         <span style={S.sortLabel}>Sort by</span>
         <select
           value={sortBy}
@@ -277,11 +301,13 @@ export default function Leaderboard() {
             ? <PshipTable data={Array.isArray(data)?data:[]} highlightPlayer={pshipPlayer}/>
             : indTab==='mvp'
               ? <MVPTable data={data}/>
-              : indTab==='batting'
-                ? <BatTable data={Array.isArray(data)?data:[]}/>
-                : indTab==='bowling'
-                  ? <BowlTable data={Array.isArray(data)?data:[]}/>
-                  : <FieldTable data={Array.isArray(data)?data:[]}/>
+              : indTab==='wins'
+                ? <WinsTable data={data}/>
+                : indTab==='batting'
+                  ? <BatTable data={Array.isArray(data)?data:[]}/>
+                  : indTab==='bowling'
+                    ? <BowlTable data={Array.isArray(data)?data:[]}/>
+                    : <FieldTable data={Array.isArray(data)?data:[]}/>
         }
       </div>
     </div>
@@ -353,6 +379,53 @@ function MVPTable({ data }) {
         <span style={S.rankCol}>#</span>
         <span style={{flex:1}}>Player</span>
         <span style={S.headerGroup}>Total · Bat · Bowl</span>
+      </div>
+      {group1.map((p,i) => <Row key={p.player} p={p} i={i} dimmed={false}/>)}
+      {group2.length > 0 && (
+        <>
+          <div style={S.divider}>
+            Below {Math.round((mvpThreshold || 0.6) * 100)}% threshold ({threshold60} of {totalMatches} matches)
+          </div>
+          {group2.map((p,i) => <Row key={p.player} p={p} i={i} dimmed={true}/>)}
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── Wins Table ────────────────────────────────────────────────────────────────
+function WinsTable({ data }) {
+  if (!data) return <Empty/>;
+  const { group1=[], group2=[], totalMatches, threshold60, mvpThreshold=0.6 } = data;
+
+  function Row({ p, i, dimmed }) {
+    const podium = podiumFor(p.rank, dimmed);
+    return (
+      <div style={playerRowStyle(i, p.rank, dimmed)}>
+        <div style={S.rowMain}>
+          <Rank rank={p.rank} i={i} dimmed={dimmed}/>
+          <div style={{flex:1, minWidth:0}}>
+            <div style={{...S.playerName, color:podium?.primary || S.playerName.color}}>{p.player}</div>
+          </div>
+          <div style={S.statGroup}>
+            <StatVal label="Won"  val={p.won}         podium={podium}/>
+            <StatVal label="Lost" val={p.lost}        podium={podium}/>
+            <StatVal label="Win%" val={`${p.winPct}%`} podium={podium}/>
+          </div>
+        </div>
+        <div style={S.rowSub}>
+          <span style={{...S.subItem, color:podium?.secondary || S.subItem.color}}>{p.matches} matches</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={S.card}>
+      <div style={S.tableHeader}>
+        <span style={S.rankCol}>#</span>
+        <span style={{flex:1}}>Player</span>
+        <span style={S.headerGroup}>Won · Lost · Win%</span>
       </div>
       {group1.map((p,i) => <Row key={p.player} p={p} i={i} dimmed={false}/>)}
       {group2.length > 0 && (
@@ -584,6 +657,11 @@ const S = {
     borderBottom:'0.5px solid #eee',
   },
   sortLabel:  { fontSize:12, color:'#aaa', flexShrink:0 },
+  captainLabel: {
+    display:'flex', alignItems:'center', gap:5,
+    fontSize:12, color:'#555', cursor:'pointer', marginRight:'auto',
+  },
+  captainCheck: { accentColor: ACCENT, cursor:'pointer' },
   sortSelect: {
     width:'40%',
     padding:'5px 6px',

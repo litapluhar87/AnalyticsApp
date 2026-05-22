@@ -46,6 +46,7 @@ function filterPlayers(players, filters = {}) {
     if (filters.battingPosition && String(p.batting?.position) !== String(filters.battingPosition)) return false;
     if (filters.winLoss === 'Win'  && !p.won) return false;
     if (filters.winLoss === 'Loss' &&  p.won) return false;
+    if (filters.captainOnly && p.captain !== '1' && p.captain !== 1) return false;
     return true;
   });
 }
@@ -857,6 +858,77 @@ function getAllTeams(sport) {
   return ['All', ...new Set(players.map(p => p.team).filter(Boolean))].sort();
 }
 
+function getWinsLeaderboard(sport, filters = {}, sortBy = 'won') {
+  const { players } = loadData(sport);
+  const config = loadConfig(sport);
+  const min = config.leaderboardConfig.minMatchesForMVP;
+
+  const thresholdFilters = ['season', 'format', 'ground', 'team'];
+  const hasThresholdExemptFilter = ['matchNum', 'batInning', 'battingPosition', 'winLoss']
+    .some(k => filters[k] && filters[k] !== 'All');
+
+  const matchLevelFilters = {};
+  thresholdFilters.forEach(k => {
+    if (filters[k]) matchLevelFilters[k] = filters[k];
+  });
+
+  const matchLevelPlayers = filterPlayers(players, matchLevelFilters);
+  const totalMatches = new Set(
+    matchLevelPlayers.map(p => `${p.season}-${p.matchNum}`)
+  ).size;
+  const mvpThreshold = appConfig.leaderboard?.mvpQualificationThreshold || 0.6;
+  const threshold60 = hasThresholdExemptFilter
+    ? 0
+    : Math.max(1, Math.ceil(totalMatches * mvpThreshold));
+
+  const filteredPlayers = filterPlayers(players, filters);
+  const byPlayer = {};
+  filteredPlayers.forEach(row => {
+    if (!byPlayer[row.player]) byPlayer[row.player] = [];
+    byPlayer[row.player].push(row);
+  });
+
+  const toEntry = (rows) => {
+    const player = rows[0].player;
+    const matchKeys = new Set(rows.map(r => `${r.season}-${r.matchNum}`));
+    const matches = matchKeys.size;
+    const won = new Set(rows.filter(r => r.won).map(r => `${r.season}-${r.matchNum}`)).size;
+    const lost = matches - won;
+    const winPct = matches > 0 ? Math.round((won / matches) * 100) : 0;
+    return { player, matches, won, lost, winPct };
+  };
+
+  const sortFns = {
+    won:    (a, b) => b.won    - a.won    || b.winPct - a.winPct,
+    lost:   (a, b) => b.lost   - a.lost   || b.matches - a.matches,
+    winPct: (a, b) => b.winPct - a.winPct || b.won - a.won,
+  };
+
+  const hasAnyFilter = Object.keys(filters).some(k => filters[k] && filters[k] !== 'All');
+  const allPlayers = Object.values(byPlayer)
+    .map(toEntry)
+    .filter(p => p && p.matches >= (hasAnyFilter ? 1 : min));
+
+  const sortFn = sortFns[sortBy] || sortFns.won;
+
+  if (hasThresholdExemptFilter || totalMatches <= 1) {
+    const sorted = allPlayers.sort(sortFn).map((p, i) => ({ ...p, rank: i + 1 }));
+    return { group1: sorted, group2: [], totalMatches, threshold60 };
+  }
+
+  const group1 = allPlayers
+    .filter(p => p.matches >= threshold60)
+    .sort(sortFn)
+    .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
+
+  const group2 = allPlayers
+    .filter(p => p.matches < threshold60)
+    .sort(sortFn)
+    .map((p, i) => ({ ...p, rank: group1.length + i + 1, qualified: false }));
+
+  return { group1, group2, totalMatches, threshold60, mvpThreshold };
+}
+
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 module.exports = {
@@ -875,6 +947,7 @@ module.exports = {
   getFieldingLeaderboard,
   getMVPLeaderboard,
   getMVPLeaderboardEnhanced,
+  getWinsLeaderboard,
   getPartnershipLeaderboard,
   comparePlayers,
   comparePlayerSeasons,
