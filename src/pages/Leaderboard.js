@@ -12,6 +12,14 @@ const MVP_SORTS = [
   {v:'momCount',    l:'MoM count'},
   {v:'mosCount',    l:'MoS count'},
 ];
+const MVP_SORT_FNS = {
+  totalPoints: (a, b) => b.mvpMomPerInn   - a.mvpMomPerInn,
+  batPoints:   (a, b) => b.mvpBatPerInn   - a.mvpBatPerInn,
+  bowlPoints:  (a, b) => b.mvpBowlPerInn  - a.mvpBowlPerInn,
+  fieldPoints: (a, b) => b.mvpFieldPerInn - a.mvpFieldPerInn,
+  momCount:    (a, b) => b.momCount       - a.momCount,
+  mosCount:    (a, b) => (b.mosCount||0)  - (a.mosCount||0),
+};
 const BAT_SORTS = [
   {v:'runs',       l:'Runs'},
   {v:'average',    l:'Average'},
@@ -38,6 +46,11 @@ const WINS_SORTS = [
   {v:'lost',   l:'Losses'},
   {v:'winPct', l:'Win %'},
 ];
+const WINS_SORT_FNS = {
+  won:    (a, b) => b.won    - a.won    || b.winPct  - a.winPct,
+  lost:   (a, b) => b.lost   - a.lost   || b.matches - a.matches,
+  winPct: (a, b) => b.winPct - a.winPct || b.won     - a.won,
+};
 const PSHIP_SORTS = [
   {v:'runs',       l:'Runs'},
   {v:'strikeRate', l:'Strike rate'},
@@ -190,9 +203,25 @@ export default function Leaderboard() {
     try {
       if (mode === 'individual') {
         if (indTab==='mvp') {
-          setData(engine.getMVPLeaderboardEnhanced(sport, buildFilters(), sortBy));
+          let mvp = engine.getMVPLeaderboardEnhanced(sport, buildFilters(), sortBy);
+          if (captainOnly && mvp?.group2?.length) {
+            const sortFn = MVP_SORT_FNS[sortBy] || MVP_SORT_FNS.totalPoints;
+            const merged = [...mvp.group1, ...mvp.group2]
+              .sort(sortFn)
+              .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
+            mvp = { ...mvp, group1: merged, group2: [] };
+          }
+          setData(mvp);
         } else if (indTab==='wins') {
-          setData(engine.getWinsLeaderboard(sport, buildFilters(), sortBy));
+          let wins = engine.getWinsLeaderboard(sport, buildFilters(), sortBy);
+          if (captainOnly && wins?.group2?.length) {
+            const sortFn = WINS_SORT_FNS[sortBy] || WINS_SORT_FNS.won;
+            const merged = [...wins.group1, ...wins.group2]
+              .sort(sortFn)
+              .map((p, i) => ({ ...p, rank: i + 1, qualified: true }));
+            wins = { ...wins, group1: merged, group2: [] };
+          }
+          setData(wins);
         } else if (indTab==='batting') {
           setData(engine.getBattingLeaderboard(sport, buildFilters(), sortBy));
         } else if (indTab==='bowling') {

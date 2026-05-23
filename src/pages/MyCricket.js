@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useApp } from '../App';
+import PlayerDashboard from '../components/PlayerDashboard';
 const appConfig = require('../config/app.config.json');
 
 const engine = require('../engine/statsEngine');
@@ -38,6 +39,7 @@ export default function MyCricket() {
   const [batInning, setBatInning] = useState('All');
   const [batPos,    setBatPos]    = useState('All');
   const [winLoss,   setWinLoss]   = useState('All');
+  const [dashView, setDashView] = useState(false);
 
   // Data
   const [stats,        setStats]        = useState(null);
@@ -253,151 +255,186 @@ function buildStatFilters() {
               </select>
             </div>
           </div>
+		  {/* Dashboard / Table toggle */}
+		  <div style={{ display:'flex', justifyContent:'flex-end', marginTop:6 }}>
+		    <button
+			  onClick={() => setDashView(false)}
+			  style={{
+			    background: !dashView ? ACCENT : 'transparent',
+			    color: !dashView ? '#fff' : '#aaa',
+			    border: `1px solid ${!dashView ? ACCENT : '#ddd'}`,
+			    borderRadius: '6px 0 0 6px',
+			    padding: '4px 10px',
+			    fontSize: 14,
+			    cursor: 'pointer',
+			  }}
+		    >
+			  ☰
+		    </button>
+		    <button
+			  onClick={() => setDashView(true)}
+			  style={{
+			    background: dashView ? ACCENT : 'transparent',
+			    color: dashView ? '#fff' : '#aaa',
+			    border: `1px solid ${dashView ? ACCENT : '#ddd'}`,
+			    borderLeft: 'none',
+			    borderRadius: '0 6px 6px 0',
+			    padding: '4px 10px',
+			    fontSize: 14,
+			    cursor: 'pointer',
+			  }}
+		    >
+			  ⊞
+		    </button>
+		  </div>
         </div>
       )}
-
+	  	  
       {/* ── STATS TAB ── */}
       {activeTab==='stats' && (
         <div style={S.body}>
-          {!stats ? <Empty/> : <>
+          {!stats ? <Empty/> : dashView ? (
+			<PlayerDashboard stats={stats} recentForm={recentForm}/>
+		  ) : (
+		    <>
+              <Sec label="Matches · MVP per inning"/>
+              <Grid5 items={[
+                {n:ini(stats.matches),       l:'Matches'},
+                {n:ini(stats.won),           l:'Won',      hl:HL},
+                {n:ini(stats.mvpBatPerInn),  l:'MVP Bat'},
+                {n:ini(stats.mvpBowlPerInn), l:'MVP Bowl'},
+                {n:ini(stats.mvpMomPerInn),  l:'Total MVP', hl:HL},
+              ]}/>
 
-            <Sec label="Matches · MVP per inning"/>
-            <Grid5 items={[
-              {n:ini(stats.matches),       l:'Matches'},
-              {n:ini(stats.won),           l:'Won',      hl:HL},
-              {n:ini(stats.mvpBatPerInn),  l:'MVP Bat'},
-              {n:ini(stats.mvpBowlPerInn), l:'MVP Bowl'},
-              {n:ini(stats.mvpMomPerInn),  l:'Total MVP', hl:HL},
-            ]}/>
+              <Sec label="Batting"/>
+              <Grid5 items={[
+                {n:ini(stats.innings),    l:'Innings'},
+                {n:ini(stats.runs),       l:'Runs',        hl:HL},
+                {n: stats.average ?? '-', l:'Average'},
+                {n:ini(stats.strikeRate), l:'Strike rate'},
+                {n:ini(stats.highScore),  l:'High score'},
+                {n:ini(stats.notOuts),    l:'Not outs'},
+                {n:ini(stats.fours),      l:'Fours'},
+                {n:ini(stats.sixes),      l:'Sixes'},
+                {n:ini(stats.scores15),   l:'15+ scores'},
+                {n:ini(stats.scores30),   l:'30+ scores'},
+              ]}/>
 
-            <Sec label="Batting"/>
-            <Grid5 items={[
-              {n:ini(stats.innings),    l:'Innings'},
-              {n:ini(stats.runs),       l:'Runs',        hl:HL},
-              {n: stats.average ?? '-', l:'Average'},
-              {n:ini(stats.strikeRate), l:'Strike rate'},
-              {n:ini(stats.highScore),  l:'High score'},
-              {n:ini(stats.notOuts),    l:'Not outs'},
-              {n:ini(stats.fours),      l:'Fours'},
-              {n:ini(stats.sixes),      l:'Sixes'},
-              {n:ini(stats.scores15),   l:'15+ scores'},
-              {n:ini(stats.scores30),   l:'30+ scores'},
-            ]}/>
+              <Sec label="Bowling · Fielding"/>
+              <Grid5 items={[
+                {n:fmtOvers(stats.oversBowled), l:'Overs'},
+                {n:ini(stats.wickets),           l:'Wickets', hl:HL},
+                {n:ini(stats.bowlingAvg),        l:'Average'},
+                {n:ini(stats.bestFigures),       l:'Best'},
+                {n:ini(stats.bowlingSR),         l:'Strike rate'},
+                {n:ini(stats.economy),           l:'Economy'},
+                {n:ini(stats.twoW),              l:'2W hauls'},
+                {n:ini(stats.threeW),            l:'3W hauls'},
+                {n:ini(stats.catches),           l:'Catches'},
+                {n:ini((stats.runOutsDirect||0)+(stats.runOutsCombo||0)+(stats.stumpings||0)),
+                 l:'RunOut+St'},
+              ]}/>
 
-            <Sec label="Bowling · Fielding"/>
-            <Grid5 items={[
-              {n:fmtOvers(stats.oversBowled), l:'Overs'},
-              {n:ini(stats.wickets),           l:'Wickets', hl:HL},
-              {n:ini(stats.bowlingAvg),        l:'Average'},
-              {n:ini(stats.bestFigures),       l:'Best'},
-              {n:ini(stats.bowlingSR),         l:'Strike rate'},
-              {n:ini(stats.economy),           l:'Economy'},
-              {n:ini(stats.twoW),              l:'2W hauls'},
-              {n:ini(stats.threeW),            l:'3W hauls'},
-              {n:ini(stats.catches),           l:'Catches'},
-              {n:ini((stats.runOutsDirect||0)+(stats.runOutsCombo||0)+(stats.stumpings||0)),
-               l:'RunOut+St'},
-            ]}/>
-
-            {hasCaptaincy && (() => {
-              const captItems = [
-			    {n:ini(stats.captainMatches), l:'Matches led'},
-				{n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
-				{n:stats.captainMatches > 0
-				  ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
-				  : '-',                      l:'Win %'},
-				{n:'', l:'', hidden:true},
-				{n:'', l:'', hidden:true},
-			  ];
-              return (
-                <>
-                  <div style={S.dualSecRow}>
-                    <div style={S.secLabel}>Captaincy</div>
-                  </div>
-                  <div style={{display:'grid', gridTemplateColumns:'repeat(5,minmax(0,1fr))', gap:5, marginBottom:4}}>
-				    {captItems.map((item,i) => (
-					<div key={i} style={{
-					  ...S.statCard,
-					  background:   item.hidden ? 'transparent' : item.hl ? item.hl.bg   : '#fff',
-					  borderColor:  item.hidden ? 'transparent' : item.hl ? item.hl.border: '#eee',
-					  boxShadow:    item.hidden ? 'none' : undefined,
-					  visibility:   item.hidden ? 'hidden' : 'visible',
-					}}>
-					  <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
-					  <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
-					</div>
-				))}
-                </div>
-                </>
-              );
-            })()}
-
-            {hasAwards && (() => {
-              const achievements = [
-                (stats.mosCount||0)       > 0 && `⭐ ${stats.mosCount} MoS`,
-                (stats.momCount||0)       > 0 && `🏆 ${stats.momCount} MoM`,
-                (stats.orangeCapCount||0) > 0 && `🟠 ${stats.orangeCapCount} Orange Cap`,
-                (stats.purpleCapCount||0) > 0 && `🟣 ${stats.purpleCapCount} Purple Cap`,
-              ].filter(Boolean);
-              if (!achievements.length) return null;
-              return (
-                <>
-                  <div style={S.dualSecRow}>
-                    <div style={S.secLabel}>Awards</div>
-                  </div>
-                  <div style={{display:'flex', flexWrap:'wrap', gap:8, marginBottom:8, padding:'10px 12px', background:'#fff', borderRadius:10, border:'0.5px solid #eee'}}>
-                    {achievements.map((a,i) => (
-                      <span key={i} style={{fontSize:13, color:'#222', background:'#F0F6FF', border:'0.5px solid #B5D4F4', borderRadius:20, padding:'4px 12px', fontWeight:500}}>
-                        {a}
-                      </span>
-                    ))}
-                  </div>
-                </>
-              );
-            })()}
-
-            <div style={S.sectionDivider}>
-              <div style={S.dividerLine}/>
-              <span style={S.dividerText}>RECENT FORM</span>
-              <div style={S.dividerLine}/>
-            </div>
-            <div style={S.card}>
-              <div style={S.formDots}>
-                {recentForm.filter(r => r.showResultIndicator !== false).map((r,i) => (
-                  <div key={i} style={{
-                    ...S.dot,
-                    background: r.tied?'#888': r.won?'#3B6D11':'#993C1D',
-                    color:'#fff',
-                  }}>
-                    {r.tied?'T': r.won?'W':'L'}
-                  </div>
-                ))}
-              </div>
-              {(() => {
-                const maxMvp = Math.max(...recentForm.map(r => r.mvpMom || 0), 1);
-                return recentForm.map((r,i) => (
-                  <div key={i} style={S.formRow}>
-                    <span style={S.formId}>S{r.season} M{r.matchNum}</span>
-                    <span style={S.formBat}>
-                      {r.runs}{r.notOut?'*':''} ({r.balls})
-                      {r.mom && <span style={S.momTrophy}> 🏆</span>}
-                    </span>
-                    <span style={S.formBowl}>{r.wickets}/{r.runsGiven}</span>
-                    <div style={S.mvpBarWrap}>
-                      <span style={S.mvpBarVal}>{Math.round(r.mvpMom||0)}</span>
-                      <div style={S.mvpBarTrack}>
-                        <div style={{
-                          ...S.mvpBarFill,
-                          width:`${Math.round(((r.mvpMom||0)/maxMvp)*100)}%`,
-                        }}/>
-                      </div>
-                      <span style={S.mvpBarLabel}>MVP</span>
+              {hasCaptaincy && (() => {
+                const captItems = [
+			      {n:ini(stats.captainMatches), l:'Matches led'},
+				  {n:ini(stats.captainWins),    l:'Won', hl:(stats.captainWins||0)>0 ? HL : null},
+				  {n:stats.captainMatches > 0
+				    ? ini(Math.round((stats.captainWins/stats.captainMatches)*100))+'%'
+				    : '-',                      l:'Win %'},
+				  {n:'', l:'', hidden:true},
+				  {n:'', l:'', hidden:true},
+			    ];
+                return (
+                  <>
+                    <div style={S.dualSecRow}>
+                      <div style={S.secLabel}>Captaincy</div>
                     </div>
+                    <div style={{display:'grid', gridTemplateColumns:'repeat(5,minmax(0,1fr))', gap:5, marginBottom:4}}>
+				      {captItems.map((item,i) => (
+					  <div key={i} style={{
+					    ...S.statCard,
+					    background:   item.hidden ? 'transparent' : item.hl ? item.hl.bg   : '#fff',
+					    borderColor:  item.hidden ? 'transparent' : item.hl ? item.hl.border: '#eee',
+					    boxShadow:    item.hidden ? 'none' : undefined,
+					    visibility:   item.hidden ? 'hidden' : 'visible',
+					  }}>
+					    <div style={{...S.statNum, color:item.hl?item.hl.text:'#111'}}>{item.n}</div>
+					    <div style={{...S.statLbl, color:item.hl?item.hl.text:'#aaa'}}>{item.l}</div>
+					  </div>
+				  ))}
                   </div>
-                ));
+                  </>
+                );
               })()}
-            </div>
-          </>}
+
+              {hasAwards && (() => {
+                const achievements = [
+                  (stats.mosCount||0)       > 0 && `⭐ ${stats.mosCount} MoS`,
+                  (stats.momCount||0)       > 0 && `🏆 ${stats.momCount} MoM`,
+                  (stats.orangeCapCount||0) > 0 && `🟠 ${stats.orangeCapCount} Orange Cap`,
+                  (stats.purpleCapCount||0) > 0 && `🟣 ${stats.purpleCapCount} Purple Cap`,
+                ].filter(Boolean);
+                if (!achievements.length) return null;
+                return (
+                  <>
+                    <div style={S.dualSecRow}>
+                      <div style={S.secLabel}>Awards</div>
+                    </div>
+                    <div style={{display:'flex', flexWrap:'wrap', gap:8, marginBottom:8, padding:'10px 12px', background:'#fff', borderRadius:10,   border:'0.5px solid #eee'}}>
+                      {achievements.map((a,i) => (
+                        <span key={i} style={{fontSize:13, color:'#222', background:'#F0F6FF', border:'0.5px solid #B5D4F4', borderRadius:20, padding:'4px 12px', fontWeight:500}}>
+                          {a}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
+
+              <div style={S.sectionDivider}>
+                <div style={S.dividerLine}/>
+                <span style={S.dividerText}>RECENT FORM</span>
+                <div style={S.dividerLine}/>
+              </div>
+              <div style={S.card}>
+                <div style={S.formDots}>
+                  {recentForm.filter(r => r.showResultIndicator !== false).map((r,i) => (
+                    <div key={i} style={{
+                      ...S.dot,
+                      background: r.tied?'#888': r.won?'#3B6D11':'#993C1D',
+                      color:'#fff',
+                    }}>
+                      {r.tied?'T': r.won?'W':'L'}
+                    </div>
+                  ))}
+                </div>
+                {(() => {
+                  const maxMvp = Math.max(...recentForm.map(r => r.mvpMom || 0), 1);
+                  return recentForm.map((r,i) => (
+                    <div key={i} style={S.formRow}>
+                      <span style={S.formId}>S{r.season} M{r.matchNum}</span>
+                      <span style={S.formBat}>
+                        {r.runs}{r.notOut?'*':''} ({r.balls})
+                        {r.mom && <span style={S.momTrophy}> 🏆</span>}
+                      </span>
+                      <span style={S.formBowl}>{r.wickets}/{r.runsGiven}</span>
+                      <div style={S.mvpBarWrap}>
+                        <span style={S.mvpBarVal}>{Math.round(r.mvpMom||0)}</span>
+                        <div style={S.mvpBarTrack}>
+                          <div style={{
+                            ...S.mvpBarFill,
+                            width:`${Math.round(((r.mvpMom||0)/maxMvp)*100)}%`,
+                          }}/>
+                        </div>
+                        <span style={S.mvpBarLabel}>MVP</span>
+                      </div>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </>
+	      )}	
         </div>
       )}
 

@@ -890,6 +890,32 @@ function getWinsLeaderboard(sport, filters = {}, sortBy = 'won') {
 
   const toEntry = (rows) => {
     const player = rows[0].player;
+
+    if (filters.captainOnly) {
+      // Captain participation is fractional: Test has 2 team innings, T12 has 1.
+      // Player can captain 1 of 2 Test innings → 0.5 match, 0.5 win/loss.
+      const byMatch = {};
+      rows.forEach(r => {
+        const key = `${r.season}-${r.matchNum}`;
+        if (!byMatch[key]) byMatch[key] = { rows: [], format: r.format, won: r.won };
+        byMatch[key].rows.push(r);
+      });
+
+      let matches = 0;
+      let won = 0;
+      Object.values(byMatch).forEach(m => {
+        const totalInnings = m.format === 'Test' ? 2 : 1;
+        const fraction = Math.min(m.rows.length / totalInnings, 1.0);
+        matches += fraction;
+        if (m.won) won += fraction;
+      });
+      matches = Math.round(matches * 100) / 100;
+      won = Math.round(won * 100) / 100;
+      const lost = Math.round((matches - won) * 100) / 100;
+      const winPct = matches > 0 ? Math.round((won / matches) * 100) : 0;
+      return { player, matches, won, lost, winPct };
+    }
+
     const matchKeys = new Set(rows.map(r => `${r.season}-${r.matchNum}`));
     const matches = matchKeys.size;
     const won = new Set(rows.filter(r => r.won).map(r => `${r.season}-${r.matchNum}`)).size;
@@ -905,9 +931,10 @@ function getWinsLeaderboard(sport, filters = {}, sortBy = 'won') {
   };
 
   const hasAnyFilter = Object.keys(filters).some(k => filters[k] && filters[k] !== 'All');
+  const minMatches = hasAnyFilter ? (filters.captainOnly ? 0.25 : 1) : min;
   const allPlayers = Object.values(byPlayer)
     .map(toEntry)
-    .filter(p => p && p.matches >= (hasAnyFilter ? 1 : min));
+    .filter(p => p && p.matches >= minMatches);
 
   const sortFn = sortFns[sortBy] || sortFns.won;
 
