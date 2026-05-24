@@ -6,9 +6,9 @@
 import React, { useMemo } from 'react';
 import {
   RadarChart, Radar, PolarGrid, PolarAngleAxis,
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid,
-  PieChart, Pie,
+  PieChart, Pie, Cell,
 } from 'recharts';
 
 const ACCENT  = '#534AB7';
@@ -90,11 +90,11 @@ export default function PlayerDashboard({ stats, recentForm }) {
   // ── Radar data ─────────────────────────────────────────────────────────────
   // Normalise each axis to 0-100
   const radarData = useMemo(() => {
-    const batMax  = 100;  // MVP bat per inning — cap at 100
-    const bowlMax = 50;   // MVP bowl per inning — cap at 50
-    const fieldMax= 20;   // MVP field per inning
+    const batMax  = 30;  // MVP bat per inning — cap at 100
+    const bowlMax = 20;   // MVP bowl per inning — cap at 50
+    const fieldMax= 10;   // MVP field per inning
     const winMax  = 100;  // win % 0-100
-    const mvpMax  = 100;  // total MVP per inning
+    const mvpMax  = 50;  // total MVP per inning
 
     return [
       {
@@ -107,20 +107,20 @@ export default function PlayerDashboard({ stats, recentForm }) {
         value: Math.min(Math.round(((stats.mvpBowlPerInn || 0) / bowlMax) * 100), 100),
         raw: stats.mvpBowlPerInn || 0,
       },
-      //{
-      //  axis: 'Field',
-      //  value: Math.min(Math.round(((stats.mvpField || 0) / fieldMax) * 100), 100),
-      //  raw: stats.mvpField || 0,
-      //},
-      //{
-      //  axis: 'Win%',
-      //  value: stats.matches > 0
-      //    ? Math.round((stats.won / stats.matches) * 100)
-      //    : 0,
-      //  raw: stats.matches > 0
-      //    ? Math.round((stats.won / stats.matches) * 100)
-      //    : 0,
-      //},
+      {
+        axis: 'Field',
+        value: Math.min(Math.round(((stats.mvpFieldPerInn || 0) / fieldMax) * 100), 100),
+        raw: stats.mvpField || 0,
+      },
+      {
+        axis: 'Win%',
+        value: stats.matches > 0
+          ? Math.round((stats.won / stats.matches) * 100)
+          : 0,
+        raw: stats.matches > 0
+          ? Math.round((stats.won / stats.matches) * 100)
+          : 0,
+      },
       {
         axis: 'MVP',
         value: Math.min(Math.round(((stats.mvpMomPerInn || 0) / mvpMax) * 100), 100),
@@ -176,10 +176,10 @@ export default function PlayerDashboard({ stats, recentForm }) {
       </div>
 
       {/* ── Win/Loss donut + Radar side by side ── */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 4, width: '100%' }}>
 
-        {/* Donut */}
-        <div style={card}>
+        {/* Donut — half width */}
+        <div style={{...card, width:'calc(50% - 4px)', flexShrink:0, boxSizing:'border-box'}}>
           <div style={{ fontSize: 10, color: '#aaa', textAlign: 'center', marginBottom: 4, fontWeight: 600, letterSpacing: 0.6, textTransform: 'uppercase' }}>
             Win / Loss
           </div>
@@ -209,8 +209,8 @@ export default function PlayerDashboard({ stats, recentForm }) {
           </div>
         </div>
 
-        {/* Radar */}
-        <div style={{ ...card, flex: 1 }}>
+        {/* Radar — half width */}
+        <div style={{ ...card, width:'calc(50% - 4px)', flexShrink:0, boxSizing:'border-box' }}>
           <div style={{ fontSize: 10, color: '#aaa', textAlign: 'center', marginBottom: 0, fontWeight: 600, letterSpacing: 0.6, textTransform: 'uppercase' }}>
             Player Profile
           </div>
@@ -234,7 +234,7 @@ export default function PlayerDashboard({ stats, recentForm }) {
 
       {/* ── MVP Trend ── */}
       {matchData.length > 0 && (
-        <>          
+        <>
           <div style={card}>
 		    <div style={chartTitle}>MVP trend</div>
             <ResponsiveContainer width="100%" height={110}>
@@ -251,12 +251,13 @@ export default function PlayerDashboard({ stats, recentForm }) {
                   type="monotone"
                   dataKey="mvp"
                   stroke={ACCENT}
-                  strokeWidth={2}
+                  strokeWidth={1.2}
                   dot={(props) => {
                     const { cx, cy, payload } = props;
                     const fill = payload.tied ? AMBER : payload.won ? GREEN : RED;
-                    return <circle key={cx} cx={cx} cy={cy} r={3} fill={fill} stroke="#fff" strokeWidth={1}/>;
+                    return <circle key={cx} cx={cx} cy={cy} r={4.5} fill={fill} stroke="#fff" strokeWidth={1.5}/>;
                   }}
+                  activeDot={{ r: 6 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -275,10 +276,11 @@ export default function PlayerDashboard({ stats, recentForm }) {
       {/* ── Runs + Wickets bars side by side ── */}
       {matchData.length > 0 && (
         <>
+		  <div style={{ marginTop: 4 }}/>	
           <div style={{ display: 'flex', gap: 8 }}>
 
             {/* Runs */}
-            <div style={{ ...card, flex: 1 }}>
+			<div style={{ ...card, flex: 1 }}>
               <div style={chartTitle}>Runs</div>
               <ResponsiveContainer width="100%" height={100}>
                 <BarChart data={matchData} margin={{ top: 4, right: 4, bottom: 0, left: -28 }} barSize={10}>
@@ -289,11 +291,7 @@ export default function PlayerDashboard({ stats, recentForm }) {
                     formatter={(v) => [`${v}`, 'Runs']}
                     labelStyle={{ fontSize: 9, color: '#888' }}
                   />
-                  <Bar dataKey="runs" radius={[3, 3, 0, 0]}>
-                    {matchData.map((d, i) => (
-                      <Cell key={i} fill={d.tied ? AMBER : d.won ? ACCENT : '#C5C2E8'}/>
-                    ))}
-                  </Bar>
+                  <Bar dataKey="runs" radius={[3, 3, 0, 0]} fill={ACCENT}/>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -310,11 +308,7 @@ export default function PlayerDashboard({ stats, recentForm }) {
                     formatter={(v) => [`${v}`, 'Wickets']}
                     labelStyle={{ fontSize: 9, color: '#888' }}
                   />
-                  <Bar dataKey="wickets" radius={[3, 3, 0, 0]}>
-                    {matchData.map((d, i) => (
-                      <Cell key={i} fill={d.tied ? AMBER : d.won ? TEAL : '#A8DED4'}/>
-                    ))}
-                  </Bar>
+                  <Bar dataKey="wickets" radius={[3, 3, 0, 0]} fill={TEAL}/>
                 </BarChart>
               </ResponsiveContainer>
             </div>
