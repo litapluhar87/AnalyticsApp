@@ -336,10 +336,9 @@ function getPlayerStats(sport, playerName, filters = {}) {
   return aggregatePlayerStats(rows, config);
 }
 
-function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.recentFormMatches || 10)) {
+function getPlayerRecentForm(sport, playerName, n = (appConfig.leaderboard?.recentFormMatches || 10), filters = {}) {
   const { players, matches } = loadData(sport);
-  const sortedRows = players
-    .filter(p => p.player === playerName)
+  const sortedRows = filterPlayers(players, { ...filters, playerName })
     .sort((a, b) => {
       if (Number(b.season) !== Number(a.season)) return Number(b.season) - Number(a.season);
       return Number(b.matchNum) - Number(a.matchNum);

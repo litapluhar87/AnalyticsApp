@@ -273,44 +273,100 @@ export default function PlayerDashboard({ stats, recentForm }) {
         </>
       )}
 
-      {/* ── Runs + Wickets bars side by side ── */}
+      {/* ── Runs + Wickets — combined horizontal back-to-back ── */}
       {matchData.length > 0 && (
         <>
-		  <div style={{ marginTop: 4 }}/>	
-          <div style={{ display: 'flex', gap: 8 }}>
-
-            {/* Runs */}
-			<div style={{ ...card, flex: 1 }}>
-              <div style={chartTitle}>Runs</div>
-              <ResponsiveContainer width="100%" height={100}>
-                <BarChart data={matchData} margin={{ top: 4, right: 4, bottom: 0, left: -28 }} barSize={10}>
-                  <XAxis dataKey="name" tick={{ fontSize: 7, fill: '#ccc' }} tickLine={false} axisLine={false}/>
-                  <YAxis tick={{ fontSize: 7, fill: '#ccc' }} tickLine={false} axisLine={false}/>
+          <div style={{ marginTop: 4 }}/>
+          <div style={{ ...card, width: '100%', boxSizing: 'border-box' }}>
+            <div style={{ ...chartTitle, alignSelf: 'center' }}>Runs · Wickets</div>
+            <div style={{
+              display: 'flex',
+              width: '100%',
+              height: Math.max(220, matchData.length * 24),
+            }}>
+              {/* Left half — Runs, bars grow rightward toward centre, match labels on far left */}
+              <ResponsiveContainer width="50%" height="100%">
+                <BarChart
+                  data={matchData}
+                  layout="vertical"
+                  margin={{ top: 4, right: 2, bottom: 4, left: 2 }}
+                  barSize={10}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" horizontal={false}/>
+                  <XAxis
+                    type="number"
+                    orientation="bottom"
+                    tick={{ fontSize: 8, fill: '#aaa' }}
+                    tickLine={false}
+                    axisLine={{ stroke: '#eee' }}
+                    domain={[0, Math.max(maxRuns + 5, 10)]}
+                    label={{ value: 'Runs', position: 'insideBottom', offset: -2, style: { fontSize: 9, fill: '#888' } }}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    orientation="left"
+                    tick={{ fontSize: 8, fill: '#666' }}
+                    tickLine={false}
+                    axisLine={false}
+                    width={44}
+                  />
                   <Tooltip
                     contentStyle={{ fontSize: 10, borderRadius: 8, border: 'none', boxShadow: '0 2px 8px #0002' }}
                     formatter={(v) => [`${v}`, 'Runs']}
-                    labelStyle={{ fontSize: 9, color: '#888' }}
+                    cursor={{ fill: '#f5f5f5' }}
                   />
-                  <Bar dataKey="runs" radius={[3, 3, 0, 0]} fill={ACCENT}/>
+                  <Bar dataKey="runs" fill={ACCENT} radius={[0, 3, 3, 0]}/>
                 </BarChart>
               </ResponsiveContainer>
-            </div>
 
-            {/* Wickets */}
-            <div style={{ ...card, flex: 1 }}>
-              <div style={chartTitle}>Wickets</div>
-              <ResponsiveContainer width="100%" height={100}>
-                <BarChart data={matchData} margin={{ top: 4, right: 4, bottom: 0, left: -28 }} barSize={10}>
-                  <XAxis dataKey="name" tick={{ fontSize: 7, fill: '#ccc' }} tickLine={false} axisLine={false}/>
-                  <YAxis tick={{ fontSize: 7, fill: '#ccc' }} tickLine={false} axisLine={false} domain={[0, Math.max(maxWickets + 1, 5)]}/>
+              {/* Right half — Wickets, bars grow leftward toward centre, match labels on far right */}
+              <ResponsiveContainer width="50%" height="100%">
+                <BarChart
+                  data={matchData}
+                  layout="vertical"
+                  margin={{ top: 4, right: 2, bottom: 4, left: 2 }}
+                  barSize={10}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" horizontal={false}/>
+                  <XAxis
+                    type="number"
+                    reversed
+                    orientation="bottom"
+                    tick={{ fontSize: 8, fill: '#aaa' }}
+                    tickLine={false}
+                    axisLine={{ stroke: '#eee' }}
+                    domain={[0, Math.max(maxWickets + 1, 5)]}
+                    label={{ value: 'Wickets', position: 'insideBottom', offset: -2, style: { fontSize: 9, fill: '#888' } }}
+                  />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    orientation="right"
+                    tick={{ fontSize: 8, fill: '#666' }}
+                    tickLine={false}
+                    axisLine={false}
+                    width={44}
+                  />
                   <Tooltip
                     contentStyle={{ fontSize: 10, borderRadius: 8, border: 'none', boxShadow: '0 2px 8px #0002' }}
                     formatter={(v) => [`${v}`, 'Wickets']}
-                    labelStyle={{ fontSize: 9, color: '#888' }}
+                    cursor={{ fill: '#f5f5f5' }}
                   />
-                  <Bar dataKey="wickets" radius={[3, 3, 0, 0]} fill={TEAL}/>
+                  <Bar dataKey="wickets" fill={TEAL} radius={[3, 0, 0, 3]}/>
                 </BarChart>
               </ResponsiveContainer>
+            </div>
+            {/* Legend */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 16, marginTop: 6 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: ACCENT }}/>
+                <span style={{ fontSize: 9, color: '#888' }}>Runs</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: TEAL }}/>
+                <span style={{ fontSize: 9, color: '#888' }}>Wickets</span>
+              </div>
             </div>
           </div>
         </>

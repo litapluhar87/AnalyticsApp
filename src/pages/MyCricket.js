@@ -135,7 +135,7 @@ function buildStatFilters() {
         purpleCapCount: counts.purpleCapCount,
       } : null);
     } catch(_) {}
-    try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, appConfig.leaderboard?.recentFormMatches || 10)); }
+    try { setRecentForm(engine.getPlayerRecentForm(sport, selectedPlayer, appConfig.leaderboard?.recentFormMatches || 10, filters)); }
     catch(_) { setRecentForm([]); }
     try {
       const pfilters = {};
