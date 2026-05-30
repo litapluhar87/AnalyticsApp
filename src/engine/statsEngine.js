@@ -42,7 +42,10 @@ function filterPlayers(players, filters = {}) {
     if (filters.ground          && p.ground !== filters.ground)                              return false;
     if (filters.team            && p.team   !== filters.team)                                return false;
     if (filters.matchNum        && String(p.matchNum) !== String(filters.matchNum))          return false;
-    if (filters.batInning       && String(p.batting?.innings) !== String(filters.batInning)) return false;
+    if (filters.batInning && filters.batInning !== 'All') {
+	  if (filters.batInning === '1' && !p.batFirst) return false;
+	  if (filters.batInning === '2' &&  p.batFirst) return false;
+	}
     if (filters.battingPosition && String(p.batting?.position) !== String(filters.battingPosition)) return false;
     if (filters.winLoss === 'Win'  && !p.won) return false;
     if (filters.winLoss === 'Loss' &&  p.won) return false;

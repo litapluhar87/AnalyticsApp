@@ -5,7 +5,7 @@
 
 import React, { useMemo } from 'react';
 import {
-  RadarChart, Radar, PolarGrid, PolarAngleAxis,
+  RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   LineChart, Line, CartesianGrid,
   PieChart, Pie, Cell,
@@ -215,20 +215,21 @@ export default function PlayerDashboard({ stats, recentForm }) {
             Player Profile
           </div>
           <RadarChart
-            width={190} height={140}
-            data={radarData}
-            margin={{ top: 8, right: 20, bottom: 8, left: 20 }}
-          >
-            <PolarGrid stroke="#eee" strokeWidth={0.8}/>
-            <PolarAngleAxis dataKey="axis" tick={<RadarLabel/>}/>
-            <Radar
-              dataKey="value"
-              stroke={ACCENT}
-              fill={ACCENT}
-              fillOpacity={0.25}
-              strokeWidth={1.5}
-            />
-          </RadarChart>
+			width={190} height={140}
+			data={radarData}
+			margin={{ top: 8, right: 20, bottom: 8, left: 20 }}
+		  >
+			<PolarGrid stroke="#eee" strokeWidth={0.8}/>
+			<PolarAngleAxis dataKey="axis" tick={<RadarLabel/>}/>
+			<PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false}/>
+			<Radar
+			  dataKey="value"
+			  stroke={ACCENT}
+			  fill={ACCENT}
+			  fillOpacity={0.25}
+			  strokeWidth={1.5}
+			/>
+		  </RadarChart>
         </div>
       </div>
 
