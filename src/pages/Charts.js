@@ -4,6 +4,25 @@ import { useApp } from '../App';
 const engine = require('../engine/statsEngine');
 const ACCENT = '#3B63D1';
 
+// Rank / magnitude colors for the total hbar chart
+const GOLD   = '#F1A72A';
+const SILVER = '#AEB6C4';
+const BRONZE = '#C67D3F';
+
+// Fixed per-season / per-inning colors for grouped bar charts —
+// index-based (season position), NOT per-player, so the legend stays meaningful
+const SEASON_COLORS = ['#AEC0F5', ACCENT, '#14B8A6', '#9B6FD1', '#E8833A', '#5B84F5'];
+
+function hexToRgba(hex, alpha) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// Still used for the player-selector chips (distinct identity per player there
+// makes sense — that's a different UI concern from the charts themselves)
 const PLAYER_COLORS = [
   '#185FA5','#993C1D','#534AB7','#0F6E56','#BA7517',
   '#712B13','#3C3489','#27500A','#633806','#0C447C',
@@ -159,17 +178,30 @@ export default function Charts() {
                      : mvpComp;
 
       if (viewMode === 'total') {
-        const bars = players.map((p, i) => {
+        const bars = players.map(p => {
           const st = engine.getPlayerStats(sport, p, buildFilters());
           const raw = Number(st?.[statKey]) || 0;
           return {
             player: p,
             value:  chartTab === 'mvp' ? Math.round(raw * 10) / 10 : raw,
-            color:  PLAYER_COLORS[i % PLAYER_COLORS.length],
           };
         })
         .filter(b => b.value > 0)
         .sort((a,b) => b.value - a.value);
+
+        // Color by final rank/magnitude, not by original list position —
+        // this is what makes the top bar actually look like the top bar.
+        const maxVal = bars[0]?.value || 1;
+        bars.forEach((b, i) => {
+          if      (i === 0) b.color = GOLD;
+          else if (i === 1) b.color = SILVER;
+          else if (i === 2) b.color = BRONZE;
+          else {
+            const t = 0.35 + 0.55 * (b.value / maxVal);
+            b.color = hexToRgba(ACCENT, t);
+          }
+        });
+
         setChartData({ type:'hbar', bars, statKey });
         return;
       }
@@ -184,14 +216,18 @@ export default function Charts() {
           });
         });
 
-        const playerData = players.map((p, i) => {
+        const playerData = players.map(p => {
           const values = activeSns.map(s => {
             const st  = engine.getPlayerStats(sport, p, buildFilters({ season: s }));
             const raw = Number(st?.[statKey]) || 0;
-            return chartTab === 'mvp' ? Math.round(raw * 10) / 10 : raw;
+            const val = chartTab === 'mvp' ? Math.round(raw * 10) / 10 : raw;
+            // NOTE: previously the sub-label fell back to `S${v}` where v was
+            // the *stat value* (e.g. "S190"), not the season number. Carrying
+            // the season number through explicitly fixes that.
+            return { season: s, value: val, label: `S${s}` };
           });
-          const total = values.reduce((a,b) => a+b, 0);
-          return { player:p, total, color: PLAYER_COLORS[i % PLAYER_COLORS.length], values };
+          const total = values.reduce((a,b) => a + b.value, 0);
+          return { player:p, total, values };
         })
         .filter(p => p.total > 0)
         .sort((a,b) => b.total - a.total);
@@ -210,7 +246,7 @@ export default function Charts() {
         const matches = engine.getMatches(sport, buildFilters());
         const matchNums = [...new Set(matches.map(m => m.matchNum))].sort((a,b)=>a-b);
 
-        const playerData = players.map((p, i) => {
+        const playerData = players.map(p => {
           // For each match, get 1st and 2nd innings separately
           const values = [];
           matchNums.forEach(mn => {
@@ -225,7 +261,7 @@ export default function Charts() {
             }
           });
           const total = values.reduce((a,b) => a + b.value, 0);
-          return { player:p, total, color: PLAYER_COLORS[i % PLAYER_COLORS.length], values };
+          return { player:p, total, values };
         })
         .filter(p => p.total > 0)
         .sort((a,b) => b.total - a.total);
@@ -435,7 +471,28 @@ function ChartRenderer({ data, isLandscape }) {
 }
 
 function Legend({ data }) {
-  return null;
+  if (data?.type !== 'playerGrouped') return null;
+
+  const items = data.viewMode === 'season'
+    ? (data.seasons || []).map((s, i) => ({
+        key: `s${s}`, label: `S${s}`, color: SEASON_COLORS[i % SEASON_COLORS.length],
+      }))
+    : (data.players[0]?.values || []).map((v, i) => ({
+        key: v.label, label: v.label, color: SEASON_COLORS[i % SEASON_COLORS.length],
+      }));
+
+  if (!items.length) return null;
+
+  return (
+    <div style={S.legend}>
+      {items.map(it => (
+        <div key={it.key} style={S.legItem}>
+          <span style={{ ...S.legDot, background: it.color }} />
+          <span style={S.legLabel}>{it.label}</span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // ── Drawing functions ─────────────────────────────────────────────────────────
@@ -553,7 +610,8 @@ function drawHBar(ctx, W, H, data) {
     ctx.fillStyle = '#333';
     ctx.font = `${Math.min(12, barH-2)}px sans-serif`;
     ctx.textAlign = 'right';
-    ctx.fillText(b.player, padL-5, y+barH/2+4);
+    const medal = i===0 ? '\uD83E\uDD47 ' : i===1 ? '\uD83E\uDD48 ' : i===2 ? '\uD83E\uDD49 ' : '';
+    ctx.fillText(medal + b.player, padL-5, y+barH/2+4);
 
     ctx.fillStyle = '#333';
     ctx.font = 'bold 10px sans-serif';
@@ -571,9 +629,7 @@ function drawPlayerGrouped(ctx, W, H, data) {
   const cH   = H - padT - padB;
 
   const barsPerPlayer = players[0]?.values?.length || 1;
-  const allVals = players.flatMap(p => p.values.map(v =>
-    typeof v === 'object' ? v.value : v
-  ));
+  const allVals = players.flatMap(p => p.values.map(v => v.value));
   const maxVal = Math.max(...allVals, 1);
 
   const grpW   = cW / players.length;
@@ -591,15 +647,15 @@ function drawPlayerGrouped(ctx, W, H, data) {
 
   players.forEach((p, gi) => {
     p.values.forEach((v, bi) => {
-      const val  = typeof v === 'object' ? v.value : v;
+      const val = v.value;
       if (!val) return;
       const bH  = (val/maxVal)*cH;
       const x   = padL + gi*grpW + grpPad + bi*barW;
       const y   = padT + cH - bH;
 
-      // Alternate brightness for innings within player
-      const alpha = bi % 2 === 0 ? 'FF' : 'AA';
-      ctx.fillStyle = p.color + alpha;
+      // Fixed color per season/inning position — same S6 bar is the same
+      // color for every player, so the legend actually means something.
+      ctx.fillStyle = SEASON_COLORS[bi % SEASON_COLORS.length];
       ctx.beginPath();
       ctx.roundRect(x, y, Math.max(barW-1,1), Math.max(bH,1), 2);
       ctx.fill();
@@ -622,7 +678,7 @@ function drawPlayerGrouped(ctx, W, H, data) {
   // Season/inning sub-labels — show for first player as reference
   if (barsPerPlayer <= 8 && players[0]) {
     players[0].values.forEach((v, bi) => {
-      const label = typeof v === 'object' ? (v.label || '') : `S${v}`;
+      const label = v.label || '';
       if (!label) return;
       const x = padL + grpPad + bi*barW + barW/2;
       ctx.fillStyle = '#bbb'; ctx.font = '7px sans-serif'; ctx.textAlign = 'center';
